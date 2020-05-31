@@ -22,20 +22,36 @@ $(document).ready(function () {
         }
 
         $('#result').css({'padding-top': headHeight});
-       /*
+       
         setTimeout(() => {
             scrolldwon.click();
         }, 3000);
-        */
+        
     });
     $(window).on('scroll',function(){
-        console.log($(this).scrollTop());
-        if($(this).scrollTop()>30 && !$('body').hasClass('leavetop')){
-            $('body').addClass('leavetop');
+        if($(this).scrollTop()>30){
+            if(!$('body').hasClass('leavetop')){
+                $('body').addClass('leavetop');
+            }
         }else{
-            $('body').removeClass('leavetop');
+            if($('body').hasClass('leavetop')){
+                $('body').removeClass('leavetop');
+            }
         }
+
     });
+
+    $('#pagelogo').on('click',function(){
+       
+        pageBody.stop().animate(
+            {
+              scrollTop: 0
+            },
+            500,
+            "swing"
+        );
+    });
+
 });
 
 

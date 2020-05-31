@@ -51,7 +51,7 @@ a {
         overflow: hidden;
     }
     &.work{
-        max-height: 100%;
+        max-height: none;
         overflow: auto;
         #mainNav{
             transform: translateX(0);
@@ -172,6 +172,7 @@ a {
     #pagelogo{
         display: block;
         width: 68px;
+        cursor: pointer;
         img{
             width: 68px;
             height: 68px;

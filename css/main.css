@@ -236,7 +236,7 @@ a:hover:focus {
 }
 
 #page.work {
-  max-height: 100%;
+  max-height: none;
   overflow: auto;
 }
 
@@ -398,6 +398,7 @@ a:hover:focus {
 #mainNav #pagelogo {
   display: block;
   width: 68px;
+  cursor: pointer;
 }
 
 #mainNav #pagelogo img {
