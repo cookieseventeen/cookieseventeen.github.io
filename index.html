@@ -58,7 +58,8 @@
                             <div class="picture">
                                 <div class="inner">
                                     <a :href="resultItem.link" target="_blank">
-                                        <img src="https://www.wentang.com.tw/wp-content/uploads/2020/05/素材照片.jpg" alt="">
+                                        <img v-if="resultItem.featured_image_url" :src="resultItem.featured_image_url" alt="">
+                                        <img v-else src="https://www.wentang.com.tw/wp-content/uploads/2020/05/素材照片.jpg" alt="">
                                     </a>
                                 </div>
                             </div>
