@@ -28,6 +28,14 @@ $(document).ready(function () {
         }, 3000);
         */
     });
+    $(window).on('scroll',function(){
+        console.log($(this).scrollTop());
+        if($(this).scrollTop()>30 && !$('body').hasClass('leavetop')){
+            $('body').addClass('leavetop');
+        }else{
+            $('body').removeClass('leavetop');
+        }
+    });
 });
 
 
