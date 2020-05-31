@@ -13,6 +13,15 @@ $(document).ready(function () {
         );
         console.log(offsetValue);
     });
+
+    $(window).on('load resize',function(){
+        let heightViewPort=window.innerHeight;
+        
+        if(!$('#page').hasClass('action')){
+            $('#pageBanner').height(heightViewPort);
+        }
+        console.log(widthViewProt +'+'+ heightViewPort);
+    });
 });
 
 
@@ -25,9 +34,8 @@ var actionTools = new Vue({
         return {
             wp_data: '',
             pagemode: {
-                load: true,
-                welcome: false,
-                search: false
+                ready:false,
+                load: false,
             },
             search_data: '',
             tagdata: {
@@ -68,6 +76,10 @@ var actionTools = new Vue({
                 actionTools.tagdataload = true;
             }
         });
+        setTimeout(() => {
+            this.pagemode.ready=true;
+        }, 500);
+        
     },
     computed: {
         filterPost: function () {

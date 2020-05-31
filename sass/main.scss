@@ -42,6 +42,13 @@ a {
         outline: none !important;
     }
 }
+#page{
+    opacity: 0;
+    transition: opacity 1s ease;
+    &.ready{
+        opacity: 1;
+    }
+}
 
 #pageBanner {
     width: 100%;
@@ -76,7 +83,7 @@ a {
             height: 40px;
             background: #000;
             transition: transform 0.4s ease;
-            transform-origin: bottom center;
+            transform-origin: top center;
         }
         &:hover{
             &:after{
@@ -124,7 +131,7 @@ a {
 
 #mainNav{
     background: #FFF;
-    //transform: translateY(-100%);
+    transform: translateY(-100%);
     #pagelogo{
         display: block;
         width: 68px;
