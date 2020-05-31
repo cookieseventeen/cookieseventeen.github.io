@@ -11,7 +11,6 @@ $(document).ready(function () {
             500,
             "swing"
         );
-
         console.log(offsetValue);
     });
 });
@@ -31,8 +30,11 @@ var actionTools = new Vue({
                 search: false
             },
             search_data: '',
-            tag_data: {},
-            tagloaded: false
+            tagdata: {
+                load:false,
+                data:{}
+            },
+            tagdataload:false
         }
     },
     mounted() {
@@ -55,17 +57,14 @@ var actionTools = new Vue({
                 let tagajaxdata = response;
 
                 tagajaxdata.forEach(element => {
-
                     let this_id = element.id;
-
-                    actionTools.tag_data[this_id] = {
-                        'link': element.link,
-                        'name': element.name,
-                        'slug': element.slug
+                    actionTools.tagdata.data[this_id] = {
+                        link: element.link,
+                        name: element.name,
+                        slug: element.slug
                     };
                 });
-
-                actionTools.tagloaded = true;
+                actionTools.tagdataload = true;
             }
         });
     },

@@ -21,7 +21,7 @@
         <div id="result">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-6" v-for="(resultItem,key,index) in filterPost">
+                    <div class="col-md-6" v-for="(resultItem,key,index) in filterPost" v-if="tagdataload">
                         <div class="item">
                             <div class="title">
                                <a :href="resultItem.link" target="_blank">{{resultItem.title.rendered}}</a>
@@ -39,11 +39,11 @@
                             <div class="description">
                                 <a :href="resultItem.link" v-html="resultItem.excerpt.rendered" target="_blank"></a>
                             </div>
-                            <!--
+                            
                                 <div class="tag-list" >
-                                    <a class="tag-item" v-for="tagitem in resultItem.tags" :data-tagid="tagitem" v-if="tagloaded" >{{ tag_data[tagitem] }}</a>
+                                    <a class="tag-item" v-for="tagitem in resultItem.tags" :data-tagid="tagitem" v-if="tagdata.data[tagitem]" :href="tagdata.data[tagitem].link" target="_blank">{{ tagdata.data[tagitem].name }}</a>
                                 </div>
-                            -->
+                            
                         </div>
                     </div>
                 </div>
