@@ -4,7 +4,7 @@ $(document).ready(function () {
     scrolldwon = $('.action-btn');
 
     scrolldwon.on('click', function () {
-        let offsetValue = $('#result').offset().top;
+        let offsetValue = $('#result').offset().top-$('#mainNav').outerHeight();
         pageBody.stop().animate({
                 scrollTop: offsetValue
             },
@@ -34,7 +34,8 @@ var actionTools = new Vue({
                 load:false,
                 data:{}
             },
-            tagdataload:false
+            tagdataload:false,
+            thinks_action:''
         }
     },
     mounted() {
@@ -70,7 +71,25 @@ var actionTools = new Vue({
     },
     computed: {
         filterPost: function () {
-            return this.wp_data
+            if(this.thinks_action!=''){
+                let thisVm=this;
+                setTimeout(() => {
+                    $.ajax({
+                        type: "GET",
+                        url: "https://wentang.com.tw/wp-json/wp/v2/posts?search="+this.thinks_action,
+                        //data: "data",
+                        dataType: "json",
+                        success: function (response) {
+                            thisVm.search_data=response;
+                        }
+                    });
+                }, 1000);
+                
+                return thisVm.search_data;
+            }else{
+                return this.wp_data
+            }
+            
         }
     },
 

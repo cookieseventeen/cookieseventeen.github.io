@@ -28,8 +28,16 @@
 
 </head>
 <body>
-    
     <div id="page" :class="pagemode">
+         <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg text-uppercase fixed-top" id="mainNav">
+            <div class="container">
+                <a id="pagelogo" ><img src="images/logo/logo.svg" alt=""></a>
+                <div id="thinks">
+                    <input type="text" v-model="thinks_action"  placeholder="Key in somethine?">
+                </div>
+            </div>
+        </nav>
         <div id="pageBanner">
             <div class="welcome">
                 Welcom, I'm Ben.
@@ -59,7 +67,7 @@
                             </div>
                             
                                 <div class="tag-list" >
-                                    <a class="tag-item" v-for="tagitem in resultItem.tags" :data-tagid="tagitem" v-if="tagdata.data[tagitem]" :href="tagdata.data[tagitem].link" target="_blank">{{ tagdata.data[tagitem].name }}</a>
+                                    <a class="tag-item" v-for="tagitem in resultItem.tags" :data-tagid="tagitem" v-if="tagdata.data[tagitem]" :href="tagdata.data[tagitem].link" target="_blank"># {{ tagdata.data[tagitem].name }} </a>
                                 </div>
                             
                         </div>
