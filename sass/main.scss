@@ -47,6 +47,14 @@ a {
     transition: opacity 1s ease;
     &.ready{
         opacity: 1;
+        max-height: 100vh;
+        overflow: hidden;
+    }
+    &.work{
+        max-height: auto;
+        #mainNav{
+            transform: translateX(0);
+        }
     }
 }
 
@@ -61,6 +69,7 @@ a {
     .welcome {
         font-size: 10vw;
         font-weight: 900;
+        transition: opacity 0.2s ease,transform 0.2s ease,;
     }
     .action-btn{
         display: block;
@@ -71,6 +80,7 @@ a {
         padding: 32px 15px 64px;
         font-size: 32px;
         cursor: pointer;
+        transition: transform 1.2s ease;
         &:after,
         &:before{
             content: '';
@@ -85,7 +95,24 @@ a {
             transition: transform 0.4s ease;
             transform-origin: top center;
         }
+        &.action,
         &:hover{
+            &:after{
+                transform: rotate(-45deg);
+            }
+            &:before{
+                transform: rotate(45deg);
+            }
+        }
+    }
+    &.action{
+        .welcome{
+            opacity: 0;
+            transform: scale(0.8);
+        }
+        .action-btn{
+            transform: translateX(-50%) rotateY(720deg);
+
             &:after{
                 transform: rotate(-45deg);
             }
@@ -132,6 +159,8 @@ a {
 #mainNav{
     background: #FFF;
     transform: translateY(-100%);
+    transition: transform 0.6s ease;
+
     #pagelogo{
         display: block;
         width: 68px;

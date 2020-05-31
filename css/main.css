@@ -231,6 +231,17 @@ a:hover:focus {
 
 #page.ready {
   opacity: 1;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+#page.work {
+  max-height: auto;
+}
+
+#page.work #mainNav {
+  -webkit-transform: translateX(0);
+          transform: translateX(0);
 }
 
 #pageBanner {
@@ -253,6 +264,10 @@ a:hover:focus {
 #pageBanner .welcome {
   font-size: 10vw;
   font-weight: 900;
+  -webkit-transition: opacity 0.2s ease, -webkit-transform 0.2s ease;
+  transition: opacity 0.2s ease, -webkit-transform 0.2s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease, -webkit-transform 0.2s ease;
 }
 
 #pageBanner .action-btn {
@@ -265,6 +280,10 @@ a:hover:focus {
   padding: 32px 15px 64px;
   font-size: 32px;
   cursor: pointer;
+  -webkit-transition: -webkit-transform 1.2s ease;
+  transition: -webkit-transform 1.2s ease;
+  transition: transform 1.2s ease;
+  transition: transform 1.2s ease, -webkit-transform 1.2s ease;
 }
 
 #pageBanner .action-btn:after, #pageBanner .action-btn:before {
@@ -286,12 +305,33 @@ a:hover:focus {
           transform-origin: top center;
 }
 
-#pageBanner .action-btn:hover:after {
+#pageBanner .action-btn.action:after, #pageBanner .action-btn:hover:after {
   -webkit-transform: rotate(-45deg);
           transform: rotate(-45deg);
 }
 
-#pageBanner .action-btn:hover:before {
+#pageBanner .action-btn.action:before, #pageBanner .action-btn:hover:before {
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+}
+
+#pageBanner.action .welcome {
+  opacity: 0;
+  -webkit-transform: scale(0.8);
+          transform: scale(0.8);
+}
+
+#pageBanner.action .action-btn {
+  -webkit-transform: translateX(-50%) rotateY(720deg);
+          transform: translateX(-50%) rotateY(720deg);
+}
+
+#pageBanner.action .action-btn:after {
+  -webkit-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+}
+
+#pageBanner.action .action-btn:before {
   -webkit-transform: rotate(45deg);
           transform: rotate(45deg);
 }
@@ -335,6 +375,10 @@ a:hover:focus {
   background: #FFF;
   -webkit-transform: translateY(-100%);
           transform: translateY(-100%);
+  -webkit-transition: -webkit-transform 0.6s ease;
+  transition: -webkit-transform 0.6s ease;
+  transition: transform 0.6s ease;
+  transition: transform 0.6s ease, -webkit-transform 0.6s ease;
 }
 
 #mainNav #pagelogo {

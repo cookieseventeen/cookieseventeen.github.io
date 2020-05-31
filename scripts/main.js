@@ -4,23 +4,28 @@ $(document).ready(function () {
     scrolldwon = $('.action-btn');
 
     scrolldwon.on('click', function () {
-        let offsetValue = $('#result').offset().top-$('#mainNav').outerHeight();
-        pageBody.stop().animate({
-                scrollTop: offsetValue
-            },
-            500,
-            "swing"
-        );
-        console.log(offsetValue);
+       $(this).parents('#pageBanner').addClass('action');
+
+       $('#pageBanner').animate({height:'0'},1000, function() {
+            $('#page').addClass('work');
+        });
+       $('#pageBanner .welcome').animate({'transform':'scale(0.2)','opacity':0},400);
+
     });
 
     $(window).on('load resize',function(){
-        let heightViewPort=window.innerHeight;
-        
-        if(!$('#page').hasClass('action')){
+        let heightViewPort=window.innerHeight,
+            headHeight=$('#mainNav').outerHeight()+15;
+
+        if(!$('#page').hasClass('work')){
             $('#pageBanner').height(heightViewPort);
         }
-        console.log(widthViewProt +'+'+ heightViewPort);
+
+        $('#result').css({'padding-top': headHeight});
+       
+        setTimeout(() => {
+            scrolldwon.click();
+        }, 3000);
     });
 });
 
@@ -84,20 +89,20 @@ var actionTools = new Vue({
     computed: {
         filterPost: function () {
             if(this.thinks_action!=''){
+
                 let thisVm=this;
-                setTimeout(() => {
-                    $.ajax({
-                        type: "GET",
-                        url: "https://wentang.com.tw/wp-json/wp/v2/posts?search="+this.thinks_action,
-                        //data: "data",
-                        dataType: "json",
-                        success: function (response) {
-                            thisVm.search_data=response;
-                        }
-                    });
-                }, 1000);
-                
+
+                $.ajax({
+                    type: "GET",
+                    url: "https://wentang.com.tw/wp-json/wp/v2/posts?search="+thisVm.thinks_action,
+                    //data: "data",
+                    dataType: "json",
+                    success: function (response) {
+                        thisVm.search_data=response;
+                    }
+                });
                 return thisVm.search_data;
+
             }else{
                 return this.wp_data
             }
