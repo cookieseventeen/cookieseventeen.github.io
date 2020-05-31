@@ -51,7 +51,8 @@ a {
         overflow: hidden;
     }
     &.work{
-        max-height: auto;
+        max-height: 100%;
+        overflow: auto;
         #mainNav{
             transform: translateX(0);
         }

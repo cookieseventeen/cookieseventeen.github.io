@@ -236,7 +236,8 @@ a:hover:focus {
 }
 
 #page.work {
-  max-height: auto;
+  max-height: 100%;
+  overflow: auto;
 }
 
 #page.work #mainNav {
