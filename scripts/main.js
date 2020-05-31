@@ -25,7 +25,7 @@ $(document).ready(function () {
        
         setTimeout(() => {
             scrolldwon.click();
-        }, 3000);
+        }, 2000);
     });
 });
 
