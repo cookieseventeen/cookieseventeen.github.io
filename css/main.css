@@ -271,6 +271,12 @@ a:hover:focus {
   transition: opacity 0.2s ease, transform 0.2s ease, -webkit-transform 0.2s ease;
 }
 
+@media (max-width: 767px) {
+  #pageBanner .welcome {
+    font-weight: 500;
+  }
+}
+
 #pageBanner .action-btn {
   display: block;
   position: absolute;
@@ -285,6 +291,13 @@ a:hover:focus {
   transition: -webkit-transform 1.2s ease;
   transition: transform 1.2s ease;
   transition: transform 1.2s ease, -webkit-transform 1.2s ease;
+}
+
+@media (max-width: 767px) {
+  #pageBanner .action-btn {
+    font-size: 24px;
+    font-weight: 900;
+  }
 }
 
 #pageBanner .action-btn:after, #pageBanner .action-btn:before {
@@ -404,4 +417,5 @@ a:hover:focus {
   height: 48px;
   line-height: 32px;
   padding: 12px;
+  font-size: 24px;
 }

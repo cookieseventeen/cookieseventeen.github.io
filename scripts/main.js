@@ -22,10 +22,11 @@ $(document).ready(function () {
         }
 
         $('#result').css({'padding-top': headHeight});
-       
+       /*
         setTimeout(() => {
             scrolldwon.click();
-        }, 2000);
+        }, 3000);
+        */
     });
 });
 
