@@ -265,10 +265,10 @@ a:hover:focus {
 #pageBanner .welcome {
   font-size: 10vw;
   font-weight: 900;
-  -webkit-transition: opacity 0.2s ease, -webkit-transform 0.2s ease;
-  transition: opacity 0.2s ease, -webkit-transform 0.2s ease;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  transition: opacity 0.2s ease, transform 0.2s ease, -webkit-transform 0.2s ease;
+  -webkit-transition: opacity 0.2s ease, -webkit-transform 0.6s ease;
+  transition: opacity 0.2s ease, -webkit-transform 0.6s ease;
+  transition: opacity 0.2s ease, transform 0.6s ease;
+  transition: opacity 0.2s ease, transform 0.6s ease, -webkit-transform 0.6s ease;
 }
 
 @media (max-width: 767px) {
@@ -331,8 +331,8 @@ a:hover:focus {
 
 #pageBanner.action .welcome {
   opacity: 0;
-  -webkit-transform: scale(0.8);
-          transform: scale(0.8);
+  -webkit-transform: scale(0.6);
+          transform: scale(0.6);
 }
 
 #pageBanner.action .action-btn {
@@ -389,10 +389,10 @@ a:hover:focus {
   background: #FFF;
   -webkit-transform: translateY(-100%);
           transform: translateY(-100%);
-  -webkit-transition: -webkit-transform 0.6s ease;
-  transition: -webkit-transform 0.6s ease;
-  transition: transform 0.6s ease;
-  transition: transform 0.6s ease, -webkit-transform 0.6s ease;
+  -webkit-transition: -webkit-transform 0.6s ease, -webkit-box-shadow 1s ease;
+  transition: -webkit-transform 0.6s ease, -webkit-box-shadow 1s ease;
+  transition: transform 0.6s ease, box-shadow 1s ease;
+  transition: transform 0.6s ease, box-shadow 1s ease, -webkit-transform 0.6s ease, -webkit-box-shadow 1s ease;
 }
 
 #mainNav #pagelogo {
@@ -419,4 +419,9 @@ a:hover:focus {
   line-height: 32px;
   padding: 12px;
   font-size: 24px;
+}
+
+.leavetop #mainNav {
+  -webkit-box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+          box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
 }
