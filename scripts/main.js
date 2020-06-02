@@ -125,13 +125,12 @@ var actionTools = new Vue({
                         dataType: "json",
                         success: function (response) {
                             thisVm.search_data=response;
-                            return thisVm.search_data;
+                            
                         }
                     });
                 }, 3000);
-                
-                
 
+                return thisVm.search_data;
             }else{
                 return this.wp_data
             }
