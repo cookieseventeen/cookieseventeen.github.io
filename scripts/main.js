@@ -55,7 +55,7 @@ $(document).ready(function () {
 });
 
 
-
+var searchDebounce;
 
 //綁定資料
 var actionTools = new Vue({
@@ -116,17 +116,21 @@ var actionTools = new Vue({
             if(this.thinks_action!=''){
 
                 let thisVm=this;
-
-                $.ajax({
-                    type: "GET",
-                    url: "https://wentang.com.tw/wp-json/wp/v2/posts?search="+thisVm.thinks_action,
-                    //data: "data",
-                    dataType: "json",
-                    success: function (response) {
-                        thisVm.search_data=response;
-                    }
-                });
-                return thisVm.search_data;
+                clearTimeout(searchDebounce);
+                searchDebounce=setTimeout(() => {
+                    $.ajax({
+                        type: "GET",
+                        url: "https://wentang.com.tw/wp-json/wp/v2/posts?search="+thisVm.thinks_action,
+                        //data: "data",
+                        dataType: "json",
+                        success: function (response) {
+                            thisVm.search_data=response;
+                            return thisVm.search_data;
+                        }
+                    });
+                }, 3000);
+                
+                
 
             }else{
                 return this.wp_data
