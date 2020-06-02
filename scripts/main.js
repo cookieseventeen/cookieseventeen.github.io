@@ -127,7 +127,7 @@ var actionTools = new Vue({
                             thisVm.search_data=response;
                         }
                     });
-                }, 3000);
+                }, 1800);
 
                 return thisVm.search_data;
             }else{
