@@ -125,7 +125,6 @@ var actionTools = new Vue({
                         dataType: "json",
                         success: function (response) {
                             thisVm.search_data=response;
-                            
                         }
                     });
                 }, 3000);
