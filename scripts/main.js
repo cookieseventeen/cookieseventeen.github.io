@@ -90,7 +90,7 @@ var actionTools = new Vue({
         });
         $.ajax({
             type: "GET",
-            url: "https://wentang.com.tw/wp-json/wp/v2/tags??per_page=1000",
+            url: "https://wentang.com.tw/wp-json/wp/v2/tags?per_page=1000",
             //data: "data",
             dataType: "json",
             success: function (response) {
