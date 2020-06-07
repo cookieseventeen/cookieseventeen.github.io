@@ -153,6 +153,46 @@ a {
 
     .picture {
         margin-bottom: 8px;
+        .inner{
+            position: relative;
+            a{
+                transition: opacity 0.4s ease;
+            }
+            a.picture-link{
+                display: block;
+                position: relative;
+                z-index: 2;
+
+            }
+            a.codepen-link{
+                display: block;
+                position: absolute;
+                z-index: 1;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                iframe{
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+        }
+        &.hascodepen{
+            &:hover{
+                a.picture-link{
+                    opacity: 0;
+                }
+                a.codepen-link{
+                    opacity: 1;
+                }
+            }
+        }
     }
     .tag-list{
         padding-top: 8px;

@@ -73,7 +73,8 @@ var actionTools = new Vue({
                 data:{}
             },
             tagdataload:false,
-            thinks_action:''
+            thinks_action:'',
+            hoverid:''
         }
     },
     mounted() {
@@ -136,5 +137,8 @@ var actionTools = new Vue({
             
         }
     },
+    methods:{
+
+    }
 
 })
