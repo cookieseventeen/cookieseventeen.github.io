@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>Hello World</title>
-    <url>/2020/11/22/hello-world/</url>
+    <url>/uncategorized/hello-world/</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
 
@@ -20,7 +20,7 @@
   </entry>
   <entry>
     <title>數值補零-(Padding Left)</title>
-    <url>/2020/11/22/paddingLeft/</url>
+    <url>/Javascript/paddingLeft/</url>
     <content><![CDATA[<p>偶爾我們會遇上固定顯示幾位數的狀況，這裡一個簡易的方法來提供補零的方式，如果有任何更好的方法歡迎在下面提供。</p>
 <h2 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">function</span> paddingLeft(str,strLenght)&#123;  </span><br><span class="line">  var thisStr=String(str),//如果沒有強行別,在放在計算裡面會轉成INT,造成undefined</span><br><span class="line">      thisStrlenght=parseInt(strLenght);//所以我數字也順便加上型別了 QQ      </span><br><span class="line">  </span><br><span class="line">	<span class="keyword">if</span>(thisStr.length &gt;= thisStrlenght)&#123;</span><br><span class="line">        <span class="built_in">return</span> str;</span><br><span class="line">    &#125;<span class="keyword">else</span> &#123;       </span><br><span class="line">        var makeupNum= thisStrlenght - thisStr.length,</span><br><span class="line">            makeZero=<span class="string">&#x27;&#x27;</span>;</span><br><span class="line">            //原本可以利用callback 重複補0,但我希望函式只要用一次就可以補完所有的0</span><br><span class="line">            <span class="keyword">for</span>(var i=0;i&lt;makeupNum;i++)&#123;</span><br><span class="line">                makeZero= makeZero+<span class="string">&#x27;0&#x27;</span>;</span><br><span class="line">            &#125;     </span><br><span class="line">        <span class="built_in">return</span> makeZero+thisStr;</span><br><span class="line">    &#125;	</span><br><span class="line">&#125;</span><br><span class="line">//使用的方式</span><br><span class="line">var test_text=paddingLeft(1,20);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
@@ -33,6 +33,27 @@
         <tag>Javascript</tag>
         <tag>Padding Left</tag>
         <tag>數值補零</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在VSCode使用Ftp-Sync實現FTP自動同步本地檔案</title>
+    <url>/%E5%B7%A5%E5%85%B7%E5%A5%97%E4%BB%B6/%E5%9C%A8VSCode%E4%BD%BF%E7%94%A8Ftp-Sync%E5%AF%A6%E7%8F%BEFTP%E8%87%AA%E5%8B%95%E5%90%8C%E6%AD%A5%E6%9C%AC%E5%9C%B0%E6%AA%94%E6%A1%88/</url>
+    <content><![CDATA[<p>你是否厭倦的每次修改檔案都要不斷的上傳，VSCode上有一款套件Ftp-Sync可以幫你解決這個問題，這款套件可以幫你比對檔案並且更新到Server上，只要你依照下面的設定一一完成就可以在按下存擋的瞬間上傳，以下介紹設定的方式以及常用的指令。</p>
+<h2 id="Ftp-sync-Init-初始化設定"><a href="#Ftp-sync-Init-初始化設定" class="headerlink" title="Ftp-sync:Init (初始化設定)"></a>Ftp-sync:Init (初始化設定)</h2><p>一開始你必須在所在的檔案資料夾按下 cmd + shift + P 來輸入 Ftp-sync:Init 這個指令接著就會產上下面的設定檔，按照以下的說明參考設定對應更新的資料夾，就可以開始享受這這個功能．</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;remotePath&quot;</span>: <span class="string">&quot;./public_html&quot;</span>,<span class="comment">//如果你是根目錄才是./ 一般主機可能檔案放在public_html下,對照的位置就如此設定</span></span><br><span class="line">    <span class="attr">&quot;host&quot;</span>: <span class="string">&quot;設定ＦＴＰ連線位置&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;username&quot;</span>: <span class="string">&quot;登入帳號&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;password&quot;</span>: <span class="string">&quot;登入密碼&quot;</span>,</span><br><span class="line">    <span class="attr">&quot;port&quot;</span>: <span class="number">21</span>,<span class="comment">//如果單純ＦＴＰ連線port 21 SFTP port 22</span></span><br><span class="line">    <span class="attr">&quot;secure&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">&quot;protocol&quot;</span>: <span class="string">&quot;ftp&quot;</span>,<span class="comment">//ftp or sftp </span></span><br><span class="line">    <span class="attr">&quot;uploadOnSave&quot;</span>: <span class="literal">true</span>,<span class="comment">//儲存時自動上傳</span></span><br><span class="line">    <span class="attr">&quot;passive&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">&quot;debug&quot;</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">&quot;privateKeyPath&quot;</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="attr">&quot;passphrase&quot;</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="attr">&quot;agent&quot;</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="attr">&quot;allow&quot;</span>: [],</span><br><span class="line">    <span class="attr">&quot;ignore&quot;</span>: [ <span class="comment">//忽略檔案</span></span><br><span class="line">        <span class="string">&quot;\\.vscode&quot;</span>,</span><br><span class="line">        <span class="string">&quot;\\.git&quot;</span>,</span><br><span class="line">        <span class="string">&quot;\\.DS_Store&quot;</span></span><br><span class="line">    ],</span><br><span class="line">    <span class="attr">&quot;generatedFiles&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;uploadOnSave&quot;</span>: <span class="literal">true</span>,<span class="comment">// 儲存自動上傳設定</span></span><br><span class="line">        <span class="attr">&quot;extensionsToInclude&quot;</span>: [</span><br><span class="line">            <span class="string">&quot;&quot;</span></span><br><span class="line">        ],</span><br><span class="line">        <span class="attr">&quot;path&quot;</span>: <span class="string">&quot;/Library/WebServer/Documents/檔案料夾&quot;</span> <span class="comment">//對照的檔案位置</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Ftp-sync-Sync-Remote-to-Local"><a href="#Ftp-sync-Sync-Remote-to-Local" class="headerlink" title="Ftp-sync:Sync Remote to Local"></a>Ftp-sync:Sync Remote to Local</h2><p>Ftp-sync:Sync Remote to Local 假設你已經設定好可以透過這個指令將Server 上的資料載到本地端。</p>
+<h2 id="Ftp-sync-Sync-Local-to-Remote"><a href="#Ftp-sync-Sync-Local-to-Remote" class="headerlink" title="Ftp-sync:Sync Local to Remote"></a>Ftp-sync:Sync Local to Remote</h2><p>如同上面的相反，假設你今天要從本地上傳資料上去，就可以打上這個指定，將會自動更新到Server端。</p>
+<p>以上是自己常用到的指令，必須謹慎使用避免覆蓋錯誤的位置或檔案，如果可以搭配版控最好．</p>
+]]></content>
+      <categories>
+        <category>工具套件</category>
+      </categories>
+      <tags>
+        <tag>VSCode</tag>
+        <tag>Ftp-Sync</tag>
+        <tag>檔案自動上傳</tag>
+        <tag>FTP</tag>
       </tags>
   </entry>
 </search>
