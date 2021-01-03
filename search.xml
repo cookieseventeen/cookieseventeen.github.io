@@ -154,4 +154,33 @@
         <tag>RegularExpressions</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Angular 從0開始</title>
+    <url>/Angular/Angular-%E5%BE%9E0%E9%96%8B%E5%A7%8B/</url>
+    <content><![CDATA[<p>Angular 其實是三大框架裡面最嚴謹仔細的一個框架，相對上手難度比較高，內建需要使用到Typescript，我將從Ｏ’REILLY 的Angular 建置與執行的書開始一步一步認識，然後試著做出一些東西給自己使用。</p>
+<h2 id="Angular介紹"><a href="#Angular介紹" class="headerlink" title="Angular介紹"></a>Angular介紹</h2><p>這個章節我比較想紀錄的是開發環境的安裝，你必須具備下面的程式安裝才可以使用Angular。</p>
+<ul>
+<li>nodejs <a href="https://nodejs.org/en/">nodejs</a></li>
+<li>TypeScript</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install -g typescript</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Angular CLI</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">npm install -g @angular/cli</span><br></pre></td></tr></table></figure>
+
+<h2 id="Hello-Angular"><a href="#Hello-Angular" class="headerlink" title="Hello Angular"></a>Hello Angular</h2><p>Hello world！永遠是學習程式的第一步，開始建立第一個學習用專案。</p>
+<h3 id="建立專案"><a href="#建立專案" class="headerlink" title="建立專案"></a>建立專案</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ng new 專案名稱</span><br></pre></td></tr></table></figure>
+
+<h3 id="啟動專案"><a href="#啟動專案" class="headerlink" title="啟動專案"></a>啟動專案</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ng serve</span><br></pre></td></tr></table></figure>
+
+<h3 id="建立元件"><a href="#建立元件" class="headerlink" title="建立元件"></a>建立元件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ng generate 元件名稱</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Angular</category>
+      </categories>
+      <tags>
+        <tag>Angular</tag>
+      </tags>
+  </entry>
 </search>
