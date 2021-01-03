@@ -138,4 +138,20 @@
         <tag>原型鏈</tag>
       </tags>
   </entry>
+  <entry>
+    <title>關於正規表達式</title>
+    <url>/Regular-Expressions/%E9%97%9C%E6%96%BC%E6%AD%A3%E8%A6%8F%E8%A1%A8%E9%81%94%E5%BC%8F/</url>
+    <content><![CDATA[<p>關於正規表達式，其實是我非常不熟的一塊，最近在同事的分享會上聽到了他的學習經驗，所以我打算用這一篇慢慢堆積起自己的資源。</p>
+<p>實際上的解說可以到MDN上查詢：</p>
+<p>連結：<a href="https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Guide/Regular_Expressions">https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Guide/Regular_Expressions)</a></p>
+<p>額外讓我驚艷的學習網站<a href="https://regexr.com/">https://regexr.com/)</a>，這個網站只要你貼上所寫的正規表達式，他就會有相對應的解說，先別說驗證自己的正規表達式，如果你想從拆解別人的正規表達式怎麼寫的，這就是最好的第一步。</p>
+]]></content>
+      <categories>
+        <category>Regular_Expressions</category>
+      </categories>
+      <tags>
+        <tag>正規表達式</tag>
+        <tag>RegularExpressions</tag>
+      </tags>
+  </entry>
 </search>
