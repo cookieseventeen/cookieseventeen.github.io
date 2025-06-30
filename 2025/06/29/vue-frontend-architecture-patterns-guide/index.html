@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Vue.js 前端架構模式比較與選擇指南 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="深入比較 Vue.js 專案中的四種架構模式：全域屬性注入、服務注入、Composables 和 Store 模式，提供完整的選擇指南和實戰建議。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue.js 前端架構模式比較與選擇指南">
+<meta property="og:url" content="https://cookieseventeen.github.io/2025/06/29/vue-frontend-architecture-patterns-guide/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="深入比較 Vue.js 專案中的四種架構模式：全域屬性注入、服務注入、Composables 和 Store 模式，提供完整的選擇指南和實戰建議。">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-06-29T03:00:00.000Z">
+<meta property="article:modified_time" content="2025-06-30T15:26:22.653Z">
+<meta property="article:author" content="Ben Hsieh">
+<meta property="article:tag" content="Vue.js">
+<meta property="article:tag" content="Frontend Architecture">
+<meta property="article:tag" content="Composables">
+<meta property="article:tag" content="Global Properties">
+<meta property="article:tag" content="Service Pattern">
+<meta property="article:tag" content="State Management">
+<meta property="article:tag" content="Pinia">
+<meta property="article:tag" content="Composition API">
+<meta property="article:tag" content="Design Patterns">
+<meta property="article:tag" content="Best Practices">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.2.0/css/fork-awesome.min.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">任何一件事做到極致都值得敬佩</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="搜尋"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜尋"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://cookieseventeen.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-vue-frontend-architecture-patterns-guide" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2025/06/29/vue-frontend-architecture-patterns-guide/" class="article-date">
+  <time class="dt-published" datetime="2025-06-29T03:00:00.000Z" itemprop="datePublished">2025-06-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Tech-Daily/">Tech Daily</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Vue.js 前端架構模式比較與選擇指南
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="📋-核心懶人包"><a href="#📋-核心懶人包" class="headerlink" title="📋 核心懶人包"></a>📋 核心懶人包</h2><ol>
+<li><strong>全域屬性模式</strong>：快速開發，適合小型專案或即將 EOS 的系統</li>
+<li><strong>服務注入模式</strong>：純業務邏輯處理，易於測試，重用性高</li>
+<li><strong>Composables 模式</strong>：響應式邏輯復用，Vue 3 原生支援</li>
+<li><strong>Store 模式</strong>：全域狀態管理，適合複雜應用程式狀態</li>
+<li><strong>混合策略</strong>：依據功能特性選擇最適合的架構模式</li>
+</ol>
+<h2 id="🏗️-專案概述"><a href="#🏗️-專案概述" class="headerlink" title="🏗️ 專案概述"></a>🏗️ 專案概述</h2><p>本文記錄了在 Vue.js 專案中不同架構模式的比較分析，特別針對公用程式管理、狀態共享和業務邏輯組織方式進行深入探討：</p>
+<ul>
+<li>🎯 <strong>架構模式比較</strong>：四種主要前端架構模式的優缺點分析</li>
+<li>🔧 <strong>實作策略</strong>：每種模式的具體實作方式和程式碼範例</li>
+<li>📊 <strong>選擇指南</strong>：基於專案特性的架構選擇建議</li>
+<li>🚀 <strong>最佳實踐</strong>：混合使用策略和重構建議</li>
+<li>⚡ <strong>效能考量</strong>：不同模式對 Bundle 大小和效能的影響</li>
+</ul>
+<h2 id="🏗️-架構模式技術比較"><a href="#🏗️-架構模式技術比較" class="headerlink" title="🏗️ 架構模式技術比較"></a>🏗️ 架構模式技術比較</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    A[Vue.js 前端架構] --&gt; B[全域屬性注入]</span><br><span class="line">    A --&gt; C[服務注入模式]</span><br><span class="line">    A --&gt; D[Composables 模式]</span><br><span class="line">    A --&gt; E[Store 模式]</span><br><span class="line">    </span><br><span class="line">    B --&gt; B1[快速開發]</span><br><span class="line">    B --&gt; B2[統一管理]</span><br><span class="line">    B --&gt; B3[Bundle 較大]</span><br><span class="line">    </span><br><span class="line">    C --&gt; C1[純業務邏輯]</span><br><span class="line">    C --&gt; C2[易於測試]</span><br><span class="line">    C --&gt; C3[型別安全]</span><br><span class="line">    </span><br><span class="line">    D --&gt; D1[響應式狀態]</span><br><span class="line">    D --&gt; D2[邏輯復用]</span><br><span class="line">    D --&gt; D3[Vue 特定]</span><br><span class="line">    </span><br><span class="line">    E --&gt; E1[全域狀態]</span><br><span class="line">    E --&gt; E2[DevTools 支援]</span><br><span class="line">    E --&gt; E3[結構化管理]</span><br></pre></td></tr></table></figure>
+
+<h2 id="📝-文件概述"><a href="#📝-文件概述" class="headerlink" title="📝 文件概述"></a>📝 文件概述</h2><p>本文記錄了在 Vue.js 專案中不同架構模式的比較分析，特別針對公用程式管理、狀態共享和業務邏輯組織方式進行深入探討。</p>
+<h2 id="🏗️-架構模式比較"><a href="#🏗️-架構模式比較" class="headerlink" title="🏗️ 架構模式比較"></a>🏗️ 架構模式比較</h2><h3 id="1-全域屬性注入模式-Global-Properties-Injection"><a href="#1-全域屬性注入模式-Global-Properties-Injection" class="headerlink" title="1. 全域屬性注入模式 (Global Properties Injection)"></a>1. 全域屬性注入模式 (Global Properties Injection)</h3><h4 id="💡-概念"><a href="#💡-概念" class="headerlink" title="💡 概念"></a>💡 概念</h4><p>將所有工具函式和服務掛載到 Vue 應用程式的全域屬性上，讓所有組件都能直接存取。</p>
+<h4 id="🔧-實作方式"><a href="#🔧-實作方式" class="headerlink" title="🔧 實作方式"></a>🔧 實作方式</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// main.js</span></span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> <span class="title class_">Utils</span> <span class="keyword">from</span> <span class="string">&#x27;@/common/utils.js&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> <span class="title class_">ChartOptions</span> <span class="keyword">from</span> <span class="string">&#x27;@/common/chart_option.js&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> api <span class="keyword">from</span> <span class="string">&#x27;./api&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = <span class="title function_">createApp</span>(<span class="title class_">App</span>);</span><br><span class="line"></span><br><span class="line">app.<span class="property">config</span>.<span class="property">globalProperties</span>.<span class="property">$utils</span> = <span class="title class_">Utils</span>;</span><br><span class="line">app.<span class="property">config</span>.<span class="property">globalProperties</span>.<span class="property">$api</span> = api;</span><br><span class="line">app.<span class="property">config</span>.<span class="property">globalProperties</span>.<span class="property">$chartOption</span> = <span class="title class_">ChartOptions</span>;</span><br><span class="line">app.<span class="property">config</span>.<span class="property">globalProperties</span>.<span class="property">$lodash</span> = lodash;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在組件中使用</span></span><br><span class="line"><span class="keyword">const</span> curInstance = <span class="title function_">getCurrentInstance</span>();</span><br><span class="line"><span class="keyword">const</span> api = curInstance.<span class="property">appContext</span>.<span class="property">config</span>.<span class="property">globalProperties</span>.<span class="property">$api</span>;</span><br><span class="line"><span class="keyword">const</span> utils = curInstance.<span class="property">appContext</span>.<span class="property">config</span>.<span class="property">globalProperties</span>.<span class="property">$utils</span>;</span><br></pre></td></tr></table></figure>
+
+<h4 id="✅-優點"><a href="#✅-優點" class="headerlink" title="✅ 優點"></a>✅ 優點</h4><ul>
+<li><strong>快速開發</strong>：不需要反覆匯入，直接使用</li>
+<li><strong>統一管理</strong>：所有公用程式都在 main.js 中註冊</li>
+<li><strong>團隊協作</strong>：新成員容易上手，使用方式一致</li>
+<li><strong>向後相容</strong>：適合既有專案的漸進式升級</li>
+</ul>
+<h4 id="❌-缺點"><a href="#❌-缺點" class="headerlink" title="❌ 缺點"></a>❌ 缺點</h4><ul>
+<li><strong>Bundle 肥大</strong>：所有工具都會被打包，即使未使用</li>
+<li><strong>依賴不明確</strong>：難以追蹤組件真正使用的依賴</li>
+<li><strong>測試困難</strong>：全域依賴較難進行單元測試</li>
+<li><strong>型別推斷弱</strong>：TypeScript 支援有限</li>
+</ul>
+<h4 id="🎯-適用場景"><a href="#🎯-適用場景" class="headerlink" title="🎯 適用場景"></a>🎯 適用場景</h4><ul>
+<li><strong>即將 EOS 的專案</strong>：不適合大規模重構</li>
+<li><strong>快速原型開發</strong>：需要快速驗證功能</li>
+<li><strong>小型專案</strong>：團隊規模小，複雜度低</li>
+</ul>
+<hr>
+<h3 id="2-服務注入模式-Service-Injection"><a href="#2-服務注入模式-Service-Injection" class="headerlink" title="2. 服務注入模式 (Service Injection)"></a>2. 服務注入模式 (Service Injection)</h3><h4 id="💡-概念-1"><a href="#💡-概念-1" class="headerlink" title="💡 概念"></a>💡 概念</h4><p>將業務邏輯封裝成獨立的服務類別，按需匯入使用，專注於純業務邏輯處理。</p>
+<h4 id="🔧-實作方式-1"><a href="#🔧-實作方式-1" class="headerlink" title="🔧 實作方式"></a>🔧 實作方式</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// services/ExcelService.js</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ExcelService</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">async</span> <span class="title function_">exportExcel</span>(<span class="params">options</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> &#123;</span><br><span class="line">            data = [],</span><br><span class="line">            headers = [],</span><br><span class="line">            filename = <span class="string">&#x27;export&#x27;</span>,</span><br><span class="line">            sheetName = <span class="string">&#x27;Sheet1&#x27;</span>,</span><br><span class="line">            style = &#123;&#125;,</span><br><span class="line">            includeTimestamp = <span class="literal">true</span></span><br><span class="line">        &#125; = options;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">const</span> worksheet = <span class="variable language_">this</span>.<span class="title function_">_createWorksheet</span>(data, headers);</span><br><span class="line">            <span class="variable language_">this</span>.<span class="title function_">_applyStyle</span>(worksheet, style);</span><br><span class="line">            <span class="keyword">const</span> buffer = <span class="variable language_">this</span>.<span class="title function_">_generateFile</span>(worksheet, sheetName);</span><br><span class="line">            <span class="variable language_">this</span>.<span class="title function_">_downloadFile</span>(buffer, filename, includeTimestamp);</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">return</span> &#123; <span class="attr">success</span>: <span class="literal">true</span> &#125;;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;Excel 匯出失敗:&#x27;</span>, error);</span><br><span class="line">            <span class="keyword">return</span> &#123; <span class="attr">success</span>: <span class="literal">false</span>, error &#125;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 私有方法</span></span><br><span class="line">    <span class="keyword">static</span> <span class="title function_">_createWorksheet</span>(<span class="params">data, headers</span>) &#123; <span class="comment">/* 實作邏輯 */</span> &#125;</span><br><span class="line">    <span class="keyword">static</span> <span class="title function_">_applyStyle</span>(<span class="params">worksheet, style</span>) &#123; <span class="comment">/* 實作邏輯 */</span> &#125;</span><br><span class="line">    <span class="keyword">static</span> <span class="title function_">_generateFile</span>(<span class="params">worksheet, sheetName</span>) &#123; <span class="comment">/* 實作邏輯 */</span> &#125;</span><br><span class="line">    <span class="keyword">static</span> <span class="title function_">_downloadFile</span>(<span class="params">buffer, filename, includeTimestamp</span>) &#123; <span class="comment">/* 實作邏輯 */</span> &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="title class_">ExcelService</span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在組件中使用</span></span><br><span class="line"><span class="keyword">import</span> <span class="title class_">ExcelService</span> <span class="keyword">from</span> <span class="string">&#x27;@/services/ExcelService.js&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">exportData</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> result = <span class="keyword">await</span> <span class="title class_">ExcelService</span>.<span class="title function_">exportExcel</span>(&#123;</span><br><span class="line">        <span class="attr">data</span>: tableData.<span class="property">value</span>,</span><br><span class="line">        <span class="attr">headers</span>: columnHeaders,</span><br><span class="line">        <span class="attr">filename</span>: <span class="string">&#x27;設備清單&#x27;</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="✅-優點-1"><a href="#✅-優點-1" class="headerlink" title="✅ 優點"></a>✅ 優點</h4><ul>
+<li><strong>易於測試</strong>：純業務邏輯，易於單元測試</li>
+<li><strong>重用性高</strong>：可在任何環境使用，不限於 Vue</li>
+<li><strong>型別安全</strong>：完整的 TypeScript 支援</li>
+<li><strong>按需載入</strong>：只載入真正需要的功能</li>
+<li><strong>依賴明確</strong>：清楚知道組件使用哪些服務</li>
+</ul>
+<h4 id="❌-缺點-1"><a href="#❌-缺點-1" class="headerlink" title="❌ 缺點"></a>❌ 缺點</h4><ul>
+<li><strong>學習成本</strong>：需要理解服務模式的概念</li>
+<li><strong>初期投入</strong>：需要設計服務介面和架構</li>
+<li><strong>依賴注入</strong>：需要手動管理依賴關係</li>
+</ul>
+<h4 id="🎯-適用場景-1"><a href="#🎯-適用場景-1" class="headerlink" title="🎯 適用場景"></a>🎯 適用場景</h4><ul>
+<li><strong>純業務邏輯</strong>：如資料處理、檔案匯出、API 呼叫</li>
+<li><strong>需要測試</strong>：重要的業務功能需要完整測試</li>
+<li><strong>跨平台使用</strong>：邏輯可能在不同環境中重複使用</li>
+</ul>
+<hr>
+<h3 id="3-Composables-模式-Vue-3-Composition-API"><a href="#3-Composables-模式-Vue-3-Composition-API" class="headerlink" title="3. Composables 模式 (Vue 3 Composition API)"></a>3. Composables 模式 (Vue 3 Composition API)</h3><h4 id="💡-概念-2"><a href="#💡-概念-2" class="headerlink" title="💡 概念"></a>💡 概念</h4><p>使用 Vue 3 的 Composition API 建立可重複使用的響應式邏輯，專注於狀態管理和 Vue 特定功能。</p>
+<h4 id="🔧-實作方式-2"><a href="#🔧-實作方式-2" class="headerlink" title="🔧 實作方式"></a>🔧 實作方式</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// composables/useCounter.js</span></span><br><span class="line"><span class="keyword">const</span> count = <span class="title function_">ref</span>(<span class="number">0</span>) <span class="comment">// 模組級別共享狀態</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">useCounter</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> doubleCount = <span class="title function_">computed</span>(<span class="function">() =&gt;</span> count.<span class="property">value</span> * <span class="number">2</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">increment</span>(<span class="params"></span>) &#123;</span><br><span class="line">        count.<span class="property">value</span>++;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">reset</span>(<span class="params"></span>) &#123;</span><br><span class="line">        count.<span class="property">value</span> = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> &#123; </span><br><span class="line">        <span class="attr">count</span>: <span class="title function_">readonly</span>(count), </span><br><span class="line">        doubleCount, </span><br><span class="line">        increment, </span><br><span class="line">        reset </span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// composables/useApi.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">useApi</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> loading = <span class="title function_">ref</span>(<span class="literal">false</span>);</span><br><span class="line">    <span class="keyword">const</span> error = <span class="title function_">ref</span>(<span class="literal">null</span>);</span><br><span class="line">    <span class="keyword">const</span> data = <span class="title function_">ref</span>(<span class="literal">null</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">fetchData</span>(<span class="params">url</span>) &#123;</span><br><span class="line">        loading.<span class="property">value</span> = <span class="literal">true</span>;</span><br><span class="line">        error.<span class="property">value</span> = <span class="literal">null</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="title function_">fetch</span>(url);</span><br><span class="line">            data.<span class="property">value</span> = <span class="keyword">await</span> response.<span class="title function_">json</span>();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">            error.<span class="property">value</span> = e.<span class="property">message</span>;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            loading.<span class="property">value</span> = <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> &#123; data, loading, error, fetchData &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在組件中使用</span></span><br><span class="line"><span class="keyword">import</span> &#123; useCounter &#125; <span class="keyword">from</span> <span class="string">&#x27;@/composables/useCounter&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; useApi &#125; <span class="keyword">from</span> <span class="string">&#x27;@/composables/useApi&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> &#123; count, increment &#125; = <span class="title function_">useCounter</span>();</span><br><span class="line">        <span class="keyword">const</span> &#123; data, loading, fetchData &#125; = <span class="title function_">useApi</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> &#123; count, increment, data, loading, fetchData &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="✅-優點-2"><a href="#✅-優點-2" class="headerlink" title="✅ 優點"></a>✅ 優點</h4><ul>
+<li><strong>響應式狀態</strong>：自動追蹤狀態變化，無需手動更新</li>
+<li><strong>生命週期整合</strong>：可以使用 Vue 的生命週期鉤子</li>
+<li><strong>邏輯複用</strong>：在多個組件間共享相同邏輯</li>
+<li><strong>型別推斷</strong>：優秀的 TypeScript 支援</li>
+<li><strong>組合能力</strong>：可以輕鬆組合多個 Composables</li>
+</ul>
+<h4 id="❌-缺點-2"><a href="#❌-缺點-2" class="headerlink" title="❌ 缺點"></a>❌ 缺點</h4><ul>
+<li><strong>學習曲線</strong>：需要理解 Composition API 概念</li>
+<li><strong>Vue 限定</strong>：只能在 Vue 環境中使用</li>
+<li><strong>測試複雜</strong>：需要 mock Vue 實例和響應式系統</li>
+<li><strong>狀態管理</strong>：複雜狀態管理不如專門的 Store</li>
+</ul>
+<h4 id="🎯-適用場景-2"><a href="#🎯-適用場景-2" class="headerlink" title="🎯 適用場景"></a>🎯 適用場景</h4><ul>
+<li><strong>響應式狀態管理</strong>：需要追蹤狀態變化的邏輯</li>
+<li><strong>Vue 特定功能</strong>：使用 Vue 生命週期、響應式 API</li>
+<li><strong>組件間邏輯共享</strong>：多個組件需要相同的響應式邏輯</li>
+</ul>
+<hr>
+<h2 id="🛒-狀態管理比較：Store-vs-Composables"><a href="#🛒-狀態管理比較：Store-vs-Composables" class="headerlink" title="🛒 狀態管理比較：Store vs Composables"></a>🛒 狀態管理比較：Store vs Composables</h2><h3 id="Store-Pinia-Vuex-模式"><a href="#Store-Pinia-Vuex-模式" class="headerlink" title="Store (Pinia&#x2F;Vuex) 模式"></a>Store (Pinia&#x2F;Vuex) 模式</h3><h4 id="🔧-實作方式-3"><a href="#🔧-實作方式-3" class="headerlink" title="🔧 實作方式"></a>🔧 實作方式</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// stores/user.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; defineStore &#125; <span class="keyword">from</span> <span class="string">&#x27;pinia&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> useUserStore = <span class="title function_">defineStore</span>(<span class="string">&#x27;user&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> currentUser = <span class="title function_">ref</span>(<span class="literal">null</span>);</span><br><span class="line">    <span class="keyword">const</span> token = <span class="title function_">ref</span>(<span class="variable language_">sessionStorage</span>.<span class="title function_">getItem</span>(<span class="string">&#x27;TOKEN&#x27;</span>));</span><br><span class="line">    <span class="keyword">const</span> permissions = <span class="title function_">ref</span>([]);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">login</span>(<span class="params">credentials</span>) &#123;</span><br><span class="line">        <span class="comment">// 登入邏輯</span></span><br><span class="line">        <span class="keyword">const</span> response = <span class="keyword">await</span> api.<span class="title function_">login</span>(credentials);</span><br><span class="line">        currentUser.<span class="property">value</span> = response.<span class="property">user</span>;</span><br><span class="line">        token.<span class="property">value</span> = response.<span class="property">token</span>;</span><br><span class="line">        <span class="variable language_">sessionStorage</span>.<span class="title function_">setItem</span>(<span class="string">&#x27;TOKEN&#x27;</span>, response.<span class="property">token</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">logout</span>(<span class="params"></span>) &#123;</span><br><span class="line">        currentUser.<span class="property">value</span> = <span class="literal">null</span>;</span><br><span class="line">        token.<span class="property">value</span> = <span class="literal">null</span>;</span><br><span class="line">        permissions.<span class="property">value</span> = [];</span><br><span class="line">        <span class="variable language_">sessionStorage</span>.<span class="title function_">removeItem</span>(<span class="string">&#x27;TOKEN&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> &#123; currentUser, token, permissions, login, logout &#125;;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h4 id="特點"><a href="#特點" class="headerlink" title="特點"></a>特點</h4><ul>
+<li><strong>全域狀態管理</strong>：應用程式級別的狀態</li>
+<li><strong>DevTools 支援</strong>：完整的開發者工具整合</li>
+<li><strong>持久化</strong>：易於整合狀態持久化</li>
+<li><strong>結構化</strong>：強制統一的狀態管理結構</li>
+</ul>
+<h3 id="Composables-狀態共享"><a href="#Composables-狀態共享" class="headerlink" title="Composables 狀態共享"></a>Composables 狀態共享</h3><h4 id="🔧-實作方式-4"><a href="#🔧-實作方式-4" class="headerlink" title="🔧 實作方式"></a>🔧 實作方式</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// composables/useGlobalNotifications.js</span></span><br><span class="line"><span class="keyword">const</span> notifications = <span class="title function_">ref</span>([]); <span class="comment">// 模組級別 = 全域共享</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">useGlobalNotifications</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> unreadCount = <span class="title function_">computed</span>(<span class="function">() =&gt;</span> </span><br><span class="line">        notifications.<span class="property">value</span>.<span class="title function_">filter</span>(<span class="function"><span class="params">n</span> =&gt;</span> !n.<span class="property">read</span>).<span class="property">length</span></span><br><span class="line">    );</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">addNotification</span>(<span class="params">message</span>) &#123;</span><br><span class="line">        notifications.<span class="property">value</span>.<span class="title function_">push</span>(&#123;</span><br><span class="line">            <span class="attr">id</span>: <span class="title class_">Date</span>.<span class="title function_">now</span>(),</span><br><span class="line">            message,</span><br><span class="line">            <span class="attr">read</span>: <span class="literal">false</span>,</span><br><span class="line">            <span class="attr">timestamp</span>: <span class="keyword">new</span> <span class="title class_">Date</span>()</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">function</span> <span class="title function_">markAsRead</span>(<span class="params">id</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> notification = notifications.<span class="property">value</span>.<span class="title function_">find</span>(<span class="function"><span class="params">n</span> =&gt;</span> n.<span class="property">id</span> === id);</span><br><span class="line">        <span class="keyword">if</span> (notification) notification.<span class="property">read</span> = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="attr">notifications</span>: <span class="title function_">readonly</span>(notifications),</span><br><span class="line">        unreadCount,</span><br><span class="line">        addNotification,</span><br><span class="line">        markAsRead</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="特點-1"><a href="#特點-1" class="headerlink" title="特點"></a>特點</h4><ul>
+<li><strong>靈活性高</strong>：可以選擇全域或區域共享</li>
+<li><strong>輕量級</strong>：不需要額外的狀態管理函式庫</li>
+<li><strong>組合能力</strong>：可以輕鬆組合多個狀態邏輯</li>
+</ul>
+<hr>
+<h2 id="📊-選擇指南對照表"><a href="#📊-選擇指南對照表" class="headerlink" title="📊 選擇指南對照表"></a>📊 選擇指南對照表</h2><table>
+<thead>
+<tr>
+<th>功能類型</th>
+<th>全域屬性模式</th>
+<th>服務模式</th>
+<th>Composables 模式</th>
+<th>Store 模式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>純業務邏輯</strong></td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐</td>
+<td>⭐⭐</td>
+</tr>
+<tr>
+<td><strong>工具函式</strong></td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+<td>⭐⭐</td>
+<td>⭐</td>
+</tr>
+<tr>
+<td><strong>響應式狀態</strong></td>
+<td>⭐⭐</td>
+<td>⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td><strong>全域狀態</strong></td>
+<td>⭐⭐⭐</td>
+<td>⭐</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td><strong>測試能力</strong></td>
+<td>⭐⭐</td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐⭐⭐</td>
+</tr>
+<tr>
+<td><strong>學習成本</strong></td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐</td>
+<td>⭐⭐⭐</td>
+</tr>
+<tr>
+<td><strong>開發速度</strong></td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+<td>⭐⭐⭐</td>
+</tr>
+</tbody></table>
+<h2 id="🎯-實際應用案例：Excel-匯出功能"><a href="#🎯-實際應用案例：Excel-匯出功能" class="headerlink" title="🎯 實際應用案例：Excel 匯出功能"></a>🎯 實際應用案例：Excel 匯出功能</h2><h3 id="需求分析"><a href="#需求分析" class="headerlink" title="需求分析"></a>需求分析</h3><p>Excel 匯出功能具有以下特性：</p>
+<ul>
+<li><strong>純業務邏輯</strong>：不涉及響應式狀態</li>
+<li><strong>工具性質</strong>：提供資料處理和檔案產生功能</li>
+<li><strong>可重複使用</strong>：多個頁面都可能需要匯出功能</li>
+</ul>
+<h3 id="推薦方案：Service-模式"><a href="#推薦方案：Service-模式" class="headerlink" title="推薦方案：Service 模式"></a>推薦方案：Service 模式</h3><h4 id="理由"><a href="#理由" class="headerlink" title="理由"></a>理由</h4><ol>
+<li><strong>純業務邏輯</strong>：Excel 處理不需要響應式狀態</li>
+<li><strong>易於測試</strong>：可以獨立測試匯出邏輯</li>
+<li><strong>跨平台重用</strong>：未來可能在其他專案中使用</li>
+<li><strong>依賴明確</strong>：清楚知道需要哪些 XLSX 功能</li>
+</ol>
+<h4 id="實作策略"><a href="#實作策略" class="headerlink" title="實作策略"></a>實作策略</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// services/ExcelService.js - 純業務邏輯</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ExcelService</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="title function_">exportExcel</span>(<span class="params">options</span>) &#123;</span><br><span class="line">        <span class="comment">// 核心匯出邏輯</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// utils.js - 提供便捷介面</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">function</span> <span class="title function_">exportExcel</span>(<span class="params">options</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">ExcelService</span>.<span class="title function_">exportExcel</span>(&#123;</span><br><span class="line">        ...options,</span><br><span class="line">        <span class="attr">formatUtils</span>: format  <span class="comment">// 注入專案特定依賴</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 組件中使用</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">export_data_excel</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> result = utils.<span class="title function_">exportExcel</span>(&#123;</span><br><span class="line">        <span class="attr">data</span>: tableData.<span class="property">value</span>,</span><br><span class="line">        <span class="attr">headers</span>: columnHeaders,</span><br><span class="line">        <span class="attr">filename</span>: <span class="title function_">t</span>(<span class="string">&#x27;EXPORT_FILENAME&#x27;</span>)</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="🔄-Vue-3-推出-Composables-的背景"><a href="#🔄-Vue-3-推出-Composables-的背景" class="headerlink" title="🔄 Vue 3 推出 Composables 的背景"></a>🔄 Vue 3 推出 Composables 的背景</h2><h3 id="解決的問題"><a href="#解決的問題" class="headerlink" title="解決的問題"></a>解決的問題</h3><h4 id="1-Vue-2-Mixins-的痛點"><a href="#1-Vue-2-Mixins-的痛點" class="headerlink" title="1. Vue 2 Mixins 的痛點"></a>1. Vue 2 Mixins 的痛點</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Vue 2 - 問題範例</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    <span class="attr">mixins</span>: [counterMixin, apiMixin], <span class="comment">// 命名衝突、來源不明</span></span><br><span class="line">    <span class="title function_">data</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            <span class="comment">// 不知道 count 來自哪個 mixin</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Vue 3 - 解決方案</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> &#123; count &#125; = <span class="title function_">useCounter</span>();  <span class="comment">// 明確來源</span></span><br><span class="line">        <span class="keyword">const</span> &#123; data &#125; = <span class="title function_">useApi</span>();       <span class="comment">// 無命名衝突</span></span><br><span class="line">        <span class="keyword">return</span> &#123; count, data &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-邏輯復用困難"><a href="#2-邏輯復用困難" class="headerlink" title="2. 邏輯復用困難"></a>2. 邏輯復用困難</h4><p>Vue 2 中跨組件共享邏輯很困難，Composables 提供了優雅的解決方案。</p>
+<h4 id="3-TypeScript-支援不足"><a href="#3-TypeScript-支援不足" class="headerlink" title="3. TypeScript 支援不足"></a>3. TypeScript 支援不足</h4><p>Composables 提供完整的型別推斷和型別安全。</p>
+<h3 id="設計哲學"><a href="#設計哲學" class="headerlink" title="設計哲學"></a>設計哲學</h3><p>Composables <strong>不是要取代 Service</strong>，而是補充 Vue 生態系統中<strong>狀態管理和邏輯復用</strong>的能力。</p>
+<hr>
+<h2 id="🏛️-架構演進建議"><a href="#🏛️-架構演進建議" class="headerlink" title="🏛️ 架構演進建議"></a>🏛️ 架構演進建議</h2><h3 id="對於-EOS-專案"><a href="#對於-EOS-專案" class="headerlink" title="對於 EOS 專案"></a>對於 EOS 專案</h3><ol>
+<li><strong>保持現有架構</strong>：不進行大規模重構</li>
+<li><strong>新功能使用 Service</strong>：如 Excel 匯出等純業務邏輯</li>
+<li><strong>逐步優化</strong>：針對高使用率功能進行局部優化</li>
+</ol>
+<h3 id="對於新專案"><a href="#對於新專案" class="headerlink" title="對於新專案"></a>對於新專案</h3><ol>
+<li><p><strong>混合使用策略</strong>：</p>
+<ul>
+<li><strong>工具函式</strong>：Service 模式</li>
+<li><strong>響應式邏輯</strong>：Composables 模式</li>
+<li><strong>全域狀態</strong>：Store 模式</li>
+<li><strong>API 呼叫</strong>：Service + Composables 組合</li>
+</ul>
+</li>
+<li><p><strong>分層架構</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Components (組件層)</span><br><span class="line">     ↓</span><br><span class="line">Composables (邏輯復用層)</span><br><span class="line">     ↓</span><br><span class="line">Services (業務邏輯層)</span><br><span class="line">     ↓</span><br><span class="line">Utils (工具函式層)</span><br></pre></td></tr></table></figure></li>
+</ol>
+<hr>
+<h2 id="📝-最佳實踐總結"><a href="#📝-最佳實踐總結" class="headerlink" title="📝 最佳實踐總結"></a>📝 最佳實踐總結</h2><h3 id="1-選擇原則"><a href="#1-選擇原則" class="headerlink" title="1. 選擇原則"></a>1. 選擇原則</h3><ul>
+<li><strong>狀態性質</strong>：有狀態選 Composables&#x2F;Store，無狀態選 Service</li>
+<li><strong>專案階段</strong>：新專案靈活選擇，既有專案漸進式改進</li>
+<li><strong>團隊能力</strong>：考慮團隊對新技術的接受度和學習成本</li>
+</ul>
+<h3 id="2-混合使用策略"><a href="#2-混合使用策略" class="headerlink" title="2. 混合使用策略"></a>2. 混合使用策略</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 典型組件架構</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    <span class="title function_">setup</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="comment">// 全域狀態</span></span><br><span class="line">        <span class="keyword">const</span> userStore = <span class="title function_">useUserStore</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 響應式邏輯</span></span><br><span class="line">        <span class="keyword">const</span> &#123; filters, updateFilter &#125; = <span class="title function_">useTableFilters</span>();</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 業務服務</span></span><br><span class="line">        <span class="keyword">const</span> <span class="title function_">exportData</span> = (<span class="params"></span>) =&gt; <span class="title class_">ExcelService</span>.<span class="title function_">exportExcel</span>(&#123;...&#125;);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 工具函式</span></span><br><span class="line">        <span class="keyword">const</span> <span class="title function_">formatDate</span> = (<span class="params">date</span>) =&gt; utils.<span class="title function_">format</span>(date, <span class="string">&#x27;yyyy-MM-dd&#x27;</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            <span class="attr">user</span>: userStore.<span class="property">currentUser</span>,</span><br><span class="line">            filters,</span><br><span class="line">            updateFilter,</span><br><span class="line">            exportData,</span><br><span class="line">            formatDate</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-重構策略"><a href="#3-重構策略" class="headerlink" title="3. 重構策略"></a>3. 重構策略</h3><ul>
+<li><strong>階段式遷移</strong>：優先重構高使用率、高維護成本的功能</li>
+<li><strong>向後相容</strong>：保持既有 API 不變，內部實作漸進式改進</li>
+<li><strong>測試驅動</strong>：重要功能先寫測試，再進行重構</li>
+</ul>
+<hr>
+<h2 id="🔗-參考資源"><a href="#🔗-參考資源" class="headerlink" title="🔗 參考資源"></a>🔗 參考資源</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://vuejs.org/api/composition-api-setup.html">Vue 3 Composition API 官方文件</a></li>
+<li><a target="_blank" rel="noopener" href="https://pinia.vuejs.org/">Pinia 狀態管理</a></li>
+<li><a target="_blank" rel="noopener" href="https://vuejs.org/guide/typescript/overview.html">TypeScript 與 Vue 3</a></li>
+<li><a target="_blank" rel="noopener" href="https://vuejs.org/guide/reusability/composables.html">Vue 3 設計模式最佳實踐</a></li>
+</ul>
+<h2 id="💡-實戰決策流程圖"><a href="#💡-實戰決策流程圖" class="headerlink" title="💡 實戰決策流程圖"></a>💡 實戰決策流程圖</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">    A[新功能需求] --&gt; B&#123;是否需要狀態管理?&#125;</span><br><span class="line">    B --&gt;|是| C&#123;全域還是局部狀態?&#125;</span><br><span class="line">    B --&gt;|否| D&#123;是否為純業務邏輯?&#125;</span><br><span class="line">    </span><br><span class="line">    C --&gt;|全域| E[Store 模式]</span><br><span class="line">    C --&gt;|局部| F[Composables 模式]</span><br><span class="line">    </span><br><span class="line">    D --&gt;|是| G[Service 模式]</span><br><span class="line">    D --&gt;|否| H&#123;是否為工具函式?&#125;</span><br><span class="line">    </span><br><span class="line">    H --&gt;|是| I&#123;專案規模?&#125;</span><br><span class="line">    H --&gt;|否| J[考慮重新分析需求]</span><br><span class="line">    </span><br><span class="line">    I --&gt;|大型/新專案| G</span><br><span class="line">    I --&gt;|小型/EOS專案| K[全域屬性模式]</span><br><span class="line">    </span><br><span class="line">    E --&gt; L[實作方案]</span><br><span class="line">    F --&gt; L</span><br><span class="line">    G --&gt; L</span><br><span class="line">    K --&gt; L</span><br></pre></td></tr></table></figure>
+
+<h2 id="🎯-核心洞察總結"><a href="#🎯-核心洞察總結" class="headerlink" title="🎯 核心洞察總結"></a>🎯 核心洞察總結</h2><h3 id="1-架構選擇的關鍵因素"><a href="#1-架構選擇的關鍵因素" class="headerlink" title="1. 架構選擇的關鍵因素"></a>1. <strong>架構選擇的關鍵因素</strong></h3><ul>
+<li><strong>專案生命週期</strong>：新專案靈活選擇，既有專案考慮維護成本</li>
+<li><strong>團隊技能</strong>：考慮團隊對新技術的接受度和學習曲線</li>
+<li><strong>功能特性</strong>：依據狀態性質、業務複雜度選擇合適模式</li>
+</ul>
+<h3 id="2-混合策略的威力"><a href="#2-混合策略的威力" class="headerlink" title="2. 混合策略的威力"></a>2. <strong>混合策略的威力</strong></h3><p>不同架構模式各有優勢，智慧的組合使用能發揮最大效益：</p>
+<ul>
+<li><strong>工具函式</strong>：Service 模式提供最佳的測試性和重用性</li>
+<li><strong>響應式邏輯</strong>：Composables 模式發揮 Vue 3 的優勢</li>
+<li><strong>全域狀態</strong>：Store 模式提供結構化的狀態管理</li>
+<li><strong>既有系統</strong>：全域屬性模式確保穩定性</li>
+</ul>
+<h3 id="3-效能與開發體驗的平衡"><a href="#3-效能與開發體驗的平衡" class="headerlink" title="3. 效能與開發體驗的平衡"></a>3. <strong>效能與開發體驗的平衡</strong></h3><ul>
+<li><strong>開發速度 vs 長期維護</strong>：短期開發效率與長期維護成本的權衡</li>
+<li><strong>Bundle 大小 vs 開發便利性</strong>：按需載入與全域注入的取捨</li>
+<li><strong>型別安全 vs 學習成本</strong>：TypeScript 支援與團隊學習投入</li>
+</ul>
+<h2 id="📞-技術支援與參考資源"><a href="#📞-技術支援與參考資源" class="headerlink" title="📞 技術支援與參考資源"></a>📞 技術支援與參考資源</h2><h3 id="官方文件"><a href="#官方文件" class="headerlink" title="官方文件"></a>官方文件</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://vuejs.org/api/composition-api-setup.html">Vue 3 Composition API 官方文件</a></li>
+<li><a target="_blank" rel="noopener" href="https://pinia.vuejs.org/">Pinia 狀態管理</a></li>
+<li><a target="_blank" rel="noopener" href="https://vuejs.org/guide/typescript/overview.html">TypeScript 與 Vue 3</a></li>
+<li><a target="_blank" rel="noopener" href="https://vuejs.org/guide/reusability/composables.html">Vue 3 設計模式最佳實踐</a></li>
+</ul>
+<h3 id="實踐案例"><a href="#實踐案例" class="headerlink" title="實踐案例"></a>實踐案例</h3><ul>
+<li>Vue.js 官方範例專案</li>
+<li>Composition API RFC 討論</li>
+<li>Vue 3 遷移指南</li>
+</ul>
+<h3 id="相關工具"><a href="#相關工具" class="headerlink" title="相關工具"></a>相關工具</h3><ul>
+<li>Vue DevTools 3.0+</li>
+<li>TypeScript</li>
+<li>ESLint Vue Plugin</li>
+<li>Vite 建構工具</li>
+</ul>
+<blockquote>
+<p><strong>作者</strong>：前端架構團隊<br><strong>更新日期</strong>：2025年6月29日<br><strong>版本</strong>：v1.1<br><strong>適用範圍</strong>：Vue 3 + Composition API 專案</p>
+</blockquote>
+<hr>
+<p><em>本文件為前端架構決策提供系統性的分析和建議，幫助團隊選擇最適合的技術方案。</em></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://cookieseventeen.github.io/2025/06/29/vue-frontend-architecture-patterns-guide/" data-id="cmcj9gyyo000469mz0bcsfwfj" data-title="Vue.js 前端架構模式比較與選擇指南" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Best-Practices/" rel="tag">Best Practices</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Composables/" rel="tag">Composables</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Composition-API/" rel="tag">Composition API</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Design-Patterns/" rel="tag">Design Patterns</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Frontend-Architecture/" rel="tag">Frontend Architecture</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Global-Properties/" rel="tag">Global Properties</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pinia/" rel="tag">Pinia</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Service-Pattern/" rel="tag">Service Pattern</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/State-Management/" rel="tag">State Management</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Vue-js/" rel="tag">Vue.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2025/06/29/ai-business-collaboration-strategy-guide/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          AI 業務導向協作策略與 {{critical_functions}} 實戰指南
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2025/06/29/mapbox-data-visualization-guide/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Mapbox 地圖資料視覺化技術分析與應用指南</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分類</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Tech-Daily/">Tech Daily</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI-Assistant/" rel="tag">AI Assistant</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI-Collaboration/" rel="tag">AI Collaboration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ARM/" rel="tag">ARM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular/" rel="tag">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular-19/" rel="tag">Angular 19</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular-Universal/" rel="tag">Angular Universal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Best-Practices/" rel="tag">Best Practices</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Buildx/" rel="tag">Buildx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Business-Context/" rel="tag">Business Context</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Business-Strategy/" rel="tag">Business Strategy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CI-CD/" rel="tag">CI&#x2F;CD</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Canvas/" rel="tag">Canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Clustering/" rel="tag">Clustering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Code-Quality/" rel="tag">Code Quality</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Composables/" rel="tag">Composables</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Composition-API/" rel="tag">Composition API</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Critical-Functions/" rel="tag">Critical Functions</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Data-Visualization/" rel="tag">Data Visualization</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Design-Patterns/" rel="tag">Design Patterns</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Developer-Experience/" rel="tag">Developer Experience</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Domain-Knowledge/" rel="tag">Domain Knowledge</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ESLint-9-x/" rel="tag">ESLint 9.x</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Flat-Config/" rel="tag">Flat Config</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Frontend-Architecture/" rel="tag">Frontend Architecture</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Frontend-Tooling/" rel="tag">Frontend Tooling</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GeoJSON/" rel="tag">GeoJSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Global-Properties/" rel="tag">Global Properties</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hydration/" rel="tag">Hydration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Interactive-Maps/" rel="tag">Interactive Maps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Knowledge-Management/" rel="tag">Knowledge Management</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linting-Rules/" rel="tag">Linting Rules</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mapbox/" rel="tag">Mapbox</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mapbox-GL-JS/" rel="tag">Mapbox GL JS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Multi-platform/" rel="tag">Multi-platform</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Naming-Convention/" rel="tag">Naming Convention</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Offline-Deployment/" rel="tag">Offline Deployment</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Performance-Optimization/" rel="tag">Performance Optimization</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pinia/" rel="tag">Pinia</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Prerender/" rel="tag">Prerender</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Prompt-Engineering/" rel="tag">Prompt Engineering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RenderMode/" rel="tag">RenderMode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Route-Guards/" rel="tag">Route Guards</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/" rel="tag">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSR/" rel="tag">SSR</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Server-Side-Rendering/" rel="tag">Server-Side Rendering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Service-Pattern/" rel="tag">Service Pattern</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/State-Management/" rel="tag">State Management</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Team-Productivity/" rel="tag">Team Productivity</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Technical-Decision-Making/" rel="tag">Technical Decision Making</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TypeScript/" rel="tag">TypeScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/USGS-Data/" rel="tag">USGS Data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue-js/" rel="tag">Vue.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web-Mapping/" rel="tag">Web Mapping</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤雲</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AI-Assistant/" style="font-size: 10px;">AI Assistant</a> <a href="/tags/AI-Collaboration/" style="font-size: 10px;">AI Collaboration</a> <a href="/tags/ARM/" style="font-size: 10px;">ARM</a> <a href="/tags/Angular/" style="font-size: 10px;">Angular</a> <a href="/tags/Angular-19/" style="font-size: 10px;">Angular 19</a> <a href="/tags/Angular-Universal/" style="font-size: 10px;">Angular Universal</a> <a href="/tags/Best-Practices/" style="font-size: 10px;">Best Practices</a> <a href="/tags/Buildx/" style="font-size: 10px;">Buildx</a> <a href="/tags/Business-Context/" style="font-size: 10px;">Business Context</a> <a href="/tags/Business-Strategy/" style="font-size: 10px;">Business Strategy</a> <a href="/tags/CI-CD/" style="font-size: 10px;">CI/CD</a> <a href="/tags/Canvas/" style="font-size: 10px;">Canvas</a> <a href="/tags/Clustering/" style="font-size: 10px;">Clustering</a> <a href="/tags/Code-Quality/" style="font-size: 10px;">Code Quality</a> <a href="/tags/Composables/" style="font-size: 10px;">Composables</a> <a href="/tags/Composition-API/" style="font-size: 10px;">Composition API</a> <a href="/tags/Critical-Functions/" style="font-size: 10px;">Critical Functions</a> <a href="/tags/Data-Visualization/" style="font-size: 10px;">Data Visualization</a> <a href="/tags/Design-Patterns/" style="font-size: 10px;">Design Patterns</a> <a href="/tags/Developer-Experience/" style="font-size: 10px;">Developer Experience</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Domain-Knowledge/" style="font-size: 10px;">Domain Knowledge</a> <a href="/tags/ESLint-9-x/" style="font-size: 10px;">ESLint 9.x</a> <a href="/tags/Flat-Config/" style="font-size: 10px;">Flat Config</a> <a href="/tags/Frontend-Architecture/" style="font-size: 10px;">Frontend Architecture</a> <a href="/tags/Frontend-Tooling/" style="font-size: 10px;">Frontend Tooling</a> <a href="/tags/GeoJSON/" style="font-size: 10px;">GeoJSON</a> <a href="/tags/Global-Properties/" style="font-size: 10px;">Global Properties</a> <a href="/tags/Hydration/" style="font-size: 10px;">Hydration</a> <a href="/tags/Interactive-Maps/" style="font-size: 10px;">Interactive Maps</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Knowledge-Management/" style="font-size: 10px;">Knowledge Management</a> <a href="/tags/Linting-Rules/" style="font-size: 10px;">Linting Rules</a> <a href="/tags/Mapbox/" style="font-size: 10px;">Mapbox</a> <a href="/tags/Mapbox-GL-JS/" style="font-size: 10px;">Mapbox GL JS</a> <a href="/tags/Multi-platform/" style="font-size: 10px;">Multi-platform</a> <a href="/tags/Naming-Convention/" style="font-size: 10px;">Naming Convention</a> <a href="/tags/Offline-Deployment/" style="font-size: 10px;">Offline Deployment</a> <a href="/tags/Performance-Optimization/" style="font-size: 10px;">Performance Optimization</a> <a href="/tags/Pinia/" style="font-size: 10px;">Pinia</a> <a href="/tags/Prerender/" style="font-size: 10px;">Prerender</a> <a href="/tags/Prompt-Engineering/" style="font-size: 10px;">Prompt Engineering</a> <a href="/tags/RenderMode/" style="font-size: 10px;">RenderMode</a> <a href="/tags/Route-Guards/" style="font-size: 10px;">Route Guards</a> <a href="/tags/SEO/" style="font-size: 10px;">SEO</a> <a href="/tags/SSR/" style="font-size: 10px;">SSR</a> <a href="/tags/Server-Side-Rendering/" style="font-size: 10px;">Server-Side Rendering</a> <a href="/tags/Service-Pattern/" style="font-size: 10px;">Service Pattern</a> <a href="/tags/State-Management/" style="font-size: 10px;">State Management</a> <a href="/tags/Team-Productivity/" style="font-size: 10px;">Team Productivity</a> <a href="/tags/Technical-Decision-Making/" style="font-size: 10px;">Technical Decision Making</a> <a href="/tags/TypeScript/" style="font-size: 10px;">TypeScript</a> <a href="/tags/USGS-Data/" style="font-size: 10px;">USGS Data</a> <a href="/tags/Vue-js/" style="font-size: 10px;">Vue.js</a> <a href="/tags/Web-Mapping/" style="font-size: 10px;">Web Mapping</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">彙整</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/06/">六月 2025</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/06/29/eslint-configuration-best-practices-guide/">ESLint 9.x 革命性配置與前端開發最佳化實戰指南</a>
+          </li>
+        
+          <li>
+            <a href="/2025/06/29/angular-ssr-prerender-technical-guide/">Angular 19 SSR/Prerender 深度技術分析與實戰指南</a>
+          </li>
+        
+          <li>
+            <a href="/2025/06/29/ai-business-collaboration-strategy-guide/">AI 業務導向協作策略與 {{critical_functions}} 實戰指南</a>
+          </li>
+        
+          <li>
+            <a href="/2025/06/29/vue-frontend-architecture-patterns-guide/">Vue.js 前端架構模式比較與選擇指南</a>
+          </li>
+        
+          <li>
+            <a href="/2025/06/29/mapbox-data-visualization-guide/">Mapbox 地圖資料視覺化技術分析與應用指南</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2025 Ben Hsieh<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
