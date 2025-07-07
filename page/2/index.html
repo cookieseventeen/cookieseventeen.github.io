@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="https://cookieseventeen.github.io/page/2/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:author" content="Ben Hsieh">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.2.0/css/fork-awesome.min.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">任何一件事做到極致都值得敬佩</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="搜尋"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜尋"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://cookieseventeen.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main">
+  
+    <article id="post-docker-buildx-tech-daily" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2025/06/19/docker-buildx-tech-daily/" class="article-date">
+  <time class="dt-published" datetime="2025-06-19T02:00:00.000Z" itemprop="datePublished">2025-06-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Tech-Daily/">Tech Daily</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2025/06/19/docker-buildx-tech-daily/">Docker Buildx 跨架構封裝 Tech Daily</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="0-核心懶人包"><a href="#0-核心懶人包" class="headerlink" title="0. 核心懶人包"></a>0. 核心懶人包</h2><ol>
+<li><strong>Buildx</strong>：BuildKit 前端，可於 x86／Apple Silicon 一次產出多平台映像。</li>
+<li><code>--output type=docker,dest=*.tar</code>：產生可攜式 <code>.tar</code>，低效能主機用 <code>docker load</code> 匯入即可。</li>
+<li><strong>最佳實踐</strong>：Multi-Stage Build＋極小基底映像＋QEMU 跨架構編譯，可縮短部署時間並減少映像體積。</li>
+</ol>
+<h2 id="1-指令拆解"><a href="#1-指令拆解" class="headerlink" title="1. 指令拆解"></a>1. 指令拆解</h2><table>
+<thead>
+<tr>
+<th>片段</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>docker buildx build</code></td>
+<td>啟用 BuildKit（並行、快取、秘密掛載…）。</td>
+</tr>
+<tr>
+<td><code>-f Dockerfile</code></td>
+<td>指定 Dockerfile 路徑。</td>
+</tr>
+<tr>
+<td><code>--platform linux/arm64</code></td>
+<td>產出 arm64 層；可用逗號一次列多架構。</td>
+</tr>
+<tr>
+<td><code>.</code></td>
+<td>建構上下文（專案根目錄）。</td>
+</tr>
+<tr>
+<td><code>-t generic-app:latest</code></td>
+<td>打映像標籤。</td>
+</tr>
+<tr>
+<td><code>--output type=docker,dest=generic-app-arm64.tar</code></td>
+<td>匯出成 tar 供離線傳輸。</td>
+</tr>
+</tbody></table>
+<h2 id="2-系統流程"><a href="#2-系統流程" class="headerlink" title="2. 系統流程"></a>2. 系統流程</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">x86／Apple Silicon 開發機</span><br><span class="line">│  Buildx (BuildKit)</span><br><span class="line">│     ├─ QEMU 模擬 arm64 指令</span><br><span class="line">│     └─ 生成 manifest list</span><br><span class="line">│            └─ arm64 layers → generic-app-arm64.tar</span><br><span class="line">└─ scp／rsync</span><br><span class="line">      └─► 目標 ARM 主機</span><br><span class="line">             docker load</span><br><span class="line">             docker run／compose up</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-映像瘦身備忘"><a href="#3-映像瘦身備忘" class="headerlink" title="3. 映像瘦身備忘"></a>3. 映像瘦身備忘</h2><ol>
+<li><strong>Multi-Stage Build</strong>：只保留最終執行檔與靜態資產。</li>
+<li><strong>精簡基底</strong>：<code>alpine</code>、<code>debian:bookworm-slim</code>，或 <strong>Distroless</strong>。</li>
+<li><strong>清理暫存</strong>：<code>apt-get clean &amp;&amp; rm -rf /var/lib/apt/lists/*</code>、<code>npm ci --omit=dev</code>。</li>
+<li><strong>靜態編譯 + strip</strong>（Go／Rust）：<code>-ldflags &quot;-s -w&quot;</code> 可再省 30 %以上體積。</li>
+</ol>
+<h2 id="4-docker-compose-範例"><a href="#4-docker-compose-範例" class="headerlink" title="4. docker-compose 範例"></a>4. docker-compose 範例</h2><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">app:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">generic-app:latest</span></span><br><span class="line">    <span class="attr">platform:</span> <span class="string">linux/arm64</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;80:80&quot;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>先於目標機載入映像：<code>docker load -i generic-app-arm64.tar</code>，再執行 <code>docker compose up -d</code>。</p>
+</blockquote>
+<h2 id="5-常見踩雷速查"><a href="#5-常見踩雷速查" class="headerlink" title="5. 常見踩雷速查"></a>5. 常見踩雷速查</h2><table>
+<thead>
+<tr>
+<th>症狀</th>
+<th>快速排解</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Build 階段 QEMU 超慢</td>
+<td>僅在 Build 階段用 QEMU；Runtime 選真 arm64 基底。</td>
+</tr>
+<tr>
+<td><code>apt</code> 抓錯架構</td>
+<td>檢查 <code>dpkg --print-architecture</code>；必要時加 <code>--platform</code>。</td>
+</tr>
+<tr>
+<td><code>CGO</code> 交叉編譯失敗</td>
+<td>安裝 <code>gcc-aarch64-linux-gnu</code> 或改用 musl／zig。</td>
+</tr>
+<tr>
+<td>映像仍肥大</td>
+<td><code>docker history &lt;image&gt;</code> 找出大 layer，清除 cache／log。</td>
+</tr>
+</tbody></table>
+<h2 id="6-延伸指令"><a href="#6-延伸指令" class="headerlink" title="6. 延伸指令"></a>6. 延伸指令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 建立跨架構 builder</span></span><br><span class="line">docker buildx create --use --name cross   &amp;&amp; docker buildx inspect --bootstrap</span><br><span class="line"></span><br><span class="line"><span class="comment"># 多平台一次打包並推送 Registry</span></span><br><span class="line">docker buildx build   --platform linux/amd64,linux/arm64   -t registry.example.com/generic-app:multi   --push .</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看映像支援架構</span></span><br><span class="line">docker buildx imagetools inspect generic-app:latest</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="每日一句"><a href="#每日一句" class="headerlink" title="每日一句"></a>每日一句</h3><p><em>Build once, run anywhere — 讓大主機做重活，讓小主機專心跑服務。</em></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://cookieseventeen.github.io/2025/06/19/docker-buildx-tech-daily/" data-id="cmct8b575000enjmzdp6ref3m" data-title="Docker Buildx 跨架構封裝 Tech Daily" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ARM/" rel="tag">ARM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Buildx/" rel="tag">Buildx</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Multi-platform/" rel="tag">Multi-platform</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Offline-Deployment/" rel="tag">Offline Deployment</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+
+
+  <nav id="page-nav">
+    
+    <a class="extend prev" rel="prev" href="/">&laquo; 上一頁</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+  </nav>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分類</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Tech-Daily/">Tech Daily</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI-Assistant/" rel="tag">AI Assistant</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI-Collaboration/" rel="tag">AI Collaboration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ARM/" rel="tag">ARM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular/" rel="tag">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular-15/" rel="tag">Angular 15+</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular-19/" rel="tag">Angular 19</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular-19/" rel="tag">Angular 19+</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular-Configuration/" rel="tag">Angular Configuration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular-SSR/" rel="tag">Angular SSR</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular-Universal/" rel="tag">Angular Universal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Best-Practices/" rel="tag">Best Practices</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Buildx/" rel="tag">Buildx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Business-Context/" rel="tag">Business Context</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Business-Strategy/" rel="tag">Business Strategy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CI-CD/" rel="tag">CI&#x2F;CD</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Canvas/" rel="tag">Canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Clean-Architecture/" rel="tag">Clean Architecture</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Clustering/" rel="tag">Clustering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Code-Quality/" rel="tag">Code Quality</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Composables/" rel="tag">Composables</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Composition-API/" rel="tag">Composition API</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Critical-Functions/" rel="tag">Critical Functions</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Data-Visualization/" rel="tag">Data Visualization</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debugging/" rel="tag">Debugging</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dependency-Injection/" rel="tag">Dependency Injection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Design-Patterns/" rel="tag">Design Patterns</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Developer-Experience/" rel="tag">Developer Experience</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Domain-Knowledge/" rel="tag">Domain Knowledge</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ESLint-9-x/" rel="tag">ESLint 9.x</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Enterprise-Architecture/" rel="tag">Enterprise Architecture</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Error-Handling/" rel="tag">Error Handling</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Feature-Modules/" rel="tag">Feature Modules</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Flat-Config/" rel="tag">Flat Config</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Frontend-Architecture/" rel="tag">Frontend Architecture</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Frontend-Tooling/" rel="tag">Frontend Tooling</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GeoJSON/" rel="tag">GeoJSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Global-Properties/" rel="tag">Global Properties</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP-Interceptors/" rel="tag">HTTP Interceptors</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HttpClient/" rel="tag">HttpClient</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hydration/" rel="tag">Hydration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Interactive-Maps/" rel="tag">Interactive Maps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Internationalization/" rel="tag">Internationalization</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Knowledge-Management/" rel="tag">Knowledge Management</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linting-Rules/" rel="tag">Linting Rules</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mapbox/" rel="tag">Mapbox</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mapbox-GL-JS/" rel="tag">Mapbox GL JS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Migration-Guide/" rel="tag">Migration Guide</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Multi-language/" rel="tag">Multi-language</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Multi-platform/" rel="tag">Multi-platform</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Naming-Convention/" rel="tag">Naming Convention</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NullInjectorError/" rel="tag">NullInjectorError</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Offline-Deployment/" rel="tag">Offline Deployment</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Performance-Optimization/" rel="tag">Performance Optimization</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pinia/" rel="tag">Pinia</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Prerender/" rel="tag">Prerender</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PrimeNG/" rel="tag">PrimeNG</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Production-Deployment/" rel="tag">Production Deployment</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Production-Issues/" rel="tag">Production Issues</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Project-Architecture/" rel="tag">Project Architecture</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Prompt-Engineering/" rel="tag">Prompt Engineering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RenderMode/" rel="tag">RenderMode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Route-Guards/" rel="tag">Route Guards</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/" rel="tag">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSR/" rel="tag">SSR</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSR-Configuration/" rel="tag">SSR Configuration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Server-Side-Rendering/" rel="tag">Server-Side Rendering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Service-Pattern/" rel="tag">Service Pattern</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Signals/" rel="tag">Signals</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Standalone-Components/" rel="tag">Standalone Components</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/State-Management/" rel="tag">State Management</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tailwind-CSS/" rel="tag">Tailwind CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Team-Productivity/" rel="tag">Team Productivity</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Technical-Decision-Making/" rel="tag">Technical Decision Making</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Transloco/" rel="tag">Transloco</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Troubleshooting/" rel="tag">Troubleshooting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TypeScript/" rel="tag">TypeScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/USGS-Data/" rel="tag">USGS Data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue-js/" rel="tag">Vue.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web-Mapping/" rel="tag">Web Mapping</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/i18n/" rel="tag">i18n</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/i18n-Debug/" rel="tag">i18n Debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jsverse-transloco/" rel="tag">jsverse-transloco</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/provideHttpClient/" rel="tag">provideHttpClient</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/withInterceptorsFromDI/" rel="tag">withInterceptorsFromDI</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤雲</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AI-Assistant/" style="font-size: 10px;">AI Assistant</a> <a href="/tags/AI-Collaboration/" style="font-size: 10px;">AI Collaboration</a> <a href="/tags/ARM/" style="font-size: 10px;">ARM</a> <a href="/tags/Angular/" style="font-size: 10px;">Angular</a> <a href="/tags/Angular-15/" style="font-size: 10px;">Angular 15+</a> <a href="/tags/Angular-19/" style="font-size: 16.67px;">Angular 19</a> <a href="/tags/Angular-19/" style="font-size: 10px;">Angular 19+</a> <a href="/tags/Angular-Configuration/" style="font-size: 10px;">Angular Configuration</a> <a href="/tags/Angular-SSR/" style="font-size: 10px;">Angular SSR</a> <a href="/tags/Angular-Universal/" style="font-size: 20px;">Angular Universal</a> <a href="/tags/Best-Practices/" style="font-size: 10px;">Best Practices</a> <a href="/tags/Buildx/" style="font-size: 10px;">Buildx</a> <a href="/tags/Business-Context/" style="font-size: 10px;">Business Context</a> <a href="/tags/Business-Strategy/" style="font-size: 10px;">Business Strategy</a> <a href="/tags/CI-CD/" style="font-size: 10px;">CI/CD</a> <a href="/tags/Canvas/" style="font-size: 10px;">Canvas</a> <a href="/tags/Clean-Architecture/" style="font-size: 10px;">Clean Architecture</a> <a href="/tags/Clustering/" style="font-size: 10px;">Clustering</a> <a href="/tags/Code-Quality/" style="font-size: 10px;">Code Quality</a> <a href="/tags/Composables/" style="font-size: 10px;">Composables</a> <a href="/tags/Composition-API/" style="font-size: 10px;">Composition API</a> <a href="/tags/Critical-Functions/" style="font-size: 10px;">Critical Functions</a> <a href="/tags/Data-Visualization/" style="font-size: 10px;">Data Visualization</a> <a href="/tags/Debugging/" style="font-size: 10px;">Debugging</a> <a href="/tags/Dependency-Injection/" style="font-size: 10px;">Dependency Injection</a> <a href="/tags/Design-Patterns/" style="font-size: 10px;">Design Patterns</a> <a href="/tags/Developer-Experience/" style="font-size: 10px;">Developer Experience</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Domain-Knowledge/" style="font-size: 10px;">Domain Knowledge</a> <a href="/tags/ESLint-9-x/" style="font-size: 10px;">ESLint 9.x</a> <a href="/tags/Enterprise-Architecture/" style="font-size: 10px;">Enterprise Architecture</a> <a href="/tags/Error-Handling/" style="font-size: 10px;">Error Handling</a> <a href="/tags/Feature-Modules/" style="font-size: 10px;">Feature Modules</a> <a href="/tags/Flat-Config/" style="font-size: 10px;">Flat Config</a> <a href="/tags/Frontend-Architecture/" style="font-size: 10px;">Frontend Architecture</a> <a href="/tags/Frontend-Tooling/" style="font-size: 10px;">Frontend Tooling</a> <a href="/tags/GeoJSON/" style="font-size: 10px;">GeoJSON</a> <a href="/tags/Global-Properties/" style="font-size: 10px;">Global Properties</a> <a href="/tags/HTTP-Interceptors/" style="font-size: 10px;">HTTP Interceptors</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/Hydration/" style="font-size: 13.33px;">Hydration</a> <a href="/tags/Interactive-Maps/" style="font-size: 10px;">Interactive Maps</a> <a href="/tags/Internationalization/" style="font-size: 10px;">Internationalization</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Knowledge-Management/" style="font-size: 10px;">Knowledge Management</a> <a href="/tags/Linting-Rules/" style="font-size: 10px;">Linting Rules</a> <a href="/tags/Mapbox/" style="font-size: 10px;">Mapbox</a> <a href="/tags/Mapbox-GL-JS/" style="font-size: 10px;">Mapbox GL JS</a> <a href="/tags/Migration-Guide/" style="font-size: 10px;">Migration Guide</a> <a href="/tags/Multi-language/" style="font-size: 10px;">Multi-language</a> <a href="/tags/Multi-platform/" style="font-size: 10px;">Multi-platform</a> <a href="/tags/Naming-Convention/" style="font-size: 10px;">Naming Convention</a> <a href="/tags/NullInjectorError/" style="font-size: 10px;">NullInjectorError</a> <a href="/tags/Offline-Deployment/" style="font-size: 10px;">Offline Deployment</a> <a href="/tags/Performance-Optimization/" style="font-size: 13.33px;">Performance Optimization</a> <a href="/tags/Pinia/" style="font-size: 10px;">Pinia</a> <a href="/tags/Prerender/" style="font-size: 13.33px;">Prerender</a> <a href="/tags/PrimeNG/" style="font-size: 10px;">PrimeNG</a> <a href="/tags/Production-Deployment/" style="font-size: 10px;">Production Deployment</a> <a href="/tags/Production-Issues/" style="font-size: 10px;">Production Issues</a> <a href="/tags/Project-Architecture/" style="font-size: 10px;">Project Architecture</a> <a href="/tags/Prompt-Engineering/" style="font-size: 10px;">Prompt Engineering</a> <a href="/tags/RenderMode/" style="font-size: 13.33px;">RenderMode</a> <a href="/tags/Route-Guards/" style="font-size: 13.33px;">Route Guards</a> <a href="/tags/SEO/" style="font-size: 13.33px;">SEO</a> <a href="/tags/SSR/" style="font-size: 16.67px;">SSR</a> <a href="/tags/SSR-Configuration/" style="font-size: 13.33px;">SSR Configuration</a> <a href="/tags/Server-Side-Rendering/" style="font-size: 16.67px;">Server-Side Rendering</a> <a href="/tags/Service-Pattern/" style="font-size: 10px;">Service Pattern</a> <a href="/tags/Signals/" style="font-size: 10px;">Signals</a> <a href="/tags/Standalone-Components/" style="font-size: 13.33px;">Standalone Components</a> <a href="/tags/State-Management/" style="font-size: 10px;">State Management</a> <a href="/tags/Tailwind-CSS/" style="font-size: 10px;">Tailwind CSS</a> <a href="/tags/Team-Productivity/" style="font-size: 10px;">Team Productivity</a> <a href="/tags/Technical-Decision-Making/" style="font-size: 10px;">Technical Decision Making</a> <a href="/tags/Transloco/" style="font-size: 16.67px;">Transloco</a> <a href="/tags/Troubleshooting/" style="font-size: 10px;">Troubleshooting</a> <a href="/tags/TypeScript/" style="font-size: 10px;">TypeScript</a> <a href="/tags/USGS-Data/" style="font-size: 10px;">USGS Data</a> <a href="/tags/Vue-js/" style="font-size: 10px;">Vue.js</a> <a href="/tags/Web-Mapping/" style="font-size: 10px;">Web Mapping</a> <a href="/tags/i18n/" style="font-size: 10px;">i18n</a> <a href="/tags/i18n-Debug/" style="font-size: 10px;">i18n Debug</a> <a href="/tags/jsverse-transloco/" style="font-size: 10px;">jsverse-transloco</a> <a href="/tags/provideHttpClient/" style="font-size: 10px;">provideHttpClient</a> <a href="/tags/withInterceptorsFromDI/" style="font-size: 10px;">withInterceptorsFromDI</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">彙整</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/06/">六月 2025</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/06/29/angular-enterprise-project-architecture-guide/">Angular 19 能源管理系統前端專案架構設計指南</a>
+          </li>
+        
+          <li>
+            <a href="/2025/06/29/angular-ssr-transloco-troubleshooting-guide/">Angular SSR + Transloco 故障排除與除錯完整指南</a>
+          </li>
+        
+          <li>
+            <a href="/2025/06/29/angular-ssr-transloco-setup-complete-guide/">Angular SSR + Transloco 國際化配置實戰指南</a>
+          </li>
+        
+          <li>
+            <a href="/2025/06/29/angular-httpclient-modern-configuration-guide/">Angular HttpClient 現代化配置與 withInterceptorsFromDI 實戰指南</a>
+          </li>
+        
+          <li>
+            <a href="/2025/06/29/eslint-configuration-best-practices-guide/">ESLint 9.x 革命性配置與前端開發最佳化實戰指南</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2025 Ben Hsieh<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
