@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Angular SSR + Transloco 故障排除與除錯完整指南 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="完整的 Angular SSR + Transloco 故障排除指南，涵蓋常見錯誤分析、除錯技巧、解決方案和預防措施，讓您快速定位和解決 SSR 國際化問題。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Angular SSR + Transloco 故障排除與除錯完整指南">
+<meta property="og:url" content="https://cookieseventeen.github.io/2025/06/29/angular-ssr-transloco-troubleshooting-guide/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="完整的 Angular SSR + Transloco 故障排除指南，涵蓋常見錯誤分析、除錯技巧、解決方案和預防措施，讓您快速定位和解決 SSR 國際化問題。">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-06-29T09:00:00.000Z">
+<meta property="article:modified_time" content="2025-07-08T01:41:30.392Z">
+<meta property="article:author" content="Ben Hsieh">
+<meta property="article:tag" content="Angular Universal">
+<meta property="article:tag" content="Transloco">
+<meta property="article:tag" content="Angular SSR">
+<meta property="article:tag" content="Debugging">
+<meta property="article:tag" content="Troubleshooting">
+<meta property="article:tag" content="Error Handling">
+<meta property="article:tag" content="NullInjectorError">
+<meta property="article:tag" content="SSR Configuration">
+<meta property="article:tag" content="i18n Debug">
+<meta property="article:tag" content="Production Issues">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.2.0/css/fork-awesome.min.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">任何一件事做到極致都值得敬佩</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="搜尋"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜尋"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://cookieseventeen.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-angular-ssr-transloco-troubleshooting-guide" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2025/06/29/angular-ssr-transloco-troubleshooting-guide/" class="article-date">
+  <time class="dt-published" datetime="2025-06-29T09:00:00.000Z" itemprop="datePublished">2025-06-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Tech-Daily/">Tech Daily</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Angular SSR + Transloco 故障排除與除錯完整指南
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="📋-核心懶人包"><a href="#📋-核心懶人包" class="headerlink" title="📋 核心懶人包"></a>📋 核心懶人包</h2><ol>
+<li><strong>NullInjectorError 根因</strong>：90% 由配置合併失敗或 Token 缺失造成，重點檢查 server config</li>
+<li><strong>SSR Loader 除錯</strong>：透過 console log 追蹤載入流程，確認初始化和檔案讀取狀態</li>
+<li><strong>路徑問題診斷</strong>：專案名稱不一致是最常見陷阱，必須檢查建置輸出目錄</li>
+<li><strong>環境差異處理</strong>：開發和生產環境的不同配置需求和解決方案</li>
+<li><strong>系統性除錯法</strong>：分層檢查從配置→建置→運行，快速定位問題根源</li>
+</ol>
+<h2 id="🏗️-專案概述"><a href="#🏗️-專案概述" class="headerlink" title="🏗️ 專案概述"></a>🏗️ 專案概述</h2><p>本指南專注於 Angular SSR + Transloco 的故障排除，提供系統性的除錯方法和解決方案：</p>
+<ul>
+<li>🔍 <strong>錯誤分析</strong>：常見錯誤的根本原因分析和快速診斷</li>
+<li>🛠️ <strong>除錯技巧</strong>：有效的除錯工具和方法論</li>
+<li>⚡ <strong>快速修復</strong>：常見問題的立即解決方案</li>
+<li>🚀 <strong>預防措施</strong>：避免常見陷阱的最佳實踐</li>
+<li>📊 <strong>監控策略</strong>：生產環境的錯誤監控和處理</li>
+</ul>
+<h2 id="🏗️-故障排除流程架構"><a href="#🏗️-故障排除流程架構" class="headerlink" title="🏗️ 故障排除流程架構"></a>🏗️ 故障排除流程架構</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    A[發現 SSR + Transloco 問題] --&gt; B&#123;錯誤類型判斷&#125;</span><br><span class="line">    </span><br><span class="line">    B --&gt;|NullInjectorError| C[Token 注入問題]</span><br><span class="line">    B --&gt;|HTTP 404| D[檔案載入問題]</span><br><span class="line">    B --&gt;|翻譯內容錯誤| E[語系檔案問題]</span><br><span class="line">    B --&gt;|SSR 啟動失敗| F[配置問題]</span><br><span class="line">    </span><br><span class="line">    C --&gt; C1[檢查 server config 合併]</span><br><span class="line">    C --&gt; C2[驗證 TRANSLOCO_LOADER token]</span><br><span class="line">    </span><br><span class="line">    D --&gt; D1[檢查專案名稱一致性]</span><br><span class="line">    D --&gt; D2[驗證 assets 配置]</span><br><span class="line">    </span><br><span class="line">    E --&gt; E1[檢查 JSON 格式]</span><br><span class="line">    E --&gt; E2[驗證語系檔案路徑]</span><br><span class="line">    </span><br><span class="line">    F --&gt; F1[檢查 main.server.ts]</span><br><span class="line">    F --&gt; F2[驗證配置合併]</span><br><span class="line">    </span><br><span class="line">    C1 --&gt; G[修復並測試]</span><br><span class="line">    C2 --&gt; G</span><br><span class="line">    D1 --&gt; G</span><br><span class="line">    D2 --&gt; G</span><br><span class="line">    E1 --&gt; G</span><br><span class="line">    E2 --&gt; G</span><br><span class="line">    F1 --&gt; G</span><br><span class="line">    F2 --&gt; G</span><br><span class="line">    </span><br><span class="line">    G --&gt; H&#123;問題解決?&#125;</span><br><span class="line">    H --&gt;|否| I[深度除錯]</span><br><span class="line">    H --&gt;|是| J[部署驗證]</span><br><span class="line">    </span><br><span class="line">    I --&gt; K[啟用詳細日誌]</span><br><span class="line">    K --&gt; L[分析錯誤堆疊]</span><br><span class="line">    L --&gt; M[查閱文檔]</span><br><span class="line">    M --&gt; G</span><br><span class="line">    </span><br><span class="line">    J --&gt; N[完成修復 ✅]</span><br></pre></td></tr></table></figure>
+
+<h1 id="Angular-SSR-Transloco-國際化問題診斷與完整解決方案"><a href="#Angular-SSR-Transloco-國際化問題診斷與完整解決方案" class="headerlink" title="Angular SSR + Transloco 國際化問題診斷與完整解決方案"></a>Angular SSR + Transloco 國際化問題診斷與完整解決方案</h1><h2 id="📖-問題背景與初始症狀"><a href="#📖-問題背景與初始症狀" class="headerlink" title="📖 問題背景與初始症狀"></a>📖 <strong>問題背景與初始症狀</strong></h2><p>在實施 Angular EMS 前端項目的 SSR (Server-Side Rendering) 和國際化功能時，遇到了一個看似簡單但實際複雜的問題：</p>
+<h3 id="初始症狀"><a href="#初始症狀" class="headerlink" title="初始症狀"></a><strong>初始症狀</strong></h3><ol>
+<li>SSR 環境中存在 TypeScript 錯誤</li>
+<li>無法看到 SSR Transloco 的 log 輸出</li>
+<li>不確定語系檔案是否在 SSR 階段正確載入</li>
+</ol>
+<h3 id="技術環境"><a href="#技術環境" class="headerlink" title="技術環境"></a><strong>技術環境</strong></h3><ul>
+<li>Angular 19.2.14</li>
+<li>Transloco (@jsverse&#x2F;transloco)</li>
+<li>SSR + 預渲染 (Prerendered 5 static routes)</li>
+<li>Node.js v23.10.0</li>
+<li>TypeScript</li>
+</ul>
+<h2 id="🔍-診斷過程：從表象到根因"><a href="#🔍-診斷過程：從表象到根因" class="headerlink" title="🔍 診斷過程：從表象到根因"></a>🔍 <strong>診斷過程：從表象到根因</strong></h2><h3 id="第一階段：表面問題修復"><a href="#第一階段：表面問題修復" class="headerlink" title="第一階段：表面問題修復"></a><strong>第一階段：表面問題修復</strong></h3><p><strong>誤判</strong>：以為只是簡單的 TypeScript 類型標註問題</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 原始問題代碼</span></span><br><span class="line"><span class="title function_">getTranslation</span>(<span class="params"><span class="attr">lang</span>: <span class="built_in">string</span></span>) &#123;</span><br><span class="line">    <span class="comment">// 缺少返回類型標註</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 修正後</span></span><br><span class="line"><span class="title function_">getTranslation</span>(<span class="attr">lang</span>: <span class="built_in">string</span>): <span class="title class_">Promise</span>&lt;<span class="title class_">Translation</span>&gt; &#123;</span><br><span class="line">    <span class="comment">// 添加了明確的返回類型</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>結果</strong>：TypeScript 錯誤解決，但核心問題依然存在。</p>
+<h3 id="第二階段：Log-輸出問題"><a href="#第二階段：Log-輸出問題" class="headerlink" title="第二階段：Log 輸出問題"></a><strong>第二階段：Log 輸出問題</strong></h3><p><strong>發現</strong>：無法看到任何 SSR Transloco 的 log 輸出</p>
+<p><strong>初步嘗試</strong>：</p>
+<ul>
+<li>檢查 console.log 是否被禁用</li>
+<li>檢查 Transloco 的 prodMode 設置</li>
+<li>添加更多 log 語句</li>
+</ul>
+<p><strong>部分原因</strong>：</p>
+<ol>
+<li>生產環境 <code>console.log</code> 被重寫為空函數</li>
+<li>Transloco 的 <code>prodMode: !isDevMode()</code> 禁用了內部 log</li>
+</ol>
+<h3 id="第三階段：深入配置問題"><a href="#第三階段：深入配置問題" class="headerlink" title="第三階段：深入配置問題"></a><strong>第三階段：深入配置問題</strong></h3><p><strong>🔍 關鍵診斷思路：補足缺失的 Injection Token</strong></p>
+<p>當時我們採用的正確修復方向是：<strong>識別並補足缺失的 injection token</strong></p>
+<h4 id="A-錯誤訊息分析"><a href="#A-錯誤訊息分析" class="headerlink" title="A. 錯誤訊息分析"></a><strong>A. 錯誤訊息分析</strong></h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ERROR Error [NullInjectorError]: R3InjectorError(Standalone[_ComponentDemoComponent])[_TranslocoService -&gt; _TranslocoService -&gt; InjectionToken TRANSLOCO_TRANSPILER -&gt; InjectionToken TRANSLOCO_TRANSPILER]:</span><br><span class="line">  NullInjectorError: No provider <span class="keyword">for</span> InjectionToken TRANSLOCO_TRANSPILER!</span><br><span class="line">    at NullInjector.get (.../chunk-PXXRCHXC.js:13045:21)</span><br><span class="line">    at R3Injector.get (.../chunk-PXXRCHXC.js:13396:27)</span><br></pre></td></tr></table></figure>
+
+<h4 id="B-問題定位思路"><a href="#B-問題定位思路" class="headerlink" title="B. 問題定位思路"></a><strong>B. 問題定位思路</strong></h4><ol>
+<li><strong>識別缺失的 Token</strong>：<code>TRANSLOCO_TRANSPILER</code> 在 SSR 環境中找不到</li>
+<li><strong>分析依賴鏈</strong>：<code>TranslocoService</code> → <code>TRANSLOCO_TRANSPILER</code> token 缺失</li>
+<li><strong>檢查配置來源</strong>：<code>main.server.ts</code> 使用了哪個配置檔案？</li>
+<li><strong>追蹤 Provider 註冊</strong>：server config 中是否有 Transloco 相關的完整 provider？</li>
+</ol>
+<h4 id="C-修復策略確定"><a href="#C-修復策略確定" class="headerlink" title="C. 修復策略確定"></a><strong>C. 修復策略確定</strong></h4><p>✅ <strong>補足策略</strong>：</p>
+<ul>
+<li>確保 <code>main.server.ts</code> 使用正確的 server config</li>
+<li>在 <code>app.config.server.ts</code> 中提供完整的 Transloco providers</li>
+<li>檢查是否需要額外的 <code>TRANSLOCO_TRANSPILER</code> 和 <code>TRANSLOCO_LOADER</code> 配置</li>
+<li>避免瀏覽器端和服務器端 provider 衝突</li>
+</ul>
+<p><strong>關鍵發現</strong>：<code>main.server.ts</code> 配置錯誤</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 錯誤配置</span></span><br><span class="line"><span class="keyword">import</span> &#123; config &#125; <span class="keyword">from</span> <span class="string">&#x27;./app/app.config&#x27;</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">async</span> <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> server = <span class="title function_">createExpressServer</span>(config); <span class="comment">// 使用錯誤的配置</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 正確配置</span></span><br><span class="line"><span class="keyword">import</span> &#123; config &#125; <span class="keyword">from</span> <span class="string">&#x27;./app/app.config.server&#x27;</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">async</span> <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> server = <span class="title function_">createExpressServer</span>(config); <span class="comment">// 使用正確的 server 配置</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>根本原因</strong>：沒有使用 <code>app.config.server.ts</code> 導致 <code>TRANSLOCO_TRANSPILER</code> 等 Transloco 相關 tokens 未被註冊！</p>
+<h2 id="🌀-實際解決過程：迷惘與試錯的完整歷程"><a href="#🌀-實際解決過程：迷惘與試錯的完整歷程" class="headerlink" title="🌀 實際解決過程：迷惘與試錯的完整歷程"></a>🌀 <strong>實際解決過程：迷惘與試錯的完整歷程</strong></h2><p><strong>這是最重要的部分 - 展示真實的解決思路演進，包括所有的錯誤判斷和陷阱！</strong></p>
+<h3 id="階段-1：初始-Token-問題解決-✅"><a href="#階段-1：初始-Token-問題解決-✅" class="headerlink" title="階段 1：初始 Token 問題解決 ✅"></a><strong>階段 1：初始 Token 問題解決</strong> ✅</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR: No provider <span class="keyword">for</span> InjectionToken TRANSLOCO_TRANSPILER!</span><br></pre></td></tr></table></figure>
+
+<p><strong>行動</strong>：補足 server config，確保 <code>main.server.ts</code> 使用 <code>app.config.server.ts</code><br><strong>結果</strong>：Token 錯誤消失，以為問題解決了</p>
+<h3 id="階段-2：發現新問題-😕"><a href="#階段-2：發現新問題-😕" class="headerlink" title="階段 2：發現新問題 😕"></a><strong>階段 2：發現新問題</strong> 😕</h3><p><strong>新症狀</strong>：頁面可以渲染，但是：</p>
+<ul>
+<li>沒有看到任何 SSR log 輸出</li>
+<li>不確定語系檔案是否真的在 SSR 階段載入</li>
+<li>懷疑 SSR Transloco 根本沒有工作</li>
+</ul>
+<p><strong>初步判斷</strong>：可能需要專用的 SSR Loader</p>
+<h3 id="階段-3：陷入-Loader-配置迷宮-🌀"><a href="#階段-3：陷入-Loader-配置迷宮-🌀" class="headerlink" title="階段 3：陷入 Loader 配置迷宮 🌀"></a><strong>階段 3：陷入 Loader 配置迷宮</strong> 🌀</h3><p><strong>我們卡在這裡很久！反覆嘗試不同的 Loader 配置方式：</strong></p>
+<h4 id="嘗試-A：基本-SSR-Loader"><a href="#嘗試-A：基本-SSR-Loader" class="headerlink" title="嘗試 A：基本 SSR Loader"></a><strong>嘗試 A：基本 SSR Loader</strong></h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 創建了 TranslocoSSRLoader，實現文件系統讀取</span></span><br><span class="line"><span class="meta">@Injectable</span>()</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">TranslocoSSRLoader</span> <span class="keyword">implements</span> <span class="title class_">TranslocoLoader</span> &#123;</span><br><span class="line">    <span class="title function_">getTranslation</span>(<span class="attr">lang</span>: <span class="built_in">string</span>): <span class="title class_">Promise</span>&lt;<span class="title class_">Translation</span>&gt; &#123;</span><br><span class="line">        <span class="comment">// 基本文件讀取邏輯</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>結果</strong>：還是沒有 log 輸出</p>
+<h4 id="嘗試-B：調整路徑策略"><a href="#嘗試-B：調整路徑策略" class="headerlink" title="嘗試 B：調整路徑策略"></a><strong>嘗試 B：調整路徑策略</strong></h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 以為是路徑問題，嘗試多種路徑配置</span></span><br><span class="line"><span class="keyword">const</span> paths = [</span><br><span class="line">    <span class="string">&#x27;./assets/i18n/$&#123;lang&#125;.json&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;./dist/assets/i18n/$&#123;lang&#125;.json&#x27;</span>,</span><br><span class="line">    <span class="comment">// ... 各種路徑組合</span></span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<p><strong>結果</strong>：還是沒有 log 輸出</p>
+<h4 id="嘗試-C：修改-Provider-配置"><a href="#嘗試-C：修改-Provider-配置" class="headerlink" title="嘗試 C：修改 Provider 配置"></a><strong>嘗試 C：修改 Provider 配置</strong></h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 嘗試不同的 provider 註冊方式</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">provide</span>: <span class="variable constant_">TRANSLOCO_LOADER</span>,</span><br><span class="line">    <span class="attr">useClass</span>: <span class="title class_">TranslocoSSRLoader</span>,</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// vs</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">provide</span>: <span class="variable constant_">TRANSLOCO_LOADER</span>,</span><br><span class="line">    <span class="attr">useFactory</span>: <span class="function">() =&gt;</span> <span class="keyword">new</span> <span class="title class_">TranslocoSSRLoader</span>(),</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>結果</strong>：還是沒有 log 輸出！</p>
+<h3 id="階段-4：盲目測試階段-🤷‍♂️"><a href="#階段-4：盲目測試階段-🤷‍♂️" class="headerlink" title="階段 4：盲目測試階段 🤷‍♂️"></a><strong>階段 4：盲目測試階段</strong> 🤷‍♂️</h3><p><strong>這時我們變得很盲目，不斷嘗試各種配置：</strong></p>
+<ul>
+<li>調整 Loader 實現細節</li>
+<li>修改文件路徑策略</li>
+<li>嘗試不同的 log 輸出方式</li>
+<li>檢查 TypeScript 配置</li>
+<li>懷疑 ES modules 問題</li>
+</ul>
+<p><strong>核心困惑</strong>：為什麼創建了 SSR Loader 但完全沒有任何 log 輸出？</p>
+<h3 id="階段-5：環境設定檢討-🔍"><a href="#階段-5：環境設定檢討-🔍" class="headerlink" title="階段 5：環境設定檢討 🔍"></a><strong>階段 5：環境設定檢討</strong> 🔍</h3><p><strong>開始懷疑是環境設定問題：</strong></p>
+<h4 id="懷疑-A：console-log-被禁用"><a href="#懷疑-A：console-log-被禁用" class="headerlink" title="懷疑 A：console.log 被禁用"></a><strong>懷疑 A：console.log 被禁用</strong></h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 檢查生產環境配置</span></span><br><span class="line"><span class="keyword">if</span> (environment.<span class="property">production</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="property">log</span> = <span class="function">() =&gt;</span> &#123;&#125;; <span class="comment">// 被禁用了？</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="懷疑-B：Transloco-prodMode"><a href="#懷疑-B：Transloco-prodMode" class="headerlink" title="懷疑 B：Transloco prodMode"></a><strong>懷疑 B：Transloco prodMode</strong></h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 檢查 Transloco 配置</span></span><br><span class="line"><span class="title function_">provideTransloco</span>(&#123;</span><br><span class="line">    <span class="attr">config</span>: &#123;</span><br><span class="line">        <span class="attr">prodMode</span>: !<span class="title function_">isDevMode</span>(), <span class="comment">// 這個禁用了 log？</span></span><br><span class="line">    &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h4 id="懷疑-C：建置環境問題"><a href="#懷疑-C：建置環境問題" class="headerlink" title="懷疑 C：建置環境問題"></a><strong>懷疑 C：建置環境問題</strong></h4><ul>
+<li>檢查 dist 目錄結構</li>
+<li>確認語系檔案是否正確複製</li>
+<li>懷疑是 SSR 建置配置問題</li>
+</ul>
+<p><strong>結果</strong>：這些都不是根本原因！</p>
+<h3 id="階段-6：關鍵突破時刻-💡"><a href="#階段-6：關鍵突破時刻-💡" class="headerlink" title="階段 6：關鍵突破時刻 💡"></a><strong>階段 6：關鍵突破時刻</strong> 💡</h3><p><strong>最終發現真相：SSR Loader 根本沒有被載入！</strong></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 檢查實際運行時的 log</span></span><br><span class="line"><span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;🚀 TranslocoSSRLoader 被初始化！&#x27;</span>); <span class="comment">// 這個 log 從來沒出現過！</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>關鍵洞察</strong>：如果 constructor 的 log 都沒出現，說明 SSR Loader 根本沒有被註冊或載入！</p>
+<p><strong>深入檢查</strong>：</p>
+<ol>
+<li>檢查 <code>main.server.ts</code> 實際使用的配置</li>
+<li>驗證 server config 是否真的被使用</li>
+<li>確認 <code>mergeApplicationConfig</code> 是否正確合併</li>
+</ol>
+<p><strong>最終發現</strong>：雖然我們修改了 <code>app.config.server.ts</code>，但 <code>main.server.ts</code> 可能還是沒有正確使用這個配置！</p>
+<h2 id="🎯-真正的問題根源"><a href="#🎯-真正的問題根源" class="headerlink" title="🎯 真正的問題根源"></a>🎯 <strong>真正的問題根源</strong></h2><p>經過深入分析，發現了三個層次的問題：</p>
+<h3 id="1-配置層次問題"><a href="#1-配置層次問題" class="headerlink" title="1. 配置層次問題"></a><strong>1. 配置層次問題</strong></h3><ul>
+<li><code>main.server.ts</code> 沒有使用正確的 server 配置</li>
+<li>SSR 專用的 Transloco Loader 沒有被正確註冊</li>
+</ul>
+<h3 id="2-實現層次問題"><a href="#2-實現層次問題" class="headerlink" title="2. 實現層次問題"></a><strong>2. 實現層次問題</strong></h3><ul>
+<li>缺少專用的 SSR Loader 實現</li>
+<li>路徑解析機制不完善</li>
+<li>ES modules 環境下的 <code>__dirname</code> 問題</li>
+</ul>
+<h3 id="3-調試層次問題"><a href="#3-調試層次問題" class="headerlink" title="3. 調試層次問題"></a><strong>3. 調試層次問題</strong></h3><ul>
+<li>Log 輸出被多重禁用</li>
+<li>缺少詳細的載入過程追蹤</li>
+</ul>
+<h3 id="4-Injection-Token-問題-🚨"><a href="#4-Injection-Token-問題-🚨" class="headerlink" title="4. Injection Token 問題 🚨"></a><strong>4. Injection Token 問題</strong> 🚨</h3><p><strong>這是最初的根本錯誤！</strong></p>
+<ul>
+<li>SSR 環境中找不到 <code>TRANSLOCO_TRANSPILER</code> injection token</li>
+<li>Server config 中缺少正確的 provider 配置</li>
+<li>Transloco 服務依賴的 transpiler 未在 SSR 環境中註冊</li>
+<li>依賴注入解析失敗</li>
+</ul>
+<p><strong>實際錯誤訊息</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ERROR Error [NullInjectorError]: R3InjectorError(Standalone[_ComponentDemoComponent])[_TranslocoService -&gt; _TranslocoService -&gt; InjectionToken TRANSLOCO_TRANSPILER -&gt; InjectionToken TRANSLOCO_TRANSPILER]:</span><br><span class="line">  NullInjectorError: No provider <span class="keyword">for</span> InjectionToken TRANSLOCO_TRANSPILER!</span><br><span class="line">    at NullInjector.get (/Users/user/projects/example-project/.angular/cache/19.2.15/example_project_frontend/vite/deps_ssr/chunk-PXXRCHXC.js:13045:21)</span><br><span class="line">    at R3Injector.get (/Users/user/projects/example-project/.angular/cache/19.2.15/example_project_frontend/vite/deps_ssr/chunk-PXXRCHXC.js:13396:27)</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-資源配置問題-⚠️"><a href="#5-資源配置問題-⚠️" class="headerlink" title="5. 資源配置問題 ⚠️"></a><strong>5. 資源配置問題</strong> ⚠️</h3><p><strong>這是一個常被忽略但關鍵的問題！</strong></p>
+<ul>
+<li><code>angular.json</code> 中 assets 配置缺失或錯誤</li>
+<li>語系檔案路徑結構不正確</li>
+<li>建置後資源無法正確複製到目標位置</li>
+</ul>
+<h2 id="🔧-完整解決方案"><a href="#🔧-完整解決方案" class="headerlink" title="🔧 完整解決方案"></a>🔧 <strong>完整解決方案</strong></h2><h3 id="步驟-0：確保基礎資源配置正確-⚠️"><a href="#步驟-0：確保基礎資源配置正確-⚠️" class="headerlink" title="步驟 0：確保基礎資源配置正確 ⚠️"></a><strong>步驟 0：確保基礎資源配置正確</strong> ⚠️</h3><p><strong>這是最容易被忽略但必須正確的基礎配置！</strong></p>
+<h4 id="A-檔案結構"><a href="#A-檔案結構" class="headerlink" title="A. 檔案結構"></a><strong>A. 檔案結構</strong></h4><p>確保語系檔案正確放置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">src/</span><br><span class="line">├── assets/</span><br><span class="line">│   └── i18n/</span><br><span class="line">│       ├── en.json</span><br><span class="line">│       └── zh-tw.json</span><br><span class="line">└── app/</span><br><span class="line">    └── ...</span><br></pre></td></tr></table></figure>
+
+<h4 id="B-angular-json-配置"><a href="#B-angular-json-配置" class="headerlink" title="B. angular.json 配置"></a><strong>B. angular.json 配置</strong></h4><p><strong>關鍵配置</strong>：確保 <code>assets</code> 正確設定，否則語系檔案不會被複製到建置輸出！</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;projects&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;your-project&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;architect&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;build&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                    <span class="attr">&quot;options&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                        <span class="attr">&quot;assets&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                            <span class="punctuation">&#123;</span></span><br><span class="line">                                <span class="attr">&quot;glob&quot;</span><span class="punctuation">:</span> <span class="string">&quot;**/*&quot;</span><span class="punctuation">,</span></span><br><span class="line">                                <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="string">&quot;public&quot;</span></span><br><span class="line">                            <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">                            <span class="punctuation">&#123;</span></span><br><span class="line">                                <span class="attr">&quot;glob&quot;</span><span class="punctuation">:</span> <span class="string">&quot;**/*&quot;</span><span class="punctuation">,</span></span><br><span class="line">                                <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="string">&quot;src/assets&quot;</span><span class="punctuation">,</span></span><br><span class="line">                                <span class="attr">&quot;output&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/assets&quot;</span></span><br><span class="line">                            <span class="punctuation">&#125;</span></span><br><span class="line">                        <span class="punctuation">]</span></span><br><span class="line">                    <span class="punctuation">&#125;</span></span><br><span class="line">                <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;test&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                    <span class="attr">&quot;options&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">                        <span class="attr">&quot;assets&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                            <span class="punctuation">&#123;</span></span><br><span class="line">                                <span class="attr">&quot;glob&quot;</span><span class="punctuation">:</span> <span class="string">&quot;**/*&quot;</span><span class="punctuation">,</span></span><br><span class="line">                                <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="string">&quot;public&quot;</span></span><br><span class="line">                            <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">                            <span class="punctuation">&#123;</span></span><br><span class="line">                                <span class="attr">&quot;glob&quot;</span><span class="punctuation">:</span> <span class="string">&quot;**/*&quot;</span><span class="punctuation">,</span></span><br><span class="line">                                <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="string">&quot;src/assets&quot;</span><span class="punctuation">,</span></span><br><span class="line">                                <span class="attr">&quot;output&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/assets&quot;</span></span><br><span class="line">                            <span class="punctuation">&#125;</span></span><br><span class="line">                        <span class="punctuation">]</span></span><br><span class="line">                    <span class="punctuation">&#125;</span></span><br><span class="line">                <span class="punctuation">&#125;</span></span><br><span class="line">            <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>重要說明</strong>：</p>
+<ul>
+<li><code>&quot;input&quot;: &quot;src/assets&quot;</code> - 指定源目錄</li>
+<li><code>&quot;output&quot;: &quot;/assets&quot;</code> - 指定輸出路徑</li>
+<li>這確保 <code>src/assets/i18n/*.json</code> 會被複製到 <code>dist/your-project/browser/assets/i18n/*.json</code></li>
+</ul>
+<h4 id="C-語系檔案範例"><a href="#C-語系檔案範例" class="headerlink" title="C. 語系檔案範例"></a><strong>C. 語系檔案範例</strong></h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/assets/i18n/zh-tw.json</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;demo&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Demo 展示中心&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;buttons&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;primary&quot;</span><span class="punctuation">:</span> <span class="string">&quot;主要動作&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;secondary&quot;</span><span class="punctuation">:</span> <span class="string">&quot;次要動作&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// src/assets/i18n/en.json</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;demo&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Demo Center&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;buttons&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;primary&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Primary Action&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;secondary&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Secondary Action&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="步驟-1：解決-Injection-Token-問題-🚨"><a href="#步驟-1：解決-Injection-Token-問題-🚨" class="headerlink" title="步驟 1：解決 Injection Token 問題 🚨"></a><strong>步驟 1：解決 Injection Token 問題</strong> 🚨</h3><p><strong>最關鍵的第一步：修正 main.server.ts 和 Server Config</strong></p>
+<h4 id="A-修正-main-server-ts"><a href="#A-修正-main-server-ts" class="headerlink" title="A. 修正 main.server.ts"></a><strong>A. 修正 main.server.ts</strong></h4><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/main.server.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123; bootstrapApplication &#125; <span class="keyword">from</span> <span class="string">&#x27;@angular/platform-browser&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">AppComponent</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;./src/app/app.component&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; config &#125; <span class="keyword">from</span> <span class="string">&#x27;./src/app/app.config.server&#x27;</span>; <span class="comment">// ✅ 關鍵：使用 server 配置</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">async</span> <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">bootstrapApplication</span>(<span class="title class_">AppComponent</span>, config);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>❌ 錯誤範例</strong> (會導致 injection token 錯誤)：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 直接使用瀏覽器端配置，會找不到 SSR Loader</span></span><br><span class="line"><span class="keyword">import</span> &#123; config &#125; <span class="keyword">from</span> <span class="string">&#x27;./src/app/app.config&#x27;</span>; <span class="comment">// 錯誤！</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="B-正確配置-Server-Config"><a href="#B-正確配置-Server-Config" class="headerlink" title="B. 正確配置 Server Config"></a><strong>B. 正確配置 Server Config</strong></h4><p><strong>關鍵理解</strong>：<code>TRANSLOCO_TRANSPILER</code> 錯誤的根本原因是 SSR 環境缺少完整的 Transloco providers。瀏覽器端的 <code>provideTransloco()</code> 會自動提供包括 <code>TRANSLOCO_TRANSPILER</code> 在內的所有必要 tokens，但 SSR 環境需要正確合併這些配置。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/app/app.config.server.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">ApplicationConfig</span>, mergeApplicationConfig &#125; <span class="keyword">from</span> <span class="string">&#x27;@angular/core&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; provideServerRendering &#125; <span class="keyword">from</span> <span class="string">&#x27;@angular/platform-server&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; provideServerRouting &#125; <span class="keyword">from</span> <span class="string">&#x27;@angular/ssr&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; <span class="variable constant_">TRANSLOCO_LOADER</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@jsverse/transloco&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; appConfig &#125; <span class="keyword">from</span> <span class="string">&#x27;./app.config&#x27;</span>; <span class="comment">// ✅ 關鍵：合併包含 provideTransloco() 的配置</span></span><br><span class="line"><span class="keyword">import</span> &#123; serverRoutes &#125; <span class="keyword">from</span> <span class="string">&#x27;./app.routes.server&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">TranslocoSSRLoader</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;./core/services/transloco-ssr.loader&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="attr">serverConfig</span>: <span class="title class_">ApplicationConfig</span> = &#123;</span><br><span class="line">    <span class="attr">providers</span>: [</span><br><span class="line">        <span class="title function_">provideServerRendering</span>(),</span><br><span class="line">        <span class="title function_">provideServerRouting</span>(serverRoutes),</span><br><span class="line">        <span class="comment">// ✅ 為 SSR 環境提供專用的 loader（會覆蓋瀏覽器端的 loader）</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">provide</span>: <span class="variable constant_">TRANSLOCO_LOADER</span>,</span><br><span class="line">            <span class="attr">useClass</span>: <span class="title class_">TranslocoSSRLoader</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">    ],</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 關鍵：合併配置確保所有 Transloco providers（包括 TRANSLOCO_TRANSPILER）都被包含</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> config = <span class="title function_">mergeApplicationConfig</span>(appConfig, serverConfig);</span><br></pre></td></tr></table></figure>
+
+<p><strong>❌ 常見錯誤範例</strong>：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 缺少 TRANSLOCO_LOADER provider</span></span><br><span class="line"><span class="keyword">const</span> <span class="attr">serverConfig</span>: <span class="title class_">ApplicationConfig</span> = &#123;</span><br><span class="line">    <span class="attr">providers</span>: [</span><br><span class="line">        <span class="title function_">provideServerRendering</span>(),</span><br><span class="line">        <span class="comment">// 缺少 TRANSLOCO_LOADER provider！</span></span><br><span class="line">    ],</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ❌ 使用錯誤的 loader</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="attr">provide</span>: <span class="variable constant_">TRANSLOCO_LOADER</span>,</span><br><span class="line">    <span class="attr">useClass</span>: <span class="title class_">TranslocoBrowserLoader</span>, <span class="comment">// 錯誤！SSR 不能使用 HTTP loader</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="步驟-2：創建專用的-SSR-Transloco-Loader"><a href="#步驟-2：創建專用的-SSR-Transloco-Loader" class="headerlink" title="步驟 2：創建專用的 SSR Transloco Loader"></a><strong>步驟 2：創建專用的 SSR Transloco Loader</strong></h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/app/core/services/transloco-ssr.loader.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Injectable</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@angular/core&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Translation</span>, <span class="title class_">TranslocoLoader</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@jsverse/transloco&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> fs <span class="keyword">from</span> <span class="string">&#x27;fs&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> path <span class="keyword">from</span> <span class="string">&#x27;path&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Injectable</span>(&#123; <span class="attr">providedIn</span>: <span class="string">&#x27;root&#x27;</span> &#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">TranslocoSSRLoader</span> <span class="keyword">implements</span> <span class="title class_">TranslocoLoader</span> &#123;</span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="comment">// 雙重輸出確保 log 可見</span></span><br><span class="line">        process.<span class="property">stdout</span>.<span class="title function_">write</span>(<span class="string">&#x27;🚀 [SSR Transloco] TranslocoSSRLoader 被初始化！\n&#x27;</span>);</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;🚀 [SSR Transloco] 伺服器端 Transloco Loader 已就緒&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="title function_">getTranslation</span>(<span class="attr">lang</span>: <span class="built_in">string</span>): <span class="title class_">Promise</span>&lt;<span class="title class_">Translation</span>&gt; &#123;</span><br><span class="line">        <span class="comment">// 多路徑嘗試機制</span></span><br><span class="line">        <span class="keyword">const</span> possiblePaths = [</span><br><span class="line">            path.<span class="title function_">join</span>(</span><br><span class="line">                process.<span class="title function_">cwd</span>(),</span><br><span class="line">                <span class="string">&#x27;dist&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;example_project_frontend&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;browser&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;assets&#x27;</span>,</span><br><span class="line">                <span class="string">&#x27;i18n&#x27;</span>,</span><br><span class="line">                <span class="string">`<span class="subst">$&#123;lang&#125;</span>.json`</span></span><br><span class="line">            ),</span><br><span class="line">            path.<span class="title function_">join</span>(process.<span class="title function_">cwd</span>(), <span class="string">&#x27;browser&#x27;</span>, <span class="string">&#x27;assets&#x27;</span>, <span class="string">&#x27;i18n&#x27;</span>, <span class="string">`<span class="subst">$&#123;lang&#125;</span>.json`</span>),</span><br><span class="line">            path.<span class="title function_">join</span>(process.<span class="title function_">cwd</span>(), <span class="string">&#x27;assets&#x27;</span>, <span class="string">&#x27;i18n&#x27;</span>, <span class="string">`<span class="subst">$&#123;lang&#125;</span>.json`</span>),</span><br><span class="line">            <span class="string">`./assets/i18n/<span class="subst">$&#123;lang&#125;</span>.json`</span>,</span><br><span class="line">            <span class="string">`./browser/assets/i18n/<span class="subst">$&#123;lang&#125;</span>.json`</span>,</span><br><span class="line">        ];</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 詳細的載入過程追蹤</span></span><br><span class="line">        process.<span class="property">stdout</span>.<span class="title function_">write</span>(<span class="string">`[SSR Transloco] 🚀 嘗試載入語系檔: <span class="subst">$&#123;lang&#125;</span>\n`</span>);</span><br><span class="line">        process.<span class="property">stdout</span>.<span class="title function_">write</span>(<span class="string">`[SSR Transloco] 📂 工作目錄: <span class="subst">$&#123;process.cwd()&#125;</span>\n`</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> tryPath = <span class="title function_">async</span> (<span class="attr">pathIndex</span>: <span class="built_in">number</span>): <span class="title class_">Promise</span>&lt;<span class="title class_">Translation</span>&gt; =&gt; &#123;</span><br><span class="line">            <span class="keyword">if</span> (pathIndex &gt;= possiblePaths.<span class="property">length</span>) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">`無法在任何路徑中找到語系檔: <span class="subst">$&#123;lang&#125;</span>`</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">const</span> filePath = possiblePaths[pathIndex];</span><br><span class="line">            process.<span class="property">stdout</span>.<span class="title function_">write</span>(<span class="string">`[SSR Transloco] 📁 嘗試路徑 <span class="subst">$&#123;pathIndex + <span class="number">1</span>&#125;</span>: <span class="subst">$&#123;filePath&#125;</span>\n`</span>);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>&lt;<span class="title class_">Translation</span>&gt;(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">                fs.<span class="title function_">readFile</span>(filePath, <span class="string">&#x27;utf8&#x27;</span>, <span class="function">(<span class="params"><span class="attr">err</span>: <span class="built_in">any</span>, <span class="attr">data</span>: <span class="built_in">string</span></span>) =&gt;</span> &#123;</span><br><span class="line">                    <span class="keyword">if</span> (err) &#123;</span><br><span class="line">                        <span class="keyword">if</span> (pathIndex &lt; possiblePaths.<span class="property">length</span> - <span class="number">1</span>) &#123;</span><br><span class="line">                            process.<span class="property">stdout</span>.<span class="title function_">write</span>(</span><br><span class="line">                                <span class="string">`[SSR Transloco] ⚠️ 路徑 <span class="subst">$&#123;pathIndex + <span class="number">1</span>&#125;</span> 失敗，嘗試下一個\n`</span></span><br><span class="line">                            );</span><br><span class="line">                            <span class="title function_">tryPath</span>(pathIndex + <span class="number">1</span>)</span><br><span class="line">                                .<span class="title function_">then</span>(resolve)</span><br><span class="line">                                .<span class="title function_">catch</span>(reject);</span><br><span class="line">                            <span class="keyword">return</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                        process.<span class="property">stderr</span>.<span class="title function_">write</span>(</span><br><span class="line">                            <span class="string">`[SSR Transloco] ❌ 讀取語系檔失敗: <span class="subst">$&#123;lang&#125;</span> - <span class="subst">$&#123;err.message&#125;</span>\n`</span></span><br><span class="line">                        );</span><br><span class="line">                        <span class="keyword">return</span> <span class="title function_">reject</span>(err);</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        <span class="keyword">const</span> translation = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(data) <span class="keyword">as</span> <span class="title class_">Translation</span>;</span><br><span class="line">                        process.<span class="property">stdout</span>.<span class="title function_">write</span>(<span class="string">`[SSR Transloco] ✅ 成功載入語系檔: <span class="subst">$&#123;lang&#125;</span>\n`</span>);</span><br><span class="line">                        <span class="title function_">resolve</span>(translation);</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (parseErr) &#123;</span><br><span class="line">                        process.<span class="property">stderr</span>.<span class="title function_">write</span>(<span class="string">`[SSR Transloco] ❌ JSON 解析失敗: <span class="subst">$&#123;lang&#125;</span>\n`</span>);</span><br><span class="line">                        <span class="title function_">reject</span>(parseErr);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;);</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="title function_">tryPath</span>(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="步驟-3：瀏覽器端-Loader-配置"><a href="#步驟-3：瀏覽器端-Loader-配置" class="headerlink" title="步驟 3：瀏覽器端 Loader 配置"></a><strong>步驟 3：瀏覽器端 Loader 配置</strong></h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/app/core/services/transloco.config.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">HttpClient</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@angular/common/http&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; inject, <span class="title class_">Injectable</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@angular/core&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Translation</span>, <span class="title class_">TranslocoLoader</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@jsverse/transloco&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Observable</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;rxjs&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; catchError, tap &#125; <span class="keyword">from</span> <span class="string">&#x27;rxjs/operators&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Injectable</span>(&#123; <span class="attr">providedIn</span>: <span class="string">&#x27;root&#x27;</span> &#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">TranslocoBrowserLoader</span> <span class="keyword">implements</span> <span class="title class_">TranslocoLoader</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> http = <span class="title function_">inject</span>(<span class="title class_">HttpClient</span>);</span><br><span class="line"></span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;🌐 [Browser Transloco] TranslocoBrowserLoader 被初始化！&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="title function_">getTranslation</span>(<span class="attr">lang</span>: <span class="built_in">string</span>): <span class="title class_">Observable</span>&lt;<span class="title class_">Translation</span>&gt; &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`[Browser Transloco] 🌐 HTTP載入語系檔: <span class="subst">$&#123;lang&#125;</span>`</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">http</span>.<span class="property">get</span>&lt;<span class="title class_">Translation</span>&gt;(<span class="string">`/assets/i18n/<span class="subst">$&#123;lang&#125;</span>.json`</span>).<span class="title function_">pipe</span>(</span><br><span class="line">            <span class="title function_">tap</span>(<span class="function">(<span class="params"><span class="attr">translation</span>: <span class="title class_">Translation</span></span>) =&gt;</span> &#123;</span><br><span class="line">                <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`[Browser Transloco] ✅ HTTP載入成功: <span class="subst">$&#123;lang&#125;</span>`</span>);</span><br><span class="line">                <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`[Browser Transloco] 載入的 keys:`</span>, <span class="title class_">Object</span>.<span class="title function_">keys</span>(translation));</span><br><span class="line">            &#125;),</span><br><span class="line">            <span class="title function_">catchError</span>(<span class="function">(<span class="params"><span class="attr">err</span>: <span class="built_in">any</span></span>) =&gt;</span> &#123;</span><br><span class="line">                <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">`[Browser Transloco] ❌ HTTP載入失敗: <span class="subst">$&#123;lang&#125;</span>`</span>, err);</span><br><span class="line">                <span class="keyword">throw</span> err;</span><br><span class="line">            &#125;)</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="步驟-4：基礎應用配置"><a href="#步驟-4：基礎應用配置" class="headerlink" title="步驟 4：基礎應用配置"></a><strong>步驟 4：基礎應用配置</strong></h3><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src/app/app.config.ts</span></span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">ApplicationConfig</span>, isDevMode &#125; <span class="keyword">from</span> <span class="string">&#x27;@angular/core&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; provideHttpClient, withFetch &#125; <span class="keyword">from</span> <span class="string">&#x27;@angular/common/http&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; provideTransloco, <span class="variable constant_">TRANSLOCO_LOADER</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@jsverse/transloco&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">TranslocoBrowserLoader</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;./core/services/transloco.config&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="attr">appConfig</span>: <span class="title class_">ApplicationConfig</span> = &#123;</span><br><span class="line">    <span class="attr">providers</span>: [</span><br><span class="line">        <span class="title function_">provideHttpClient</span>(<span class="title function_">withFetch</span>()),</span><br><span class="line">        <span class="title function_">provideTransloco</span>(&#123;</span><br><span class="line">            <span class="attr">config</span>: &#123;</span><br><span class="line">                <span class="attr">availableLangs</span>: [<span class="string">&#x27;en&#x27;</span>, <span class="string">&#x27;zh-tw&#x27;</span>],</span><br><span class="line">                <span class="attr">defaultLang</span>: <span class="string">&#x27;zh-tw&#x27;</span>,</span><br><span class="line">                <span class="comment">// 開發模式下啟用 debug，生產模式下關閉</span></span><br><span class="line">                <span class="attr">prodMode</span>: !<span class="title function_">isDevMode</span>(),</span><br><span class="line">                <span class="attr">fallbackLang</span>: <span class="string">&#x27;en&#x27;</span>,</span><br><span class="line">                <span class="attr">reRenderOnLangChange</span>: <span class="literal">true</span>,</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">loader</span>: <span class="title class_">TranslocoBrowserLoader</span>,</span><br><span class="line">        &#125;),</span><br><span class="line">        <span class="comment">// 瀏覽器環境使用 HTTP loader</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">provide</span>: <span class="variable constant_">TRANSLOCO_LOADER</span>,</span><br><span class="line">            <span class="attr">useClass</span>: <span class="title class_">TranslocoBrowserLoader</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">    ],</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="📊-測試結果與驗證"><a href="#📊-測試結果與驗證" class="headerlink" title="📊 測試結果與驗證"></a>📊 <strong>測試結果與驗證</strong></h2><h3 id="建置階段-Log-輸出"><a href="#建置階段-Log-輸出" class="headerlink" title="建置階段 Log 輸出"></a><strong>建置階段 Log 輸出</strong></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">🚀 [SSR Transloco] TranslocoSSRLoader 被初始化！</span><br><span class="line">🚀 [SSR Transloco] 伺服器端 Transloco Loader 已就緒</span><br><span class="line">[SSR Transloco] 🚀 嘗試載入語系檔: zh-tw</span><br><span class="line">[SSR Transloco] 📂 工作目錄: /path/to/project</span><br><span class="line">[SSR Transloco] 📁 嘗試路徑 1-5: [多路徑嘗試機制正常運作]</span><br></pre></td></tr></table></figure>
+
+<h3 id="頁面翻譯驗證"><a href="#頁面翻譯驗證" class="headerlink" title="頁面翻譯驗證"></a><strong>頁面翻譯驗證</strong></h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">title</span>&gt;</span>Demo 展示中心<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>按鈕元件<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span>&gt;</span>主要動作<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">button</span>&gt;</span>次要動作<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="🔑-關鍵配置要點"><a href="#🔑-關鍵配置要點" class="headerlink" title="🔑 關鍵配置要點"></a>🔑 <strong>關鍵配置要點</strong></h2><h3 id="1-雙-Loader-策略"><a href="#1-雙-Loader-策略" class="headerlink" title="1. 雙 Loader 策略"></a><strong>1. 雙 Loader 策略</strong></h3><ul>
+<li><strong>瀏覽器端</strong>：使用 HTTP 請求載入語系檔</li>
+<li><strong>SSR 端</strong>：使用文件系統直接讀取</li>
+</ul>
+<h3 id="2-路徑解析策略"><a href="#2-路徑解析策略" class="headerlink" title="2. 路徑解析策略"></a><strong>2. 路徑解析策略</strong></h3><ul>
+<li>實現多路徑嘗試機制</li>
+<li>考慮建置後的檔案結構</li>
+<li>處理 ES modules 環境限制</li>
+</ul>
+<h3 id="3-Log-輸出策略"><a href="#3-Log-輸出策略" class="headerlink" title="3. Log 輸出策略"></a><strong>3. Log 輸出策略</strong></h3><ul>
+<li>使用 <code>process.stdout.write</code> 避免被禁用</li>
+<li>雙重輸出確保可見性</li>
+<li>詳細的過程追蹤</li>
+</ul>
+<h3 id="4-錯誤處理策略"><a href="#4-錯誤處理策略" class="headerlink" title="4. 錯誤處理策略"></a><strong>4. 錯誤處理策略</strong></h3><ul>
+<li>Graceful fallback 機制</li>
+<li>詳細的錯誤訊息</li>
+<li>路徑失敗時的自動重試</li>
+</ul>
+<h2 id="💡-最佳實踐總結"><a href="#💡-最佳實踐總結" class="headerlink" title="💡 最佳實踐總結"></a>💡 <strong>最佳實踐總結</strong></h2><h3 id="配置檢查清單"><a href="#配置檢查清單" class="headerlink" title="配置檢查清單"></a><strong>配置檢查清單</strong></h3><h4 id="🏗️-基礎配置-最重要"><a href="#🏗️-基礎配置-最重要" class="headerlink" title="🏗️ 基礎配置 (最重要)"></a><strong>🏗️ 基礎配置 (最重要)</strong></h4><ul>
+<li>✅ <strong>檔案結構</strong>：<code>src/assets/i18n/*.json</code> 正確放置</li>
+<li>✅ <strong>angular.json</strong>：assets 配置正確設定 (<code>src/assets</code> → <code>/assets</code>)</li>
+<li>✅ <strong>語系檔案</strong>：JSON 格式正確，無語法錯誤</li>
+</ul>
+<h4 id="🚨-Injection-Token-配置"><a href="#🚨-Injection-Token-配置" class="headerlink" title="🚨 Injection Token 配置"></a><strong>🚨 Injection Token 配置</strong></h4><ul>
+<li>✅ <strong>main.server.ts</strong>：使用正確的 server config (<code>app.config.server.ts</code>)</li>
+<li>✅ <strong>Server config</strong>：正確合併包含 <code>provideTransloco()</code> 的配置，確保 <code>TRANSLOCO_TRANSPILER</code> 等 tokens 被提供</li>
+<li>✅ <strong>配置合併</strong>：使用 <code>mergeApplicationConfig(appConfig, serverConfig)</code> 確保完整的 provider 鏈</li>
+<li>✅ <strong>SSR Loader</strong>：覆蓋瀏覽器端的 <code>TRANSLOCO_LOADER</code> 以支援文件系統讀取</li>
+</ul>
+<h4 id="🔧-SSR-配置"><a href="#🔧-SSR-配置" class="headerlink" title="🔧 SSR 配置"></a><strong>🔧 SSR 配置</strong></h4><ul>
+<li>✅ 實現雙 Loader 策略 (SSR + Browser)</li>
+<li>✅ 添加詳細的 log 追蹤</li>
+<li>✅ 實現多路徑嘗試機制</li>
+<li>✅ 正確的文件系統讀取邏輯</li>
+</ul>
+<h4 id="🌐-運行時驗證"><a href="#🌐-運行時驗證" class="headerlink" title="🌐 運行時驗證"></a><strong>🌐 運行時驗證</strong></h4><ul>
+<li>✅ 建置後檔案存在：<code>dist/project/browser/assets/i18n/*.json</code></li>
+<li>✅ SSR log 正常輸出</li>
+<li>✅ 頁面翻譯內容正確顯示</li>
+</ul>
+<h3 id="調試技巧"><a href="#調試技巧" class="headerlink" title="調試技巧"></a><strong>調試技巧</strong></h3><h4 id="🚨-Injection-Token-問題診斷"><a href="#🚨-Injection-Token-問題診斷" class="headerlink" title="🚨 Injection Token 問題診斷"></a><strong>🚨 Injection Token 問題診斷</strong></h4><ol>
+<li><strong>錯誤訊息關鍵字</strong>：留意 <code>No provider for InjectionToken TRANSLOCO_TRANSPILER</code> 和 <code>NullInjectorError</code></li>
+<li><strong>配置檔案檢查</strong>：確認 <code>main.server.ts</code> 使用的是哪個配置檔案</li>
+<li><strong>Provider 追蹤</strong>：檢查 server config 中是否有相應的 token provider</li>
+<li><strong>環境差異分析</strong>：比較瀏覽器端和 SSR 端的 provider 配置差異</li>
+</ol>
+<h4 id="🌀-避免陷入-Loader-配置迷宮"><a href="#🌀-避免陷入-Loader-配置迷宮" class="headerlink" title="🌀 避免陷入 Loader 配置迷宮"></a><strong>🌀 避免陷入 Loader 配置迷宮</strong></h4><p><strong>關鍵檢查順序</strong> - 按這個順序進行，可以避免浪費時間：</p>
+<ol>
+<li><strong>最簡驗證</strong>：先在 SSR Loader constructor 中加入 <code>console.log</code>，確認是否被載入 <figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;🚀 SSR Loader 被初始化了嗎？&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><strong>配置追蹤</strong>：確認 <code>main.server.ts</code> → <code>app.config.server.ts</code> → <code>mergeApplicationConfig</code> 的完整鏈路</li>
+<li><strong>Provider 驗證</strong>：確認 server config 中的 provider 是否正確註冊</li>
+<li><strong>只有確認 Loader 被載入後，才開始調試實現細節</strong></li>
+</ol>
+<h4 id="🔧-實現問題調試"><a href="#🔧-實現問題調試" class="headerlink" title="🔧 實現問題調試"></a><strong>🔧 實現問題調試</strong></h4><ol>
+<li><strong>使用雙重 log 輸出</strong>：<code>process.stdout.write</code> + <code>console.log</code></li>
+<li><strong>路徑追蹤</strong>：記錄每個嘗試的路徑</li>
+<li><strong>階段性驗證</strong>：分別驗證建置階段和運行階段</li>
+<li><strong>錯誤分類</strong>：區分配置錯誤、路徑錯誤、文件錯誤</li>
+</ol>
+<h3 id="常見陷阱"><a href="#常見陷阱" class="headerlink" title="常見陷阱"></a><strong>常見陷阱</strong></h3><h4 id="🌀-最大的陷阱：Loader-配置迷宮"><a href="#🌀-最大的陷阱：Loader-配置迷宮" class="headerlink" title="🌀 最大的陷阱：Loader 配置迷宮"></a><strong>🌀 最大的陷阱：Loader 配置迷宮</strong></h4><p><strong>這是我們卡最久的地方！</strong> 其他開發者也很容易陷入這個陷阱：</p>
+<ol>
+<li><strong>假性解決陷阱</strong>：解決了 Token 問題後，以為萬事大吉，沒意識到 SSR Loader 根本沒載入</li>
+<li><strong>過度工程陷阱</strong>：不斷優化 Loader 實現細節，但忽略了根本的配置問題</li>
+<li><strong>路徑強迫症陷阱</strong>：執著於調整文件路徑，嘗試各種組合，但問題不在路徑</li>
+<li><strong>Provider 配置陷阱</strong>：嘗試各種 provider 註冊方式，但 main.server.ts 配置才是關鍵</li>
+<li><strong>環境設定轉移陷阱</strong>：把問題歸咎於環境設定，但實際是配置架構問題</li>
+</ol>
+<h4 id="🚨-核心配置陷阱"><a href="#🚨-核心配置陷阱" class="headerlink" title="🚨 核心配置陷阱"></a><strong>🚨 核心配置陷阱</strong></h4><ol>
+<li><strong>🚨 Injection Token 陷阱</strong>：<code>main.server.ts</code> 使用錯誤的配置，導致 <code>TRANSLOCO_TRANSPILER</code> token 找不到</li>
+<li><strong>🚨 資源配置陷阱</strong>：<code>angular.json</code> 中缺少 assets 配置，導致語系檔案不會被複製到建置輸出</li>
+<li><strong>🚨 配置載入陷阱</strong>：修改了 <code>app.config.server.ts</code> 但 <code>main.server.ts</code> 沒有正確使用</li>
+<li><strong>Provider 衝突陷阱</strong>：在 server config 中重複定義瀏覽器 loader</li>
+</ol>
+<h4 id="🔧-技術實現陷阱"><a href="#🔧-技術實現陷阱" class="headerlink" title="🔧 技術實現陷阱"></a><strong>🔧 技術實現陷阱</strong></h4><ol start="5">
+<li><strong>路徑陷阱</strong>：ES modules 下 <code>__dirname</code> 不可用</li>
+<li><strong>Log 陷阱</strong>：生產環境 console.log 被禁用</li>
+<li><strong>時序陷阱</strong>：預渲染階段 assets 尚未複製</li>
+<li><strong>檔案結構陷阱</strong>：語系檔案放錯位置 (如放在 <code>src/app/assets</code> 而非 <code>src/assets</code>)</li>
+</ol>
+<h4 id="⚠️-診斷陷阱"><a href="#⚠️-診斷陷阱" class="headerlink" title="⚠️ 診斷陷阱"></a><strong>⚠️ 診斷陷阱</strong></h4><ol start="9">
+<li><strong>盲目測試陷阱</strong>：不斷嘗試各種配置組合，但沒有系統性驗證</li>
+<li><strong>症狀轉移陷阱</strong>：把精力花在次要問題上，忽略了根本的配置架構問題</li>
+</ol>
+<h2 id="🚀-結論"><a href="#🚀-結論" class="headerlink" title="🚀 結論"></a>🚀 <strong>結論</strong></h2><p>這個問題的解決關鍵在於：</p>
+<ol>
+<li><strong>🚨 Injection Token 問題</strong>：確保 <code>main.server.ts</code> 使用正確的 server config 和 TRANSLOCO_TRANSPILER provider</li>
+<li><strong>🏗️ 基礎資源配置</strong>：確保 <code>angular.json</code> assets 正確設定和檔案結構正確</li>
+<li><strong>正確的配置架構</strong>：使用專門的 server config，避免 provider 衝突</li>
+<li><strong>合適的實現策略</strong>：雙 Loader + 多路徑嘗試</li>
+<li><strong>完善的調試機制</strong>：詳細 log + 錯誤處理</li>
+<li><strong>深入的問題分析</strong>：從表象到根因的系統性診斷</li>
+</ol>
+<p>通過這次問題解決，我們建立了一個完整的 Angular SSR + Transloco 國際化解決方案，可以穩定運行在生產環境中，並具備完善的調試和錯誤處理能力。</p>
+<p><strong>最重要的教訓</strong>：</p>
+<h3 id="🎯-解決策略教訓"><a href="#🎯-解決策略教訓" class="headerlink" title="🎯 解決策略教訓"></a><strong>🎯 解決策略教訓</strong></h3><ol>
+<li><strong>🚨 正確的修復方向：補足缺失的 Injection Token</strong> - 當我們看到 <code>No provider for InjectionToken TRANSLOCO_TRANSPILER</code> 錯誤時，應該立即檢查相關的 provider 配置</li>
+<li><strong>根本原因識別</strong> - 所有的症狀都源自於 <code>main.server.ts</code> 配置錯誤，導致 <code>TRANSLOCO_TRANSPILER</code> token 在 SSR 環境中找不到</li>
+<li><strong>表面錯誤只是症狀</strong> - TypeScript 錯誤、Log 問題、路徑問題都是深層配置問題的表現</li>
+<li><strong>系統性診斷是關鍵</strong> - 從依賴注入 → 配置架構 → 實現細節的分層解決方式</li>
+<li><strong>補足策略的有效性</strong> - 關鍵是使用 <code>mergeApplicationConfig()</code> 合併配置，確保所有 Transloco providers 都被正確包含在 SSR 環境中</li>
+</ol>
+<h3 id="🌀-試錯過程教訓"><a href="#🌀-試錯過程教訓" class="headerlink" title="🌀 試錯過程教訓"></a><strong>🌀 試錯過程教訓</strong></h3><ol start="6">
+<li><strong>避免 Loader 配置迷宮</strong> - 不要一開始就深入 Loader 實現細節，先確認 Loader 是否真的被載入</li>
+<li><strong>先驗證後優化</strong> - 在優化 Loader 之前，先用最簡單的 log 驗證 constructor 是否被呼叫</li>
+</ol>
+<hr>
+<p><strong>作者</strong>：技術團隊<br><strong>版本</strong>：v2.0<br><strong>最後更新</strong>：2025-07-01<br><strong>文件狀態</strong>：✅ 故障排除完整指南<br>8. <strong>配置架構優於實現細節</strong> - 90% 的問題出在配置架構上，只有 10% 是實現細節問題<br>9. <strong>假性解決的危險</strong> - 解決一個錯誤後，要全面驗證功能是否真正工作，不要急於慶祝<br>10. <strong>系統性排除勝過盲目嘗試</strong> - 建立檢查清單，系統性排除可能原因，而不是隨機嘗試各種配置</p>
+<h3 id="🔍-診斷方法教訓"><a href="#🔍-診斷方法教訓" class="headerlink" title="🔍 診斷方法教訓"></a><strong>🔍 診斷方法教訓</strong></h3><ol start="11">
+<li><strong>最簡驗證法</strong> - 用最簡單的 <code>console.log</code> 在 constructor 中驗證服務是否被載入</li>
+<li><strong>配置追蹤法</strong> - 追蹤從 <code>main.server.ts</code> 開始的完整配置鏈</li>
+<li><strong>分層診斷法</strong> - 從架構 → 配置 → 實現的順序進行診斷</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://cookieseventeen.github.io/2025/06/29/angular-ssr-transloco-troubleshooting-guide/" data-id="cmcx8ojep0004am644hqb4m88" data-title="Angular SSR + Transloco 故障排除與除錯完整指南" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Angular-SSR/" rel="tag">Angular SSR</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Angular-Universal/" rel="tag">Angular Universal</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Debugging/" rel="tag">Debugging</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Error-Handling/" rel="tag">Error Handling</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NullInjectorError/" rel="tag">NullInjectorError</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Production-Issues/" rel="tag">Production Issues</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SSR-Configuration/" rel="tag">SSR Configuration</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Transloco/" rel="tag">Transloco</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Troubleshooting/" rel="tag">Troubleshooting</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/i18n-Debug/" rel="tag">i18n Debug</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2025/06/29/angular-enterprise-project-architecture-guide/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Angular 19 能源管理系統前端專案架構設計指南
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2025/06/29/angular-httpclient-modern-configuration-guide/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Angular HttpClient 現代化配置與 withInterceptorsFromDI 實戰指南</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分類</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Tech-Daily/">Tech Daily</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI-Assistant/" rel="tag">AI Assistant</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI-Collaboration/" rel="tag">AI Collaboration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ARM/" rel="tag">ARM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular/" rel="tag">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular-15/" rel="tag">Angular 15+</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular-19/" rel="tag">Angular 19</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular-Configuration/" rel="tag">Angular Configuration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular-SSR/" rel="tag">Angular SSR</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular-Universal/" rel="tag">Angular Universal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Best-Practices/" rel="tag">Best Practices</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Buildx/" rel="tag">Buildx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Business-Context/" rel="tag">Business Context</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Business-Strategy/" rel="tag">Business Strategy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CI-CD/" rel="tag">CI&#x2F;CD</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Canvas/" rel="tag">Canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Clean-Architecture/" rel="tag">Clean Architecture</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Clustering/" rel="tag">Clustering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Code-Quality/" rel="tag">Code Quality</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Composables/" rel="tag">Composables</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Composition-API/" rel="tag">Composition API</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Critical-Functions/" rel="tag">Critical Functions</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Data-Visualization/" rel="tag">Data Visualization</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debugging/" rel="tag">Debugging</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dependency-Injection/" rel="tag">Dependency Injection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Design-Patterns/" rel="tag">Design Patterns</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Developer-Experience/" rel="tag">Developer Experience</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Domain-Knowledge/" rel="tag">Domain Knowledge</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ESLint-9-x/" rel="tag">ESLint 9.x</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Enterprise-Architecture/" rel="tag">Enterprise Architecture</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Error-Handling/" rel="tag">Error Handling</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Feature-Modules/" rel="tag">Feature Modules</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Flat-Config/" rel="tag">Flat Config</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Frontend-Architecture/" rel="tag">Frontend Architecture</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Frontend-Tooling/" rel="tag">Frontend Tooling</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GeoJSON/" rel="tag">GeoJSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Global-Properties/" rel="tag">Global Properties</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP-Interceptors/" rel="tag">HTTP Interceptors</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HttpClient/" rel="tag">HttpClient</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hydration/" rel="tag">Hydration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Interactive-Maps/" rel="tag">Interactive Maps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Knowledge-Management/" rel="tag">Knowledge Management</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linting-Rules/" rel="tag">Linting Rules</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mapbox/" rel="tag">Mapbox</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mapbox-GL-JS/" rel="tag">Mapbox GL JS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Migration-Guide/" rel="tag">Migration Guide</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Multi-platform/" rel="tag">Multi-platform</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Naming-Convention/" rel="tag">Naming Convention</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NullInjectorError/" rel="tag">NullInjectorError</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Offline-Deployment/" rel="tag">Offline Deployment</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Performance-Optimization/" rel="tag">Performance Optimization</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pinia/" rel="tag">Pinia</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Prerender/" rel="tag">Prerender</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PrimeNG/" rel="tag">PrimeNG</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Production-Issues/" rel="tag">Production Issues</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Project-Architecture/" rel="tag">Project Architecture</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Prompt-Engineering/" rel="tag">Prompt Engineering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RenderMode/" rel="tag">RenderMode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Route-Guards/" rel="tag">Route Guards</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/" rel="tag">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSR/" rel="tag">SSR</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSR-Configuration/" rel="tag">SSR Configuration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Server-Side-Rendering/" rel="tag">Server-Side Rendering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Service-Pattern/" rel="tag">Service Pattern</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Signals/" rel="tag">Signals</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Standalone-Components/" rel="tag">Standalone Components</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/State-Management/" rel="tag">State Management</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tailwind-CSS/" rel="tag">Tailwind CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Team-Productivity/" rel="tag">Team Productivity</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Technical-Decision-Making/" rel="tag">Technical Decision Making</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Transloco/" rel="tag">Transloco</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Troubleshooting/" rel="tag">Troubleshooting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TypeScript/" rel="tag">TypeScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/USGS-Data/" rel="tag">USGS Data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue-js/" rel="tag">Vue.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web-Mapping/" rel="tag">Web Mapping</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/i18n-Debug/" rel="tag">i18n Debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/provideHttpClient/" rel="tag">provideHttpClient</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/withInterceptorsFromDI/" rel="tag">withInterceptorsFromDI</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤雲</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AI-Assistant/" style="font-size: 10px;">AI Assistant</a> <a href="/tags/AI-Collaboration/" style="font-size: 10px;">AI Collaboration</a> <a href="/tags/ARM/" style="font-size: 10px;">ARM</a> <a href="/tags/Angular/" style="font-size: 10px;">Angular</a> <a href="/tags/Angular-15/" style="font-size: 10px;">Angular 15+</a> <a href="/tags/Angular-19/" style="font-size: 20px;">Angular 19</a> <a href="/tags/Angular-Configuration/" style="font-size: 10px;">Angular Configuration</a> <a href="/tags/Angular-SSR/" style="font-size: 10px;">Angular SSR</a> <a href="/tags/Angular-Universal/" style="font-size: 20px;">Angular Universal</a> <a href="/tags/Best-Practices/" style="font-size: 10px;">Best Practices</a> <a href="/tags/Buildx/" style="font-size: 10px;">Buildx</a> <a href="/tags/Business-Context/" style="font-size: 10px;">Business Context</a> <a href="/tags/Business-Strategy/" style="font-size: 10px;">Business Strategy</a> <a href="/tags/CI-CD/" style="font-size: 10px;">CI/CD</a> <a href="/tags/Canvas/" style="font-size: 10px;">Canvas</a> <a href="/tags/Clean-Architecture/" style="font-size: 10px;">Clean Architecture</a> <a href="/tags/Clustering/" style="font-size: 10px;">Clustering</a> <a href="/tags/Code-Quality/" style="font-size: 10px;">Code Quality</a> <a href="/tags/Composables/" style="font-size: 10px;">Composables</a> <a href="/tags/Composition-API/" style="font-size: 10px;">Composition API</a> <a href="/tags/Critical-Functions/" style="font-size: 10px;">Critical Functions</a> <a href="/tags/Data-Visualization/" style="font-size: 10px;">Data Visualization</a> <a href="/tags/Debugging/" style="font-size: 10px;">Debugging</a> <a href="/tags/Dependency-Injection/" style="font-size: 10px;">Dependency Injection</a> <a href="/tags/Design-Patterns/" style="font-size: 10px;">Design Patterns</a> <a href="/tags/Developer-Experience/" style="font-size: 10px;">Developer Experience</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Domain-Knowledge/" style="font-size: 10px;">Domain Knowledge</a> <a href="/tags/ESLint-9-x/" style="font-size: 10px;">ESLint 9.x</a> <a href="/tags/Enterprise-Architecture/" style="font-size: 10px;">Enterprise Architecture</a> <a href="/tags/Error-Handling/" style="font-size: 10px;">Error Handling</a> <a href="/tags/Feature-Modules/" style="font-size: 10px;">Feature Modules</a> <a href="/tags/Flat-Config/" style="font-size: 10px;">Flat Config</a> <a href="/tags/Frontend-Architecture/" style="font-size: 10px;">Frontend Architecture</a> <a href="/tags/Frontend-Tooling/" style="font-size: 10px;">Frontend Tooling</a> <a href="/tags/GeoJSON/" style="font-size: 10px;">GeoJSON</a> <a href="/tags/Global-Properties/" style="font-size: 10px;">Global Properties</a> <a href="/tags/HTTP-Interceptors/" style="font-size: 10px;">HTTP Interceptors</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/Hydration/" style="font-size: 15px;">Hydration</a> <a href="/tags/Interactive-Maps/" style="font-size: 10px;">Interactive Maps</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Knowledge-Management/" style="font-size: 10px;">Knowledge Management</a> <a href="/tags/Linting-Rules/" style="font-size: 10px;">Linting Rules</a> <a href="/tags/Mapbox/" style="font-size: 10px;">Mapbox</a> <a href="/tags/Mapbox-GL-JS/" style="font-size: 10px;">Mapbox GL JS</a> <a href="/tags/Migration-Guide/" style="font-size: 10px;">Migration Guide</a> <a href="/tags/Multi-platform/" style="font-size: 10px;">Multi-platform</a> <a href="/tags/Naming-Convention/" style="font-size: 10px;">Naming Convention</a> <a href="/tags/NullInjectorError/" style="font-size: 10px;">NullInjectorError</a> <a href="/tags/Offline-Deployment/" style="font-size: 10px;">Offline Deployment</a> <a href="/tags/Performance-Optimization/" style="font-size: 15px;">Performance Optimization</a> <a href="/tags/Pinia/" style="font-size: 10px;">Pinia</a> <a href="/tags/Prerender/" style="font-size: 15px;">Prerender</a> <a href="/tags/PrimeNG/" style="font-size: 10px;">PrimeNG</a> <a href="/tags/Production-Issues/" style="font-size: 10px;">Production Issues</a> <a href="/tags/Project-Architecture/" style="font-size: 10px;">Project Architecture</a> <a href="/tags/Prompt-Engineering/" style="font-size: 10px;">Prompt Engineering</a> <a href="/tags/RenderMode/" style="font-size: 15px;">RenderMode</a> <a href="/tags/Route-Guards/" style="font-size: 15px;">Route Guards</a> <a href="/tags/SEO/" style="font-size: 15px;">SEO</a> <a href="/tags/SSR/" style="font-size: 20px;">SSR</a> <a href="/tags/SSR-Configuration/" style="font-size: 10px;">SSR Configuration</a> <a href="/tags/Server-Side-Rendering/" style="font-size: 15px;">Server-Side Rendering</a> <a href="/tags/Service-Pattern/" style="font-size: 10px;">Service Pattern</a> <a href="/tags/Signals/" style="font-size: 10px;">Signals</a> <a href="/tags/Standalone-Components/" style="font-size: 15px;">Standalone Components</a> <a href="/tags/State-Management/" style="font-size: 10px;">State Management</a> <a href="/tags/Tailwind-CSS/" style="font-size: 10px;">Tailwind CSS</a> <a href="/tags/Team-Productivity/" style="font-size: 10px;">Team Productivity</a> <a href="/tags/Technical-Decision-Making/" style="font-size: 10px;">Technical Decision Making</a> <a href="/tags/Transloco/" style="font-size: 15px;">Transloco</a> <a href="/tags/Troubleshooting/" style="font-size: 10px;">Troubleshooting</a> <a href="/tags/TypeScript/" style="font-size: 10px;">TypeScript</a> <a href="/tags/USGS-Data/" style="font-size: 10px;">USGS Data</a> <a href="/tags/Vue-js/" style="font-size: 10px;">Vue.js</a> <a href="/tags/Web-Mapping/" style="font-size: 10px;">Web Mapping</a> <a href="/tags/i18n-Debug/" style="font-size: 10px;">i18n Debug</a> <a href="/tags/provideHttpClient/" style="font-size: 10px;">provideHttpClient</a> <a href="/tags/withInterceptorsFromDI/" style="font-size: 10px;">withInterceptorsFromDI</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">彙整</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/06/">六月 2025</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/06/29/angular-enterprise-project-architecture-guide/">Angular 19 能源管理系統前端專案架構設計指南</a>
+          </li>
+        
+          <li>
+            <a href="/2025/06/29/angular-ssr-transloco-troubleshooting-guide/">Angular SSR + Transloco 故障排除與除錯完整指南</a>
+          </li>
+        
+          <li>
+            <a href="/2025/06/29/angular-httpclient-modern-configuration-guide/">Angular HttpClient 現代化配置與 withInterceptorsFromDI 實戰指南</a>
+          </li>
+        
+          <li>
+            <a href="/2025/06/29/eslint-configuration-best-practices-guide/">ESLint 9.x 革命性配置與前端開發最佳化實戰指南</a>
+          </li>
+        
+          <li>
+            <a href="/2025/06/29/angular-ssr-prerender-technical-guide/">Angular 19 SSR/Prerender 深度技術分析與實戰指南</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2025 Ben Hsieh<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
