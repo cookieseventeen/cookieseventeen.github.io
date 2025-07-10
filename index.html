@@ -75,493 +75,6 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-angular-enterprise-project-architecture-guide" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2025/06/29/angular-enterprise-project-architecture-guide/" class="article-date">
-  <time class="dt-published" datetime="2025-06-29T10:00:00.000Z" itemprop="datePublished">2025-06-29</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Tech-Daily/">Tech Daily</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2025/06/29/angular-enterprise-project-architecture-guide/">Angular 19 能源管理系統前端專案架構設計指南</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h1 id="Energy-Management-System-EMS-Frontend-專案架構文件"><a href="#Energy-Management-System-EMS-Frontend-專案架構文件" class="headerlink" title="Energy Management System (EMS) Frontend 專案架構文件"></a>Energy Management System (EMS) Frontend 專案架構文件</h1><h2 id="📋-目錄"><a href="#📋-目錄" class="headerlink" title="📋 目錄"></a>📋 目錄</h2><ol>
-<li><a href="#%E5%B0%88%E6%A1%88%E6%A6%82%E8%BF%B0">🎯 專案概述</a></li>
-<li><a href="#%E6%95%B4%E9%AB%94%E6%9E%B6%E6%A7%8B%E8%A8%AD%E8%A8%88">🏗️ 整體架構設計</a></li>
-<li><a href="#%E5%AE%8C%E6%95%B4%E7%9B%AE%E9%8C%84%E7%B5%90%E6%A7%8B">📂 完整目錄結構</a></li>
-<li><a href="#%E6%A0%B8%E5%BF%83%E6%9E%B6%E6%A7%8B%E5%B1%A4%E7%B4%9A%E8%A9%B3%E8%A7%A3">🧱 核心架構層級詳解</a></li>
-<li><a href="#%E8%B7%AF%E7%94%B1%E6%9E%B6%E6%A7%8B%E8%A8%AD%E8%A8%88">🛣️ 路由架構設計</a></li>
-<li><a href="#%E6%A8%A3%E5%BC%8F%E6%9E%B6%E6%A7%8B">🎨 樣式架構</a></li>
-<li><a href="#%E9%96%8B%E7%99%BC%E5%B7%A5%E5%85%B7%E8%88%87%E5%93%81%E8%B3%AA%E6%8E%A7%E5%88%B6">⚙️ 開發工具與品質控制</a></li>
-<li><a href="#%E6%9E%B6%E6%A7%8B%E5%84%AA%E5%8B%A2%E8%88%87%E8%A8%AD%E8%A8%88%E6%B1%BA%E7%AD%96">🏗️ 架構優勢與設計決策</a></li>
-<li><a href="#%E6%9C%80%E4%BD%B3%E5%AF%A6%E8%B8%90%E5%BB%BA%E8%AD%B0">🚀 最佳實踐建議</a></li>
-</ol>
-<hr>
-<h2 id="🎯-專案概述"><a href="#🎯-專案概述" class="headerlink" title="🎯 專案概述"></a>🎯 專案概述</h2><p>Energy Management System (EMS) Frontend 是一個基於 Angular 19.2.2 的現代化前端應用程式，專為能源管理系統設計。專案採用 Standalone Components 架構、Signals 狀態管理、延遲載入等最新 Angular 技術，並整合 PrimeNG UI 元件庫和 Tailwind CSS 樣式框架。</p>
-<h3 id="技術堆疊"><a href="#技術堆疊" class="headerlink" title="技術堆疊"></a>技術堆疊</h3><ul>
-<li><strong>框架</strong>: Angular 19.2.2 (Standalone Components)</li>
-<li><strong>狀態管理</strong>: Angular Signals</li>
-<li><strong>路由</strong>: Angular Router (延遲載入)</li>
-<li><strong>UI 元件庫</strong>: PrimeNG 19.0.10</li>
-<li><strong>樣式框架</strong>: Tailwind CSS + PrimeFlex</li>
-<li><strong>構建工具</strong>: Angular CLI</li>
-<li><strong>程式碼品質</strong>: ESLint + Prettier</li>
-<li><strong>伺服器端渲染</strong>: Angular SSR</li>
-</ul>
-<h3 id="專案特色"><a href="#專案特色" class="headerlink" title="專案特色"></a>專案特色</h3><ul>
-<li>✅ <strong>現代化技術棧</strong>: 採用 Angular 19 最新特性</li>
-<li>✅ <strong>模組化架構</strong>: 清晰的功能模組劃分</li>
-<li>✅ <strong>效能優化</strong>: 延遲載入與 OnPush 策略</li>
-<li>✅ <strong>開發體驗</strong>: 完整的工具鏈與程式碼規範</li>
-<li>✅ <strong>可擴展性</strong>: 支援快速功能模組擴展</li>
-</ul>
-<hr>
-<h2 id="🏗️-整體架構設計"><a href="#🏗️-整體架構設計" class="headerlink" title="🏗️ 整體架構設計"></a>🏗️ 整體架構設計</h2><h3 id="架構模式"><a href="#架構模式" class="headerlink" title="架構模式"></a>架構模式</h3><p>本專案採用 <strong>功能模組化架構</strong> (Feature-Module Architecture)，結合 <strong>清潔架構</strong> (Clean Architecture) 原則：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">專案根目錄</span><br><span class="line">├── docs/                   # 📚 專案文件</span><br><span class="line">├── public/                 # 🎨 靜態資源</span><br><span class="line">├── src/                    # 💻 原始程式碼</span><br><span class="line">│   ├── environments/       # 🌍 環境配置</span><br><span class="line">│   └── app/               # 🎯 Angular 應用核心</span><br><span class="line">│       ├── core/          # 🔧 核心層 (Core Layer)</span><br><span class="line">│       ├── shared/        # 🤝 共享層 (Shared Layer)</span><br><span class="line">│       ├── features/      # 🎪 功能層 (Feature Layer)</span><br><span class="line">│       └── pages/         # 📄 頁面層 (Page Layer)</span><br><span class="line">└── 配置檔案               # ⚙️ 專案配置</span><br></pre></td></tr></table></figure>
-
-<h3 id="分層責任與設計原則"><a href="#分層責任與設計原則" class="headerlink" title="分層責任與設計原則"></a>分層責任與設計原則</h3><table>
-<thead>
-<tr>
-<th>層級</th>
-<th>責任範圍</th>
-<th>設計原則</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>Core Layer</strong></td>
-<td>核心業務邏輯、服務、攔截器</td>
-<td>提供基礎設施，保持單例模式</td>
-</tr>
-<tr>
-<td><strong>Shared Layer</strong></td>
-<td>可重用元件、管道、指令</td>
-<td>跨模組共享，無業務邏輯依賴</td>
-</tr>
-<tr>
-<td><strong>Feature Layer</strong></td>
-<td>功能模組、業務邏輯</td>
-<td>自包含，延遲載入，依賴隔離</td>
-</tr>
-<tr>
-<td><strong>Page Layer</strong></td>
-<td>頁面級元件</td>
-<td>整合功能模組，處理全域邏輯</td>
-</tr>
-</tbody></table>
-<h3 id="架構優勢"><a href="#架構優勢" class="headerlink" title="架構優勢"></a>架構優勢</h3><ol>
-<li><strong>清晰的職責分離</strong>: 每層都有明確的責任範圍</li>
-<li><strong>良好的可維護性</strong>: 模組化設計便於維護和擴展</li>
-<li><strong>優秀的效能表現</strong>: 延遲載入與變更檢測優化</li>
-<li><strong>團隊協作友好</strong>: 不同功能可並行開發</li>
-</ol>
-<hr>
-<h2 id="📂-完整目錄結構"><a href="#📂-完整目錄結構" class="headerlink" title="📂 完整目錄結構"></a>📂 完整目錄結構</h2><h3 id="專案完整結構樹"><a href="#專案完整結構樹" class="headerlink" title="專案完整結構樹"></a>專案完整結構樹</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br></pre></td><td class="code"><pre><span class="line">example-project/</span><br><span class="line">├── 📁 docs/                                    # 專案文件目錄</span><br><span class="line">│   ├── 📄 ai-business-guidance.md              # AI 業務導向指導策略文件</span><br><span class="line">│   ├── 📄 coding-standards.md                  # 程式碼規範與開發標準文件</span><br><span class="line">│   ├── 📄 eslint-configuration-guide.md        # ESLint 配置實戰指南</span><br><span class="line">│   └── 📄 project-architecture.md              # 專案架構文件 (本文件)</span><br><span class="line">│</span><br><span class="line">├── 📁 public/                                  # 靜態資源目錄</span><br><span class="line">│   └── 📄 favicon.ico                          # 網站圖示檔案</span><br><span class="line">│</span><br><span class="line">├── 📁 src/                                     # 原始程式碼根目錄</span><br><span class="line">│   ├── 📄 index.html                           # 應用程式 HTML 進入點</span><br><span class="line">│   ├── 📄 main.ts                              # 客戶端應用啟動檔案</span><br><span class="line">│   ├── 📄 main.server.ts                       # 伺服器端應用啟動檔案</span><br><span class="line">│   ├── 📄 server.ts                            # Express 伺服器配置</span><br><span class="line">│   ├── 📄 styles.scss                          # 全域樣式檔案</span><br><span class="line">│   ├── 📄 tailwind.css                         # Tailwind CSS 進入點</span><br><span class="line">│   │</span><br><span class="line">│   ├── 📁 environments/                        # 環境配置目錄</span><br><span class="line">│   │   ├── 📄 environment.ts                   # 開發環境配置檔案</span><br><span class="line">│   │   └── 📄 environment.prod.ts              # 生產環境配置檔案</span><br><span class="line">│   │</span><br><span class="line">│   └── 📁 app/                                 # Angular 應用程式核心目錄</span><br><span class="line">│       ├── 📄 app.component.html               # 根元件 HTML 模板</span><br><span class="line">│       ├── 📄 app.component.scss               # 根元件樣式檔案</span><br><span class="line">│       ├── 📄 app.component.ts                 # 根元件 TypeScript 邏輯</span><br><span class="line">│       ├── 📄 app.config.ts                    # 應用程式核心配置</span><br><span class="line">│       ├── 📄 app.config.server.ts             # SSR 專用配置檔案</span><br><span class="line">│       ├── 📄 app.routes.ts                    # 根路由配置檔案</span><br><span class="line">│       ├── 📄 app.routes.server.ts             # SSR 路由配置檔案</span><br><span class="line">│       │</span><br><span class="line">│       ├── 📁 core/                            # 核心層 - 應用程式基礎設施</span><br><span class="line">│       │   ├── 📁 enums/                       # 列舉定義目錄</span><br><span class="line">│       │   ├── 📁 guards/                      # 路由守衛目錄</span><br><span class="line">│       │   ├── 📁 interceptors/                # HTTP 攔截器目錄</span><br><span class="line">│       │   ├── 📁 models/                      # 資料模型與 TypeScript 介面目錄</span><br><span class="line">│       │   └── 📁 services/                    # 核心服務目錄</span><br><span class="line">│       │       └── 📄 dark-mode.service.ts     # 暗色模式切換服務</span><br><span class="line">│       │</span><br><span class="line">│       ├── 📁 shared/                          # 共享層 - 可重用元件與工具</span><br><span class="line">│       │   ├── 📁 components/                  # 跨模組共享元件目錄</span><br><span class="line">│       │   ├── 📁 directives/                  # 自訂指令目錄</span><br><span class="line">│       │   ├── 📁 layouts/                     # 版面配置元件目錄</span><br><span class="line">│       │   │   ├── 📄 index.ts                 # 版面配置匯出索引檔案</span><br><span class="line">│       │   │   ├── 📄 README.md                # 版面配置使用指南</span><br><span class="line">│       │   │   ├── 📁 empty-layout/            # 空白版面配置元件</span><br><span class="line">│       │   │   │   ├── 📄 empty-layout.component.html    # 空白版面 HTML 模板</span><br><span class="line">│       │   │   │   ├── 📄 empty-layout.component.scss    # 空白版面樣式檔案</span><br><span class="line">│       │   │   │   └── 📄 empty-layout.component.ts      # 空白版面 TypeScript 邏輯</span><br><span class="line">│       │   │   └── 📁 sidebar-layout/          # 側邊欄版面配置元件</span><br><span class="line">│       │   │       ├── 📄 sidebar-layout.component.html  # 側邊欄版面 HTML 模板</span><br><span class="line">│       │   │       ├── 📄 sidebar-layout.component.scss  # 側邊欄版面樣式檔案</span><br><span class="line">│       │   │       └── 📄 sidebar-layout.component.ts    # 側邊欄版面 TypeScript 邏輯</span><br><span class="line">│       │   ├── 📁 pipes/                       # 自訂管道目錄</span><br><span class="line">│       │   └── 📁 utils/                       # 工具函式目錄</span><br><span class="line">│       │</span><br><span class="line">│       ├── 📁 features/                        # 功能層 - 業務功能模組</span><br><span class="line">│       │   ├── 📁 demo/                        # 展示功能模組 (已實作完成)</span><br><span class="line">│       │   │   ├── 📄 ARCHITECTURE.md          # Demo 模組架構說明文件</span><br><span class="line">│       │   │   ├── 📄 demo-layout.component.html         # Demo 模組版面配置 HTML</span><br><span class="line">│       │   │   ├── 📄 demo-layout.component.scss         # Demo 模組版面配置樣式</span><br><span class="line">│       │   │   ├── 📄 demo-layout.component.ts           # Demo 模組版面配置邏輯</span><br><span class="line">│       │   │   ├── 📄 routes.ts                # Demo 模組路由配置</span><br><span class="line">│       │   │   ├── 📁 components/              # Demo 模組專用元件目錄</span><br><span class="line">│       │   │   │   └── 📁 demo-card/           # 展示卡片元件</span><br><span class="line">│       │   │   │       ├── 📄 demo-card.component.html   # 展示卡片 HTML 模板</span><br><span class="line">│       │   │   │       ├── 📄 demo-card.component.scss   # 展示卡片樣式檔案</span><br><span class="line">│       │   │   │       └── 📄 demo-card.component.ts     # 展示卡片 TypeScript 邏輯</span><br><span class="line">│       │   │   ├── 📁 pages/                   # Demo 模組頁面目錄</span><br><span class="line">│       │   │   │   ├── 📁 component-demo/      # 元件展示頁面</span><br><span class="line">│       │   │   │   │   ├── 📄 component-demo.component.html    # 元件展示 HTML 模板</span><br><span class="line">│       │   │   │   │   ├── 📄 component-demo.component.scss    # 元件展示樣式檔案</span><br><span class="line">│       │   │   │   │   └── 📄 component-demo.component.ts      # 元件展示 TypeScript 邏輯</span><br><span class="line">│       │   │   │   ├── 📁 demo-showcase/       # 功能展示頁面</span><br><span class="line">│       │   │   │   │   ├── 📄 demo-showcase.component.html     # 功能展示 HTML 模板</span><br><span class="line">│       │   │   │   │   ├── 📄 demo-showcase.component.scss     # 功能展示樣式檔案</span><br><span class="line">│       │   │   │   │   └── 📄 demo-showcase.component.ts       # 功能展示 TypeScript 邏輯</span><br><span class="line">│       │   │   │   ├── 📁 layout-demo/         # 版面展示頁面</span><br><span class="line">│       │   │   │   │   ├── 📄 layout-demo.component.html       # 版面展示 HTML 模板</span><br><span class="line">│       │   │   │   │   ├── 📄 layout-demo.component.scss       # 版面展示樣式檔案</span><br><span class="line">│       │   │   │   │   └── 📄 layout-demo.component.ts         # 版面展示 TypeScript 邏輯</span><br><span class="line">│       │   │   │   └── 📁 original-page/       # 原始頁面範例</span><br><span class="line">│       │   │   │       ├── 📄 original-page.component.html     # 原始頁面 HTML 模板</span><br><span class="line">│       │   │   │       ├── 📄 original-page.component.scss     # 原始頁面樣式檔案</span><br><span class="line">│       │   │   │       └── 📄 original-page.component.ts       # 原始頁面 TypeScript 邏輯</span><br><span class="line">│       │   │   └── 📁 services/                # Demo 模組服務目錄</span><br><span class="line">│       │   │       └── 📄 demo.service.ts      # Demo 模組業務邏輯服務</span><br><span class="line">│       │   │</span><br><span class="line">│       │   ├── 📁 system/                      # 系統管理功能模組 (預留擴展)</span><br><span class="line">│       │   │   ├── 📄 routes.ts                # 系統管理模組路由配置</span><br><span class="line">│       │   │   ├── 📁 components/              # 系統管理專用元件目錄</span><br><span class="line">│       │   │   ├── 📁 pages/                   # 系統管理頁面目錄</span><br><span class="line">│       │   │   └── 📁 services/                # 系統管理服務目錄</span><br><span class="line">│       │   │</span><br><span class="line">│       │   └── 📁 user/                        # 使用者管理功能模組 (預留擴展)</span><br><span class="line">│       │       ├── 📄 routes.ts                # 使用者管理模組路由配置</span><br><span class="line">│       │       ├── 📁 components/              # 使用者管理專用元件目錄</span><br><span class="line">│       │       ├── 📁 pages/                   # 使用者管理頁面目錄</span><br><span class="line">│       │       └── 📁 services/                # 使用者管理服務目錄</span><br><span class="line">│       │</span><br><span class="line">│       └── 📁 pages/                           # 頁面層 - 頂層頁面元件</span><br><span class="line">│           ├── 📁 dashboard/                   # 儀表板頁面</span><br><span class="line">│           │   ├── 📄 dashboard.component.html # 儀表板 HTML 模板</span><br><span class="line">│           │   ├── 📄 dashboard.component.scss # 儀表板樣式檔案</span><br><span class="line">│           │   └── 📄 dashboard.component.ts   # 儀表板 TypeScript 邏輯</span><br><span class="line">│           └── 📁 not-found/                   # 404 錯誤頁面</span><br><span class="line">│               ├── 📄 not-found.component.html # 404 頁面 HTML 模板</span><br><span class="line">│               └── 📄 not-found.component.ts   # 404 頁面 TypeScript 邏輯</span><br><span class="line">│</span><br><span class="line">├── 📄 angular.json                             # Angular CLI 專案配置檔案</span><br><span class="line">├── 📄 claude_desktop_config.json               # Claude Desktop 配置檔案</span><br><span class="line">├── 📄 eslint.config.js                         # ESLint 程式碼檢查配置</span><br><span class="line">├── 📄 package.json                             # NPM 套件管理與腳本配置</span><br><span class="line">├── 📄 README.md                                # 專案說明文件</span><br><span class="line">├── 📄 tailwind.config.ts                       # Tailwind CSS 客製化配置</span><br><span class="line">├── 📄 tsconfig.app.json                        # 應用程式 TypeScript 配置</span><br><span class="line">├── 📄 tsconfig.json                            # 根層級 TypeScript 配置</span><br><span class="line">└── 📄 tsconfig.spec.json                       # 測試專用 TypeScript 配置</span><br></pre></td></tr></table></figure>
-
-<h3 id="資料夾目的總覽"><a href="#資料夾目的總覽" class="headerlink" title="資料夾目的總覽"></a>資料夾目的總覽</h3><h4 id="🏠-根層級目錄"><a href="#🏠-根層級目錄" class="headerlink" title="🏠 根層級目錄"></a>🏠 <strong>根層級目錄</strong></h4><table>
-<thead>
-<tr>
-<th>資料夾&#x2F;檔案</th>
-<th>目的</th>
-<th>說明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>docs/</code></td>
-<td>📚 專案文件管理</td>
-<td>存放所有專案相關文件，包含架構說明、開發規範、配置指南等</td>
-</tr>
-<tr>
-<td><code>public/</code></td>
-<td>🎨 靜態資源存放</td>
-<td>不經過構建處理的靜態檔案，如圖示、圖片等</td>
-</tr>
-<tr>
-<td><code>src/</code></td>
-<td>💻 原始程式碼根目錄</td>
-<td>包含所有應用程式原始碼、配置與資源檔案</td>
-</tr>
-</tbody></table>
-<h4 id="🔧-核心配置檔案"><a href="#🔧-核心配置檔案" class="headerlink" title="🔧 核心配置檔案"></a>🔧 <strong>核心配置檔案</strong></h4><table>
-<thead>
-<tr>
-<th>檔案</th>
-<th>目的</th>
-<th>功能說明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>angular.json</code></td>
-<td>⚙️ Angular 專案配置</td>
-<td>定義構建選項、測試配置、部署設定等</td>
-</tr>
-<tr>
-<td><code>package.json</code></td>
-<td>📦 套件依賴管理</td>
-<td>管理 NPM 套件版本、定義腳本命令、專案 Metadata</td>
-</tr>
-<tr>
-<td><code>tailwind.config.ts</code></td>
-<td>🎨 樣式框架配置</td>
-<td>Tailwind CSS 客製化設定，包含主題、色彩、斷點等</td>
-</tr>
-<tr>
-<td><code>eslint.config.js</code></td>
-<td>🔍 程式碼品質控制</td>
-<td>ESLint 規則配置，確保程式碼一致性與品質</td>
-</tr>
-<tr>
-<td><code>tsconfig.*.json</code></td>
-<td>📝 TypeScript 配置</td>
-<td>不同環境的 TypeScript 編譯選項與路徑對應</td>
-</tr>
-</tbody></table>
-<h4 id="🏗️-應用程式核心結構"><a href="#🏗️-應用程式核心結構" class="headerlink" title="🏗️ 應用程式核心結構"></a>🏗️ <strong>應用程式核心結構</strong></h4><table>
-<thead>
-<tr>
-<th>層級</th>
-<th>資料夾</th>
-<th>目的</th>
-<th>責任範圍</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>核心層</strong></td>
-<td><code>core/</code></td>
-<td>🔧 基礎設施提供</td>
-<td>核心服務、資料模型、攔截器、路由守衛等應用程式基礎功能</td>
-</tr>
-<tr>
-<td><strong>共享層</strong></td>
-<td><code>shared/</code></td>
-<td>🤝 可重用資源</td>
-<td>跨模組共享的元件、指令、管道、工具函式與版面配置</td>
-</tr>
-<tr>
-<td><strong>功能層</strong></td>
-<td><code>features/</code></td>
-<td>🎯 業務功能實現</td>
-<td>獨立的業務功能模組，包含完整的元件、頁面、服務與路由</td>
-</tr>
-<tr>
-<td><strong>頁面層</strong></td>
-<td><code>pages/</code></td>
-<td>📄 頂層頁面整合</td>
-<td>應用程式層級的頁面元件，整合多個功能模組</td>
-</tr>
-</tbody></table>
-<hr>
-<h2 id="🧱-核心架構層級詳解"><a href="#🧱-核心架構層級詳解" class="headerlink" title="🧱 核心架構層級詳解"></a>🧱 核心架構層級詳解</h2><h3 id="🔧-Core-層-src-app-core"><a href="#🔧-Core-層-src-app-core" class="headerlink" title="🔧 Core 層 (src/app/core/)"></a>🔧 Core 層 (<code>src/app/core/</code>)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">core/</span><br><span class="line">├── enums/                          # 列舉定義</span><br><span class="line">├── guards/                         # 路由守衛</span><br><span class="line">├── interceptors/                   # HTTP 攔截器</span><br><span class="line">├── models/                         # 資料模型與介面</span><br><span class="line">└── services/                       # 核心服務</span><br><span class="line">    └── dark-mode.service.ts        # 暗色模式服務</span><br></pre></td></tr></table></figure>
-
-<p><strong>責任範圍</strong>:</p>
-<ul>
-<li><strong>enums&#x2F;</strong>: 定義應用程式中使用的列舉類型</li>
-<li><strong>guards&#x2F;</strong>: 路由層級的權限控制與導航守衛</li>
-<li><strong>interceptors&#x2F;</strong>: HTTP 請求&#x2F;回應的攔截處理</li>
-<li><strong>models&#x2F;</strong>: TypeScript 介面與資料模型定義</li>
-<li><strong>services&#x2F;</strong>: 單例服務，處理核心業務邏輯</li>
-</ul>
-<p><strong>設計原則</strong>:</p>
-<ul>
-<li>Core 層應為應用程式提供基礎設施</li>
-<li>服務應使用依賴注入並保持單例模式</li>
-<li>遵循單一責任原則</li>
-</ul>
-<h3 id="🤝-Shared-層-src-app-shared"><a href="#🤝-Shared-層-src-app-shared" class="headerlink" title="🤝 Shared 層 (src/app/shared/)"></a>🤝 Shared 層 (<code>src/app/shared/</code>)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">shared/</span><br><span class="line">├── components/                     # 可重用元件</span><br><span class="line">├── directives/                     # 自訂指令</span><br><span class="line">├── layouts/                        # 版面配置元件</span><br><span class="line">│   ├── index.ts                    # 匯出索引</span><br><span class="line">│   ├── README.md                   # 使用指南</span><br><span class="line">│   ├── empty-layout/               # 空白版面配置</span><br><span class="line">│   │   ├── empty-layout.component.html</span><br><span class="line">│   │   ├── empty-layout.component.scss</span><br><span class="line">│   │   └── empty-layout.component.ts</span><br><span class="line">│   └── sidebar-layout/             # 側邊欄版面配置</span><br><span class="line">│       ├── sidebar-layout.component.html</span><br><span class="line">│       ├── sidebar-layout.component.scss</span><br><span class="line">│       └── sidebar-layout.component.ts</span><br><span class="line">├── pipes/                          # 自訂管道</span><br><span class="line">└── utils/                          # 工具函式</span><br></pre></td></tr></table></figure>
-
-<p><strong>責任範圍</strong>:</p>
-<ul>
-<li><strong>components&#x2F;</strong>: 跨功能模組重用的 UI 元件</li>
-<li><strong>directives&#x2F;</strong>: 自訂行為指令</li>
-<li><strong>layouts&#x2F;</strong>: 頁面版面配置元件</li>
-<li><strong>pipes&#x2F;</strong>: 資料轉換管道</li>
-<li><strong>utils&#x2F;</strong>: 純函式工具庫</li>
-</ul>
-<h3 id="🎪-功能模組內部結構"><a href="#🎪-功能模組內部結構" class="headerlink" title="🎪 功能模組內部結構"></a>🎪 <strong>功能模組內部結構</strong></h3><p>每個功能模組 (<code>features/*/</code>) 都遵循統一的內部結構：</p>
-<table>
-<thead>
-<tr>
-<th>子資料夾</th>
-<th>目的</th>
-<th>說明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>components/</code></td>
-<td>🧩 模組專用元件</td>
-<td>僅在該功能模組內使用的 UI 元件</td>
-</tr>
-<tr>
-<td><code>pages/</code></td>
-<td>📄 模組頁面元件</td>
-<td>該功能模組的各個頁面元件</td>
-</tr>
-<tr>
-<td><code>services/</code></td>
-<td>⚡ 模組業務邏輯</td>
-<td>處理該功能模組的資料存取與業務邏輯</td>
-</tr>
-<tr>
-<td><code>routes.ts</code></td>
-<td>🛣️ 模組路由配置</td>
-<td>定義該功能模組的路由結構與導航</td>
-</tr>
-</tbody></table>
-<h4 id="Demo-功能模組範例"><a href="#Demo-功能模組範例" class="headerlink" title="Demo 功能模組範例"></a>Demo 功能模組範例</h4><p><strong>Demo 模組路由結構</strong>:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/demo</span><br><span class="line">├── &#x27;&#x27;              → DemoShowcaseComponent</span><br><span class="line">├── components      → ComponentDemoComponent</span><br><span class="line">├── layouts         → LayoutDemoComponent</span><br><span class="line">└── original-page   → OriginalPageComponent</span><br></pre></td></tr></table></figure>
-
-<p><strong>模組設計原則</strong>:</p>
-<ol>
-<li><strong>自包含性</strong>: 每個功能模組包含完整的業務邏輯</li>
-<li><strong>延遲載入</strong>: 使用 <code>loadComponent</code> 實現按需載入</li>
-<li><strong>路由分離</strong>: 每個模組維護獨立的路由配置</li>
-<li><strong>依賴隔離</strong>: 避免功能模組間的直接依賴</li>
-</ol>
-<h3 id="📄-Pages-層詳解-src-app-pages"><a href="#📄-Pages-層詳解-src-app-pages" class="headerlink" title="📄 Pages 層詳解 (src/app/pages/)"></a>📄 <strong>Pages 層詳解</strong> (<code>src/app/pages/</code>)</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">pages/</span><br><span class="line">├── dashboard/                      # 儀表板頁面</span><br><span class="line">│   ├── dashboard.component.html</span><br><span class="line">│   ├── dashboard.component.scss</span><br><span class="line">│   └── dashboard.component.ts</span><br><span class="line">└── not-found/                      # 404 錯誤頁面</span><br><span class="line">    ├── not-found.component.html</span><br><span class="line">    └── not-found.component.ts</span><br></pre></td></tr></table></figure>
-
-<p><strong>責任範圍</strong>:</p>
-<ul>
-<li>提供頂層頁面元件</li>
-<li>整合多個功能模組</li>
-<li>處理全域頁面邏輯</li>
-</ul>
-<h3 id="🎨-版面配置系統"><a href="#🎨-版面配置系統" class="headerlink" title="🎨 版面配置系統"></a>🎨 <strong>版面配置系統</strong></h3><table>
-<thead>
-<tr>
-<th>版面配置</th>
-<th>檔案位置</th>
-<th>適用場景</th>
-<th>特色功能</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>空白版面</strong></td>
-<td><code>shared/layouts/empty-layout/</code></td>
-<td>登入頁面、錯誤頁面</td>
-<td>極簡設計、全螢幕佈局、內容投影</td>
-</tr>
-<tr>
-<td><strong>側邊欄版面</strong></td>
-<td><code>shared/layouts/sidebar-layout/</code></td>
-<td>主要應用頁面</td>
-<td>響應式導航、暗色模式、收縮側邊欄</td>
-</tr>
-</tbody></table>
-<h3 id="🔄-開發工作流程目錄使用指南"><a href="#🔄-開發工作流程目錄使用指南" class="headerlink" title="🔄 開發工作流程目錄使用指南"></a>🔄 <strong>開發工作流程目錄使用指南</strong></h3><ol>
-<li><strong>新功能開發</strong>: 在 <code>features/</code> 下建立新的功能模組</li>
-<li><strong>共用元件</strong>: 開發可重用元件放置於 <code>shared/components/</code></li>
-<li><strong>核心服務</strong>: 應用程式級服務放置於 <code>core/services/</code></li>
-<li><strong>資料模型</strong>: TypeScript 介面定義於 <code>core/models/</code></li>
-<li><strong>工具函式</strong>: 純函式工具放置於 <code>shared/utils/</code></li>
-</ol>
-<p><strong>應用程式根元件配置</strong>:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">app/</span><br><span class="line">├── app.component.html              # 根元件模板</span><br><span class="line">├── app.component.scss              # 根元件樣式</span><br><span class="line">├── app.component.ts                # 根元件邏輯</span><br><span class="line">├── app.config.ts                   # 應用程式配置</span><br><span class="line">├── app.config.server.ts            # SSR 專用配置</span><br><span class="line">├── app.routes.ts                   # 根路由配置</span><br><span class="line">└── app.routes.server.ts            # SSR 路由配置</span><br></pre></td></tr></table></figure>
-
-<p><strong>app.config.ts 核心配置</strong>:</p>
-<ul>
-<li>Router 提供者配置</li>
-<li>PrimeNG 主題配置 (Aura Theme)</li>
-<li>動畫異步提供者</li>
-<li>暗色模式支援</li>
-</ul>
-<hr>
-<h2 id="🛣️-路由架構設計"><a href="#🛣️-路由架構設計" class="headerlink" title="🛣️ 路由架構設計"></a>🛣️ 路由架構設計</h2><h3 id="多層路由體系"><a href="#多層路由體系" class="headerlink" title="多層路由體系"></a>多層路由體系</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Application Root (app.routes.ts)</span><br><span class="line">├── &#x27;&#x27; → /demo (預設重新導向)</span><br><span class="line">├── demo → features/demo/routes.ts</span><br><span class="line">├── system → features/system/routes.ts</span><br><span class="line">├── user → features/user/routes.ts</span><br><span class="line">└── ** → /demo (萬用路由)</span><br></pre></td></tr></table></figure>
-
-<h3 id="路由載入策略"><a href="#路由載入策略" class="headerlink" title="路由載入策略"></a>路由載入策略</h3><ol>
-<li><strong>延遲載入</strong>: 所有功能模組使用 <code>loadChildren</code> 延遲載入</li>
-<li><strong>元件層級延遲載入</strong>: 頁面元件使用 <code>loadComponent</code> 延遲載入</li>
-<li><strong>路由守衛</strong>: 在需要時實施權限控制</li>
-<li><strong>SEO 優化</strong>: 使用 <code>title</code> 屬性提供頁面標題</li>
-</ol>
-<p><strong>範例路由配置</strong>:</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">path</span>: <span class="string">&#x27;demo&#x27;</span>,</span><br><span class="line">  <span class="attr">loadChildren</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="string">&#x27;./features/demo/routes&#x27;</span>).<span class="title function_">then</span>(<span class="function"><span class="params">m</span> =&gt;</span> m.<span class="property">demoRoutes</span>),</span><br><span class="line">  <span class="attr">title</span>: <span class="string">&#x27;Demo 展示中心&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="🎨-樣式架構"><a href="#🎨-樣式架構" class="headerlink" title="🎨 樣式架構"></a>🎨 樣式架構</h2><h3 id="樣式技術堆疊"><a href="#樣式技術堆疊" class="headerlink" title="樣式技術堆疊"></a>樣式技術堆疊</h3><ol>
-<li><strong>Tailwind CSS</strong>: 實用工具類別樣式框架</li>
-<li><strong>PrimeFlex</strong>: PrimeNG 配套的 Flexbox 工具</li>
-<li><strong>SCSS</strong>: 元件專用樣式</li>
-<li><strong>PrimeNG Themes</strong>: Aura 主題系統</li>
-</ol>
-<h3 id="樣式組織策略"><a href="#樣式組織策略" class="headerlink" title="樣式組織策略"></a>樣式組織策略</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">src/</span><br><span class="line">├── styles.scss                     # 全域樣式入口</span><br><span class="line">├── tailwind.css                    # Tailwind 配置</span><br><span class="line">└── app/</span><br><span class="line">    └── **/*.component.scss         # 元件層級樣式</span><br></pre></td></tr></table></figure>
-
-<h3 id="主題與暗色模式"><a href="#主題與暗色模式" class="headerlink" title="主題與暗色模式"></a>主題與暗色模式</h3><ul>
-<li><strong>主題切換</strong>: 使用 PrimeNG Aura 主題</li>
-<li><strong>暗色模式</strong>: CSS 類別切換 <code>.dark</code></li>
-<li><strong>響應式設計</strong>: Tailwind 響應式斷點</li>
-</ul>
-<hr>
-<h2 id="⚙️-開發工具與品質控制"><a href="#⚙️-開發工具與品質控制" class="headerlink" title="⚙️ 開發工具與品質控制"></a>⚙️ 開發工具與品質控制</h2><h3 id="程式碼品質工具"><a href="#程式碼品質工具" class="headerlink" title="程式碼品質工具"></a>程式碼品質工具</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">eslint.config.js                   # ESLint 9.x 配置</span><br><span class="line">.prettierrc                        # Prettier 格式化配置</span><br></pre></td></tr></table></figure>
-
-<p><strong>ESLint 規則重點</strong>:</p>
-<ul>
-<li>Angular 專用規則 (@angular-eslint)</li>
-<li>TypeScript 嚴格模式</li>
-<li>命名規範：Interface 使用 PascalCase，Observable 使用 $ 後綴</li>
-<li>檔案命名：kebab-case</li>
-</ul>
-<h3 id="構建與部署"><a href="#構建與部署" class="headerlink" title="構建與部署"></a>構建與部署</h3><p><strong>NPM 腳本</strong>:</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;start&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ng serve&quot;</span><span class="punctuation">,</span>                    # 開發伺服器</span><br><span class="line">  <span class="attr">&quot;build&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ng build&quot;</span><span class="punctuation">,</span>                    # 生產構建</span><br><span class="line">  <span class="attr">&quot;test&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ng test&quot;</span><span class="punctuation">,</span>                      # 單元測試</span><br><span class="line">  <span class="attr">&quot;lint&quot;</span><span class="punctuation">:</span> <span class="string">&quot;eslint src/**/*.ts src/**/*.html&quot;</span><span class="punctuation">,</span>  # 程式碼檢查</span><br><span class="line">  <span class="attr">&quot;lint:fix&quot;</span><span class="punctuation">:</span> <span class="string">&quot;eslint ... --fix&quot;</span>         # 自動修復</span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="🏗️-架構優勢與設計決策"><a href="#🏗️-架構優勢與設計決策" class="headerlink" title="🏗️ 架構優勢與設計決策"></a>🏗️ 架構優勢與設計決策</h2><h3 id="技術優勢"><a href="#技術優勢" class="headerlink" title="技術優勢"></a>技術優勢</h3><ol>
-<li><p><strong>現代化 Angular</strong>: </p>
-<ul>
-<li>Standalone Components 減少 NgModule 複雜性</li>
-<li>Signals 提供更高效的響應式狀態管理</li>
-<li>函式式路由守衛提高可測試性</li>
-</ul>
-</li>
-<li><p><strong>效能優化</strong>:</p>
-<ul>
-<li>延遲載入減少初始包大小</li>
-<li>OnPush 變更檢測策略</li>
-<li>Deferrable Views 改善載入狀態</li>
-</ul>
-</li>
-<li><p><strong>開發體驗</strong>:</p>
-<ul>
-<li>TypeScript 嚴格模式確保類型安全</li>
-<li>ESLint + Prettier 自動化程式碼品質</li>
-<li>清晰的資料夾結構便於導航</li>
-</ul>
-</li>
-<li><p><strong>可維護性</strong>:</p>
-<ul>
-<li>功能模組化促進程式碼重用</li>
-<li>清潔架構分離關注點</li>
-<li>完整的文件與註解</li>
-</ul>
-</li>
-</ol>
-<h3 id="設計決策理由"><a href="#設計決策理由" class="headerlink" title="設計決策理由"></a>設計決策理由</h3><ol>
-<li><p><strong>為何選擇 Standalone Components?</strong></p>
-<ul>
-<li>減少 NgModule 樣板程式碼</li>
-<li>更好的 Tree-shaking 支援</li>
-<li>簡化測試設定</li>
-</ul>
-</li>
-<li><p><strong>為何採用功能模組架構?</strong></p>
-<ul>
-<li>促進團隊協作，不同功能可並行開發</li>
-<li>延遲載入優化效能</li>
-<li>便於功能的增減與維護</li>
-</ul>
-</li>
-<li><p><strong>為何整合 PrimeNG?</strong></p>
-<ul>
-<li>豐富的 UI 元件庫</li>
-<li>Angular 原生支援</li>
-<li>一致的設計語言</li>
-</ul>
-</li>
-</ol>
-<hr>
-<h2 id="🚀-最佳實踐建議"><a href="#🚀-最佳實踐建議" class="headerlink" title="🚀 最佳實踐建議"></a>🚀 最佳實踐建議</h2><h3 id="開發規範"><a href="#開發規範" class="headerlink" title="開發規範"></a>開發規範</h3><ol>
-<li><p><strong>元件設計</strong>:</p>
-<ul>
-<li>保持元件單一責任</li>
-<li>使用 OnPush 變更檢測</li>
-<li>實施適當的生命週期管理</li>
-</ul>
-</li>
-<li><p><strong>狀態管理</strong>:</p>
-<ul>
-<li>優先使用 Signals</li>
-<li>複雜狀態考慮 NgRx</li>
-<li>避免過度的狀態提升</li>
-</ul>
-</li>
-<li><p><strong>效能優化</strong>:</p>
-<ul>
-<li>使用 TrackBy 函式優化列表渲染</li>
-<li>實施虛擬滾動處理大量資料</li>
-<li>適當使用快取策略</li>
-</ul>
-</li>
-</ol>
-<h3 id="擴展指導"><a href="#擴展指導" class="headerlink" title="擴展指導"></a>擴展指導</h3><ol>
-<li><p><strong>新增功能模組</strong>:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">features/new-feature/</span><br><span class="line">├── routes.ts</span><br><span class="line">├── components/</span><br><span class="line">├── pages/</span><br><span class="line">└── services/</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>共享元件開發</strong>:</p>
-<ul>
-<li>放置於 <code>shared/components/</code></li>
-<li>提供清晰的 API 介面</li>
-<li>撰寫使用文件</li>
-</ul>
-</li>
-<li><p><strong>服務層擴展</strong>:</p>
-<ul>
-<li>核心服務放置於 <code>core/services/</code></li>
-<li>功能專用服務放置於各自模組</li>
-<li>遵循依賴注入最佳實踐</li>
-</ul>
-</li>
-</ol>
-<h3 id="專案質量保證"><a href="#專案質量保證" class="headerlink" title="專案質量保證"></a>專案質量保證</h3><p>這樣的目錄結構設計確保了：</p>
-<ul>
-<li>✅ <strong>清晰的職責分離</strong></li>
-<li>✅ <strong>良好的可維護性</strong></li>
-<li>✅ <strong>便於團隊協作</strong></li>
-<li>✅ <strong>支援功能擴展</strong></li>
-<li>✅ <strong>遵循 Angular 最佳實踐</strong></li>
-</ul>
-<hr>
-<h2 id="📝-總結"><a href="#📝-總結" class="headerlink" title="📝 總結"></a>📝 總結</h2><p>EMS Frontend 專案採用現代化的 Angular 架構，結合最佳實踐與工具鏈，為能源管理系統提供了堅實的前端基礎。透過清晰的分層架構、模組化設計，以及完善的開發工具，確保了專案的可維護性、擴展性與效能。</p>
-<h3 id="核心價值"><a href="#核心價值" class="headerlink" title="核心價值"></a>核心價值</h3><ul>
-<li><strong>🎯 清晰架構</strong>: 從整體到個別的層次化設計</li>
-<li><strong>⚡ 高效開發</strong>: 現代化工具鏈與最佳實踐</li>
-<li><strong>🔧 易於維護</strong>: 模組化與依賴隔離設計</li>
-<li><strong>📈 可擴展性</strong>: 支援快速功能模組擴展</li>
-<li><strong>👥 團隊協作</strong>: 統一的開發標準與文件</li>
-</ul>
-<h3 id="文件組織邏輯"><a href="#文件組織邏輯" class="headerlink" title="文件組織邏輯"></a>文件組織邏輯</h3><p>本文件遵循「整體到個別」的敘述邏輯：</p>
-<ol>
-<li><strong>專案概述</strong> → 提供整體認知</li>
-<li><strong>整體架構設計</strong> → 展示系統設計思維</li>
-<li><strong>完整目錄結構</strong> → 提供全貌視角</li>
-<li><strong>核心架構層級詳解</strong> → 深入各層級細節</li>
-<li><strong>專項技術說明</strong> → 路由、樣式、工具等</li>
-<li><strong>實踐指導</strong> → 具體的開發與擴展建議</li>
-</ol>
-<p>透過本文件，開發團隊可以快速了解專案結構，遵循統一的開發標準，並有效地進行功能開發與維護工作。</p>
-<hr>
-<p><em>文件版本: v1.2 | 最後更新: 2025年7月2日 | 重新組織為「整體到個別」結構</em></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://cookieseventeen.github.io/2025/06/29/angular-enterprise-project-architecture-guide/" data-id="cmcxjaene00012h8o2uw18i1p" data-title="Angular 19 能源管理系統前端專案架構設計指南" class="article-share-link"><span class="fa fa-share">Share</span></a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Angular-19/" rel="tag">Angular 19</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Clean-Architecture/" rel="tag">Clean Architecture</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Enterprise-Architecture/" rel="tag">Enterprise Architecture</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Feature-Modules/" rel="tag">Feature Modules</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PrimeNG/" rel="tag">PrimeNG</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Project-Architecture/" rel="tag">Project Architecture</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SSR/" rel="tag">SSR</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Signals/" rel="tag">Signals</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Standalone-Components/" rel="tag">Standalone Components</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tailwind-CSS/" rel="tag">Tailwind CSS</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
     <article id="post-angular-enterprise-project-initialization-guide" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
   <div class="article-meta">
     <a href="/2025/06/29/angular-enterprise-project-initialization-guide/" class="article-date">
@@ -867,7 +380,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://cookieseventeen.github.io/2025/06/29/angular-enterprise-project-initialization-guide/" data-id="cmcxjaeng00052h8o0ewi3gl9" data-title="Angular 19 企業級前端專案初始化完整指南" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="https://cookieseventeen.github.io/2025/06/29/angular-enterprise-project-initialization-guide/" data-id="cmcxje0xt0004xf8o4t867y04" data-title="Angular 19 企業級前端專案初始化完整指南" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -1210,7 +723,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://cookieseventeen.github.io/2025/06/29/angular-ssr-transloco-troubleshooting-guide/" data-id="cmcxjaenh000e2h8o70pi7wth" data-title="Angular SSR + Transloco 故障排除與除錯完整指南" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="https://cookieseventeen.github.io/2025/06/29/angular-ssr-transloco-troubleshooting-guide/" data-id="cmcxje0xy0025xf8o8tmyght9" data-title="Angular SSR + Transloco 故障排除與除錯完整指南" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -1534,7 +1047,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://cookieseventeen.github.io/2025/06/29/angular-ssr-transloco-setup-complete-guide/" data-id="cmcxjaenh000a2h8oeeml0k0l" data-title="Angular SSR + Transloco 國際化配置實戰指南" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="https://cookieseventeen.github.io/2025/06/29/angular-ssr-transloco-setup-complete-guide/" data-id="cmcxje0xy0024xf8o1px9a0x3" data-title="Angular SSR + Transloco 國際化配置實戰指南" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -1731,7 +1244,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://cookieseventeen.github.io/2025/06/29/angular-httpclient-modern-configuration-guide/" data-id="cmcxjaeng00042h8og9p5bu64" data-title="Angular HttpClient 現代化配置與 withInterceptorsFromDI 實戰指南" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="https://cookieseventeen.github.io/2025/06/29/angular-httpclient-modern-configuration-guide/" data-id="cmcxje0xs0001xf8o6np31p1j" data-title="Angular HttpClient 現代化配置與 withInterceptorsFromDI 實戰指南" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -1945,7 +1458,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://cookieseventeen.github.io/2025/06/29/eslint-configuration-best-practices-guide/" data-id="cmcxjaeni000j2h8ogg0v4kin" data-title="ESLint 9.x 革命性配置與前端開發最佳化實戰指南" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="https://cookieseventeen.github.io/2025/06/29/eslint-configuration-best-practices-guide/" data-id="cmcxje0xy002cxf8o7ehpbyv7" data-title="ESLint 9.x 革命性配置與前端開發最佳化實戰指南" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -2125,7 +1638,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://cookieseventeen.github.io/2025/06/29/angular-ssr-prerender-technical-guide/" data-id="cmcxjaeng00062h8o6z338xl7" data-title="Angular 19 SSR/Prerender 深度技術分析與實戰指南" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="https://cookieseventeen.github.io/2025/06/29/angular-ssr-prerender-technical-guide/" data-id="cmcxje0xx0021xf8of3u00j9z" data-title="Angular 19 SSR/Prerender 深度技術分析與實戰指南" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -2305,7 +1818,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://cookieseventeen.github.io/2025/06/29/angular-ssr-technical-analysis-guide/" data-id="cmcxjaenh00092h8obwtp96df" data-title="Angular 19 SSR/Prerender 深度技術分析與實戰指南" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="https://cookieseventeen.github.io/2025/06/29/angular-ssr-technical-analysis-guide/" data-id="cmcxje0xx0022xf8o89p5e8pw" data-title="Angular 19 SSR/Prerender 深度技術分析與實戰指南" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -2537,7 +2050,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://cookieseventeen.github.io/2025/06/29/ai-business-collaboration-strategy-guide/" data-id="cmcxjaend00002h8oc1gzh6jz" data-title="AI 業務導向協作策略與 {{critical_functions}} 實戰指南" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="https://cookieseventeen.github.io/2025/06/29/ai-business-collaboration-strategy-guide/" data-id="cmcxje0xr0000xf8o9hx1b9tb" data-title="AI 業務導向協作策略與 {{critical_functions}} 實戰指南" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -2846,11 +2359,202 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://cookieseventeen.github.io/2025/06/29/vue-frontend-architecture-patterns-guide/" data-id="cmcxjaeni000o2h8oe1tx6dfd" data-title="Vue.js 前端架構模式比較與選擇指南" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="https://cookieseventeen.github.io/2025/06/29/vue-frontend-architecture-patterns-guide/" data-id="cmcxje0xy002axf8o14lkc7xb" data-title="Vue.js 前端架構模式比較與選擇指南" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Best-Practices/" rel="tag">Best Practices</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Composables/" rel="tag">Composables</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Composition-API/" rel="tag">Composition API</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Design-Patterns/" rel="tag">Design Patterns</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Frontend-Architecture/" rel="tag">Frontend Architecture</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Global-Properties/" rel="tag">Global Properties</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pinia/" rel="tag">Pinia</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Service-Pattern/" rel="tag">Service Pattern</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/State-Management/" rel="tag">State Management</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Vue-js/" rel="tag">Vue.js</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+  
+    <article id="post-mapbox-data-visualization-guide" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2025/06/29/mapbox-data-visualization-guide/" class="article-date">
+  <time class="dt-published" datetime="2025-06-29T02:00:00.000Z" itemprop="datePublished">2025-06-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Tech-Daily/">Tech Daily</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="p-name article-title" href="/2025/06/29/mapbox-data-visualization-guide/">Mapbox 地圖資料視覺化技術分析與應用指南</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="📋-核心懶人包"><a href="#📋-核心懶人包" class="headerlink" title="📋 核心懶人包"></a>📋 核心懶人包</h2><ol>
+<li><strong>智能圖層控制</strong>：選擇性隱藏地圖元素，建立專注的視覺環境</li>
+<li><strong>Canvas 圖案生成</strong>：動態產生填充圖案，不依賴外部資源</li>
+<li><strong>GeoJSON 資料整合</strong>：載入世界陸地邊界，展示地理資料應用</li>
+<li><strong>叢集視覺化</strong>：將大量點資料智能分組，提升視覺清晰度</li>
+<li><strong>互動體驗設計</strong>：整合地理編碼 API，提供豐富的使用者體驗</li>
+</ol>
+<h2 id="🗺️-專案概述"><a href="#🗺️-專案概述" class="headerlink" title="🗺️ 專案概述"></a>🗺️ 專案概述</h2><p>本專案展示了 Mapbox GL JS 在地理資料視覺化方面的強大功能：</p>
+<ul>
+<li>🎯 <strong>圖層控制技術</strong>：精確管理地圖顯示內容</li>
+<li>🎨 <strong>自訂視覺圖案</strong>：使用 Canvas API 動態生成填充圖案</li>
+<li>📊 <strong>資料叢集化</strong>：將大量點資料進行智能分組顯示</li>
+<li>🌍 <strong>地理資料整合</strong>：載入並展示世界陸地邊界資料</li>
+<li>⚡ <strong>互動體驗</strong>：豐富的點擊、懸停與縮放功能</li>
+</ul>
+<h2 id="🏗️-核心技術架構"><a href="#🏗️-核心技術架構" class="headerlink" title="🏗️ 核心技術架構"></a>🏗️ 核心技術架構</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    A[Mapbox GL JS 地圖] --&gt; B[圖層控制]</span><br><span class="line">    A --&gt; C[Canvas 圖案生成]</span><br><span class="line">    A --&gt; D[GeoJSON 資料載入]</span><br><span class="line">    A --&gt; E[叢集處理]</span><br><span class="line">    </span><br><span class="line">    B --&gt; B1[隱藏內建圖層]</span><br><span class="line">    C --&gt; C1[動態點狀圖案]</span><br><span class="line">    D --&gt; D1[世界陸地邊界]</span><br><span class="line">    D --&gt; D2[容錯處理機制]</span><br><span class="line">    E --&gt; E1[地震資料叢集]</span><br><span class="line">    E --&gt; E2[視覺化呈現]</span><br></pre></td></tr></table></figure>
+
+<h2 id="🎛️-地圖圖層控制技術"><a href="#🎛️-地圖圖層控制技術" class="headerlink" title="🎛️ 地圖圖層控制技術"></a>🎛️ 地圖圖層控制技術</h2><h3 id="技術原理"><a href="#技術原理" class="headerlink" title="技術原理"></a>技術原理</h3><p>Mapbox 底圖包含許多預設圖層，在特定應用場景中可能造成視覺干擾。通過圖層控制技術，我們可以建立更專注的視覺環境。</p>
+<h3 id="實作方式"><a href="#實作方式" class="headerlink" title="實作方式"></a>實作方式</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定義需要隱藏的圖層清單</span></span><br><span class="line"><span class="keyword">const</span> layersToHide = [</span><br><span class="line">  <span class="string">&#x27;country-label&#x27;</span>,      <span class="comment">// 國家標籤</span></span><br><span class="line">  <span class="string">&#x27;state-label&#x27;</span>,        <span class="comment">// 州/省標籤</span></span><br><span class="line">  <span class="string">&#x27;settlement-label&#x27;</span>,   <span class="comment">// 城市標籤</span></span><br><span class="line">  <span class="string">&#x27;road-primary&#x27;</span>,       <span class="comment">// 主要道路</span></span><br><span class="line">  <span class="string">&#x27;building&#x27;</span>,           <span class="comment">// 建築物</span></span><br><span class="line">  <span class="string">&#x27;water&#x27;</span>,              <span class="comment">// 水體</span></span><br><span class="line">];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 批次隱藏圖層</span></span><br><span class="line">layersToHide.<span class="title function_">forEach</span>(<span class="function"><span class="params">layerId</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (map.<span class="title function_">getLayer</span>(layerId)) &#123;</span><br><span class="line">    map.<span class="title function_">setLayoutProperty</span>(layerId, <span class="string">&#x27;visibility&#x27;</span>, <span class="string">&#x27;none&#x27;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="技術優勢"><a href="#技術優勢" class="headerlink" title="技術優勢"></a>技術優勢</h3><ul>
+<li>✅ <strong>效能優化</strong>：減少不必要的渲染負擔</li>
+<li>✅ <strong>視覺聚焦</strong>：突出重要的資料內容</li>
+<li>✅ <strong>彈性控制</strong>：可根據需求動態調整顯示內容</li>
+</ul>
+<h2 id="🎨-Canvas-動態圖案生成"><a href="#🎨-Canvas-動態圖案生成" class="headerlink" title="🎨 Canvas 動態圖案生成"></a>🎨 Canvas 動態圖案生成</h2><h3 id="為什麼使用-Canvas？"><a href="#為什麼使用-Canvas？" class="headerlink" title="為什麼使用 Canvas？"></a>為什麼使用 Canvas？</h3><p>傳統填充圖案需要外部圖片檔案，而 Canvas 技術讓我們能夠：</p>
+<ol>
+<li><strong>即時生成</strong>：不依賴外部資源</li>
+<li><strong>完全客製化</strong>：精確控制每個像素</li>
+<li><strong>動態變化</strong>：可以加入隨機元素增加視覺豐富性</li>
+</ol>
+<h3 id="核心實作"><a href="#核心實作" class="headerlink" title="核心實作"></a>核心實作</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 建立 Canvas 畫布</span></span><br><span class="line"><span class="keyword">const</span> size = <span class="number">64</span>;</span><br><span class="line"><span class="keyword">const</span> canvas = <span class="variable language_">document</span>.<span class="title function_">createElement</span>(<span class="string">&#x27;canvas&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> ctx = canvas.<span class="title function_">getContext</span>(<span class="string">&#x27;2d&#x27;</span>);</span><br><span class="line">canvas.<span class="property">width</span> = size;</span><br><span class="line">canvas.<span class="property">height</span> = size;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 設定點狀圖案參數</span></span><br><span class="line"><span class="keyword">const</span> dotSize = <span class="number">3</span>;</span><br><span class="line"><span class="keyword">const</span> spacing = <span class="number">8</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用巢狀迴圈繪製點陣圖案</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> x = <span class="number">2</span>; x &lt; size - <span class="number">2</span>; x += spacing) &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> y = <span class="number">2</span>; y &lt; size - <span class="number">2</span>; y += spacing) &#123;</span><br><span class="line">    <span class="comment">// 隨機化視覺效果</span></span><br><span class="line">    <span class="keyword">const</span> randomSize = dotSize + <span class="title class_">Math</span>.<span class="title function_">random</span>() * <span class="number">1.5</span>;</span><br><span class="line">    <span class="keyword">const</span> grayValue = <span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="number">80</span> + <span class="title class_">Math</span>.<span class="title function_">random</span>() * <span class="number">60</span>);</span><br><span class="line">    <span class="keyword">const</span> alpha = <span class="number">0.4</span> + <span class="title class_">Math</span>.<span class="title function_">random</span>() * <span class="number">0.4</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 繪製單個點</span></span><br><span class="line">    ctx.<span class="property">fillStyle</span> = <span class="string">`rgba(<span class="subst">$&#123;grayValue&#125;</span>, <span class="subst">$&#123;grayValue&#125;</span>, <span class="subst">$&#123;grayValue&#125;</span>, <span class="subst">$&#123;alpha&#125;</span>)`</span>;</span><br><span class="line">    ctx.<span class="title function_">beginPath</span>();</span><br><span class="line">    ctx.<span class="title function_">arc</span>(x, y, randomSize/<span class="number">2</span>, <span class="number">0</span>, <span class="number">2</span> * <span class="title class_">Math</span>.<span class="property">PI</span>);</span><br><span class="line">    ctx.<span class="title function_">fill</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 將 Canvas 內容註冊為地圖圖案</span></span><br><span class="line"><span class="keyword">const</span> imageData = ctx.<span class="title function_">getImageData</span>(<span class="number">0</span>, <span class="number">0</span>, size, size);</span><br><span class="line">map.<span class="title function_">addImage</span>(<span class="string">&#x27;custom-dots-pattern&#x27;</span>, imageData);</span><br></pre></td></tr></table></figure>
+
+<h2 id="🌍-GeoJSON-資料載入與應用"><a href="#🌍-GeoJSON-資料載入與應用" class="headerlink" title="🌍 GeoJSON 資料載入與應用"></a>🌍 GeoJSON 資料載入與應用</h2><h3 id="什麼是-GeoJSON？"><a href="#什麼是-GeoJSON？" class="headerlink" title="什麼是 GeoJSON？"></a>什麼是 GeoJSON？</h3><p>GeoJSON 是一種基於 JSON 的地理資料交換格式，支援點、線、多邊形等地理要素。</p>
+<h3 id="完整實作流程"><a href="#完整實作流程" class="headerlink" title="完整實作流程"></a>完整實作流程</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 步驟 1: 從遠端載入 GeoJSON 資料</span></span><br><span class="line"><span class="title function_">fetch</span>(<span class="string">&#x27;https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson&#x27;</span>)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">response</span> =&gt;</span> response.<span class="title function_">json</span>())</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 步驟 2: 將資料註冊為地圖資料來源</span></span><br><span class="line">    map.<span class="title function_">addSource</span>(<span class="string">&#x27;world-land&#x27;</span>, &#123;</span><br><span class="line">      <span class="attr">type</span>: <span class="string">&#x27;geojson&#x27;</span>,</span><br><span class="line">      <span class="attr">data</span>: data</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 步驟 3: 建立視覺圖層並套用自訂圖案</span></span><br><span class="line">    map.<span class="title function_">addLayer</span>(&#123;</span><br><span class="line">      <span class="attr">id</span>: <span class="string">&#x27;land-dots&#x27;</span>,</span><br><span class="line">      <span class="attr">type</span>: <span class="string">&#x27;fill&#x27;</span>,</span><br><span class="line">      <span class="attr">source</span>: <span class="string">&#x27;world-land&#x27;</span>,</span><br><span class="line">      <span class="attr">paint</span>: &#123;</span><br><span class="line">        <span class="string">&#x27;fill-pattern&#x27;</span>: <span class="string">&#x27;custom-dots-pattern&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;fill-opacity&#x27;</span>: <span class="number">0.4</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;)</span><br><span class="line">  .<span class="title function_">catch</span>(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 步驟 4: 容錯處理 - 建立備用的簡化陸地區域</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;無法載入陸地資料，使用替代方案&#x27;</span>);</span><br><span class="line">    <span class="comment">// 手動定義簡化區域...</span></span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="📊-叢集資料視覺化技術"><a href="#📊-叢集資料視覺化技術" class="headerlink" title="📊 叢集資料視覺化技術"></a>📊 叢集資料視覺化技術</h2><h3 id="什麼是資料叢集？"><a href="#什麼是資料叢集？" class="headerlink" title="什麼是資料叢集？"></a>什麼是資料叢集？</h3><p>當地圖上有大量密集的點資料時，叢集技術能夠：</p>
+<ul>
+<li>將鄰近的點合併顯示</li>
+<li>根據縮放層級動態調整叢集</li>
+<li>提供清晰的數量資訊</li>
+</ul>
+<h3 id="完整叢集實作範例"><a href="#完整叢集實作範例" class="headerlink" title="完整叢集實作範例"></a>完整叢集實作範例</h3><p>基於 <a target="_blank" rel="noopener" href="https://docs.mapbox.com/mapbox-gl-js/example/cluster/">Mapbox 官方範例</a>，以下是完整的叢集實作程式碼：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 設定 Mapbox 存取權杖</span></span><br><span class="line">mapboxgl.<span class="property">accessToken</span> = <span class="string">&#x27;YOUR_MAPBOX_ACCESS_TOKEN&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化地圖</span></span><br><span class="line"><span class="keyword">const</span> map = <span class="keyword">new</span> mapboxgl.<span class="title class_">Map</span>(&#123;</span><br><span class="line">  <span class="attr">container</span>: <span class="string">&#x27;map&#x27;</span>,</span><br><span class="line">  <span class="attr">style</span>: <span class="string">&#x27;mapbox://styles/mapbox/standard&#x27;</span>,</span><br><span class="line">  <span class="attr">config</span>: &#123;</span><br><span class="line">    <span class="attr">basemap</span>: &#123;</span><br><span class="line">      <span class="attr">theme</span>: <span class="string">&#x27;monochrome&#x27;</span>,</span><br><span class="line">      <span class="attr">lightPreset</span>: <span class="string">&#x27;night&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">center</span>: [-<span class="number">103.5917</span>, <span class="number">40.6699</span>],</span><br><span class="line">  <span class="attr">zoom</span>: <span class="number">3</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">map.<span class="title function_">on</span>(<span class="string">&#x27;load&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 1. 新增地震資料來源並啟用叢集功能</span></span><br><span class="line">  map.<span class="title function_">addSource</span>(<span class="string">&#x27;earthquakes&#x27;</span>, &#123;</span><br><span class="line">    <span class="attr">type</span>: <span class="string">&#x27;geojson&#x27;</span>,</span><br><span class="line">    <span class="comment">// 使用 USGS 地震資料 (2015/12/22 - 2016/1/21)</span></span><br><span class="line">    <span class="attr">data</span>: <span class="string">&#x27;https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson&#x27;</span>,</span><br><span class="line">    <span class="attr">cluster</span>: <span class="literal">true</span>,           <span class="comment">// 啟用叢集</span></span><br><span class="line">    <span class="attr">clusterMaxZoom</span>: <span class="number">14</span>,      <span class="comment">// 叢集的最大縮放層級</span></span><br><span class="line">    <span class="attr">clusterRadius</span>: <span class="number">50</span>        <span class="comment">// 叢集半徑（像素）</span></span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 2. 叢集圓圈圖層</span></span><br><span class="line">  map.<span class="title function_">addLayer</span>(&#123;</span><br><span class="line">    <span class="attr">id</span>: <span class="string">&#x27;clusters&#x27;</span>,</span><br><span class="line">    <span class="attr">type</span>: <span class="string">&#x27;circle&#x27;</span>,</span><br><span class="line">    <span class="attr">source</span>: <span class="string">&#x27;earthquakes&#x27;</span>,</span><br><span class="line">    <span class="attr">filter</span>: [<span class="string">&#x27;has&#x27;</span>, <span class="string">&#x27;point_count&#x27;</span>],  <span class="comment">// 只顯示叢集點</span></span><br><span class="line">    <span class="attr">paint</span>: &#123;</span><br><span class="line">      <span class="comment">// 使用 step 表達式根據點數量決定顏色</span></span><br><span class="line">      <span class="string">&#x27;circle-color&#x27;</span>: [</span><br><span class="line">        <span class="string">&#x27;step&#x27;</span>,</span><br><span class="line">        [<span class="string">&#x27;get&#x27;</span>, <span class="string">&#x27;point_count&#x27;</span>],</span><br><span class="line">        <span class="string">&#x27;#51bbd6&#x27;</span>,    <span class="comment">// &lt; 100 個點：藍色</span></span><br><span class="line">        <span class="number">100</span>,</span><br><span class="line">        <span class="string">&#x27;#f1f075&#x27;</span>,    <span class="comment">// 100-750 個點：黃色  </span></span><br><span class="line">        <span class="number">750</span>,</span><br><span class="line">        <span class="string">&#x27;#f28cb1&#x27;</span>     <span class="comment">// &gt;= 750 個點：粉色</span></span><br><span class="line">      ],</span><br><span class="line">      <span class="comment">// 根據點數量決定圓圈大小</span></span><br><span class="line">      <span class="string">&#x27;circle-radius&#x27;</span>: [</span><br><span class="line">        <span class="string">&#x27;step&#x27;</span>,</span><br><span class="line">        [<span class="string">&#x27;get&#x27;</span>, <span class="string">&#x27;point_count&#x27;</span>],</span><br><span class="line">        <span class="number">20</span>,           <span class="comment">// &lt; 100 個點：半徑 20px</span></span><br><span class="line">        <span class="number">100</span>,</span><br><span class="line">        <span class="number">30</span>,           <span class="comment">// 100-750 個點：半徑 30px</span></span><br><span class="line">        <span class="number">750</span>,</span><br><span class="line">        <span class="number">40</span>            <span class="comment">// &gt;= 750 個點：半徑 40px</span></span><br><span class="line">      ],</span><br><span class="line">      <span class="string">&#x27;circle-emissive-strength&#x27;</span>: <span class="number">1</span>  <span class="comment">// 發光效果</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 3. 叢集數字標籤圖層</span></span><br><span class="line">  map.<span class="title function_">addLayer</span>(&#123;</span><br><span class="line">    <span class="attr">id</span>: <span class="string">&#x27;cluster-count&#x27;</span>,</span><br><span class="line">    <span class="attr">type</span>: <span class="string">&#x27;symbol&#x27;</span>,</span><br><span class="line">    <span class="attr">source</span>: <span class="string">&#x27;earthquakes&#x27;</span>,</span><br><span class="line">    <span class="attr">filter</span>: [<span class="string">&#x27;has&#x27;</span>, <span class="string">&#x27;point_count&#x27;</span>],</span><br><span class="line">    <span class="attr">layout</span>: &#123;</span><br><span class="line">      <span class="string">&#x27;text-field&#x27;</span>: [<span class="string">&#x27;get&#x27;</span>, <span class="string">&#x27;point_count_abbreviated&#x27;</span>],  <span class="comment">// 顯示縮寫數字</span></span><br><span class="line">      <span class="string">&#x27;text-font&#x27;</span>: [<span class="string">&#x27;DIN Offc Pro Medium&#x27;</span>, <span class="string">&#x27;Arial Unicode MS Bold&#x27;</span>],</span><br><span class="line">      <span class="string">&#x27;text-size&#x27;</span>: <span class="number">12</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 4. 個別點（未叢集）圖層</span></span><br><span class="line">  map.<span class="title function_">addLayer</span>(&#123;</span><br><span class="line">    <span class="attr">id</span>: <span class="string">&#x27;unclustered-point&#x27;</span>,</span><br><span class="line">    <span class="attr">type</span>: <span class="string">&#x27;circle&#x27;</span>,</span><br><span class="line">    <span class="attr">source</span>: <span class="string">&#x27;earthquakes&#x27;</span>,</span><br><span class="line">    <span class="attr">filter</span>: [<span class="string">&#x27;!&#x27;</span>, [<span class="string">&#x27;has&#x27;</span>, <span class="string">&#x27;point_count&#x27;</span>]],  <span class="comment">// 只顯示非叢集點</span></span><br><span class="line">    <span class="attr">paint</span>: &#123;</span><br><span class="line">      <span class="string">&#x27;circle-color&#x27;</span>: <span class="string">&#x27;#11b4da&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;circle-radius&#x27;</span>: <span class="number">4</span>,</span><br><span class="line">      <span class="string">&#x27;circle-stroke-width&#x27;</span>: <span class="number">1</span>,</span><br><span class="line">      <span class="string">&#x27;circle-stroke-color&#x27;</span>: <span class="string">&#x27;#fff&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;circle-emissive-strength&#x27;</span>: <span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 5. 叢集點擊事件 - 自動縮放展開</span></span><br><span class="line">  map.<span class="title function_">on</span>(<span class="string">&#x27;click&#x27;</span>, <span class="string">&#x27;clusters&#x27;</span>, <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> features = map.<span class="title function_">queryRenderedFeatures</span>(e.<span class="property">point</span>, &#123;</span><br><span class="line">      <span class="attr">layers</span>: [<span class="string">&#x27;clusters&#x27;</span>]</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">const</span> clusterId = features[<span class="number">0</span>].<span class="property">properties</span>.<span class="property">cluster_id</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 取得適當的縮放層級</span></span><br><span class="line">    map.<span class="title function_">getSource</span>(<span class="string">&#x27;earthquakes&#x27;</span>).<span class="title function_">getClusterExpansionZoom</span>(</span><br><span class="line">      clusterId,</span><br><span class="line">      <span class="function">(<span class="params">err, zoom</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (err) <span class="keyword">return</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 平滑縮放到叢集位置</span></span><br><span class="line">        map.<span class="title function_">easeTo</span>(&#123;</span><br><span class="line">          <span class="attr">center</span>: features[<span class="number">0</span>].<span class="property">geometry</span>.<span class="property">coordinates</span>,</span><br><span class="line">          <span class="attr">zoom</span>: zoom</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;</span><br><span class="line">    );</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 6. 個別點點擊事件 - 顯示詳細資訊</span></span><br><span class="line">  map.<span class="title function_">on</span>(<span class="string">&#x27;click&#x27;</span>, <span class="string">&#x27;unclustered-point&#x27;</span>, <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> coordinates = e.<span class="property">features</span>[<span class="number">0</span>].<span class="property">geometry</span>.<span class="property">coordinates</span>.<span class="title function_">slice</span>();</span><br><span class="line">    <span class="keyword">const</span> mag = e.<span class="property">features</span>[<span class="number">0</span>].<span class="property">properties</span>.<span class="property">mag</span>;</span><br><span class="line">    <span class="keyword">const</span> tsunami = e.<span class="property">features</span>[<span class="number">0</span>].<span class="property">properties</span>.<span class="property">tsunami</span> === <span class="number">1</span> ? <span class="string">&#x27;yes&#x27;</span> : <span class="string">&#x27;no&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 處理地圖投影邊界問題</span></span><br><span class="line">    <span class="keyword">if</span> ([<span class="string">&#x27;mercator&#x27;</span>, <span class="string">&#x27;equirectangular&#x27;</span>].<span class="title function_">includes</span>(map.<span class="title function_">getProjection</span>().<span class="property">name</span>)) &#123;</span><br><span class="line">      <span class="keyword">while</span> (<span class="title class_">Math</span>.<span class="title function_">abs</span>(e.<span class="property">lngLat</span>.<span class="property">lng</span> - coordinates[<span class="number">0</span>]) &gt; <span class="number">180</span>) &#123;</span><br><span class="line">        coordinates[<span class="number">0</span>] += e.<span class="property">lngLat</span>.<span class="property">lng</span> &gt; coordinates[<span class="number">0</span>] ? <span class="number">360</span> : -<span class="number">360</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 顯示彈出視窗</span></span><br><span class="line">    <span class="keyword">new</span> mapboxgl.<span class="title class_">Popup</span>()</span><br><span class="line">      .<span class="title function_">setLngLat</span>(coordinates)</span><br><span class="line">      .<span class="title function_">setHTML</span>(</span><br><span class="line">        <span class="string">`magnitude: <span class="subst">$&#123;mag&#125;</span>&lt;br&gt;Was there a tsunami?: <span class="subst">$&#123;tsunami&#125;</span>`</span></span><br><span class="line">      )</span><br><span class="line">      .<span class="title function_">addTo</span>(map);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 7. 滑鼠游標效果</span></span><br><span class="line">  map.<span class="title function_">on</span>(<span class="string">&#x27;mouseenter&#x27;</span>, <span class="string">&#x27;clusters&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    map.<span class="title function_">getCanvas</span>().<span class="property">style</span>.<span class="property">cursor</span> = <span class="string">&#x27;pointer&#x27;</span>;</span><br><span class="line">  &#125;);</span><br><span class="line">  map.<span class="title function_">on</span>(<span class="string">&#x27;mouseleave&#x27;</span>, <span class="string">&#x27;clusters&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    map.<span class="title function_">getCanvas</span>().<span class="property">style</span>.<span class="property">cursor</span> = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="技術架構分析"><a href="#技術架構分析" class="headerlink" title="技術架構分析"></a>技術架構分析</h3><table>
+<thead>
+<tr>
+<th>圖層</th>
+<th>用途</th>
+<th>關鍵屬性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>clusters</code></td>
+<td>叢集圓圈</td>
+<td><code>filter: [&#39;has&#39;, &#39;point_count&#39;]</code></td>
+</tr>
+<tr>
+<td><code>cluster-count</code></td>
+<td>叢集數字</td>
+<td><code>text-field: point_count_abbreviated</code></td>
+</tr>
+<tr>
+<td><code>unclustered-point</code></td>
+<td>個別點</td>
+<td><code>filter: [&#39;!&#39;, [&#39;has&#39;, &#39;point_count&#39;]]</code></td>
+</tr>
+</tbody></table>
+<h2 id="⚡-互動體驗設計"><a href="#⚡-互動體驗設計" class="headerlink" title="⚡ 互動體驗設計"></a>⚡ 互動體驗設計</h2><h3 id="地理編碼整合"><a href="#地理編碼整合" class="headerlink" title="地理編碼整合"></a>地理編碼整合</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 點擊個別點時顯示地址資訊</span></span><br><span class="line">map.<span class="title function_">on</span>(<span class="string">&#x27;click&#x27;</span>, <span class="string">&#x27;unclustered-point&#x27;</span>, <span class="title function_">async</span> (e) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> [lng, lat] = e.<span class="property">features</span>[<span class="number">0</span>].<span class="property">geometry</span>.<span class="property">coordinates</span>;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 呼叫 Mapbox Geocoding API 進行反向地理編碼</span></span><br><span class="line">  <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="title function_">fetch</span>(</span><br><span class="line">    <span class="string">`https://api.mapbox.com/geocoding/v5/mapbox.places/<span class="subst">$&#123;lng&#125;</span>,<span class="subst">$&#123;lat&#125;</span>.json?access_token=<span class="subst">$&#123;mapboxgl.accessToken&#125;</span>`</span></span><br><span class="line">  );</span><br><span class="line">  <span class="keyword">const</span> data = <span class="keyword">await</span> response.<span class="title function_">json</span>();</span><br><span class="line">  <span class="keyword">const</span> placeName = data.<span class="property">features</span>[<span class="number">0</span>]?.<span class="property">place_name</span> || <span class="string">&#x27;地址查無&#x27;</span>;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 顯示彈出視窗</span></span><br><span class="line">  <span class="keyword">new</span> mapboxgl.<span class="title class_">Popup</span>()</span><br><span class="line">    .<span class="title function_">setLngLat</span>([lng, lat])</span><br><span class="line">    .<span class="title function_">setHTML</span>(<span class="string">`&lt;strong&gt;<span class="subst">$&#123;placeName&#125;</span>&lt;/strong&gt;`</span>)</span><br><span class="line">    .<span class="title function_">addTo</span>(map);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="叢集互動功能"><a href="#叢集互動功能" class="headerlink" title="叢集互動功能"></a>叢集互動功能</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 點擊叢集時自動縮放</span></span><br><span class="line">map.<span class="title function_">on</span>(<span class="string">&#x27;click&#x27;</span>, <span class="string">&#x27;clusters&#x27;</span>, <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> features = map.<span class="title function_">queryRenderedFeatures</span>(e.<span class="property">point</span>, &#123;</span><br><span class="line">    <span class="attr">layers</span>: [<span class="string">&#x27;clusters&#x27;</span>]</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="keyword">const</span> clusterId = features[<span class="number">0</span>].<span class="property">properties</span>.<span class="property">cluster_id</span>;</span><br><span class="line">  </span><br><span class="line">  map.<span class="title function_">getSource</span>(<span class="string">&#x27;earthquakes&#x27;</span>).<span class="title function_">getClusterExpansionZoom</span>(</span><br><span class="line">    clusterId,</span><br><span class="line">    <span class="function">(<span class="params">err, zoom</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (err) <span class="keyword">return</span>;</span><br><span class="line">      </span><br><span class="line">      <span class="comment">// 平滑縮放到目標位置</span></span><br><span class="line">      map.<span class="title function_">easeTo</span>(&#123;</span><br><span class="line">        <span class="attr">center</span>: features[<span class="number">0</span>].<span class="property">geometry</span>.<span class="property">coordinates</span>,</span><br><span class="line">        <span class="attr">zoom</span>: zoom</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">  );</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="🎯-實用技巧總結"><a href="#🎯-實用技巧總結" class="headerlink" title="🎯 實用技巧總結"></a>🎯 實用技巧總結</h2><h3 id="1-分層渲染策略"><a href="#1-分層渲染策略" class="headerlink" title="1. 分層渲染策略"></a>1. 分層渲染策略</h3><p>正確的圖層順序（由下到上）：</p>
+<ol>
+<li>底層填充圖案</li>
+<li>叢集圓圈</li>
+<li>光暈效果</li>
+<li>核心點</li>
+<li>文字標籤（最上層）</li>
+</ol>
+<h3 id="2-效能最佳化"><a href="#2-效能最佳化" class="headerlink" title="2. 效能最佳化"></a>2. 效能最佳化</h3><ul>
+<li><strong>圖層最小化</strong>：只顯示必要的圖層</li>
+<li><strong>適當的叢集設定</strong>：平衡視覺效果與效能</li>
+<li><strong>事件處理最佳化</strong>：避免過度頻繁的 API 呼叫</li>
+</ul>
+<h3 id="3-錯誤處理模式"><a href="#3-錯誤處理模式" class="headerlink" title="3. 錯誤處理模式"></a>3. 錯誤處理模式</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 優雅的降級處理</span></span><br><span class="line">.<span class="title function_">catch</span>(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;主要資料載入失敗，使用備用方案&#x27;</span>);</span><br><span class="line">  <span class="comment">// 提供簡化但可用的替代方案</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="🚀-進階應用方向"><a href="#🚀-進階應用方向" class="headerlink" title="🚀 進階應用方向"></a>🚀 進階應用方向</h2><h3 id="台灣地圖整合"><a href="#台灣地圖整合" class="headerlink" title="台灣地圖整合"></a>台灣地圖整合</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 載入台灣 GeoJSON 資料</span></span><br><span class="line"><span class="title function_">fetch</span>(<span class="string">&#x27;./taiwan.geojson&#x27;</span>)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">response</span> =&gt;</span> response.<span class="title function_">json</span>())</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function"><span class="params">data</span> =&gt;</span> &#123;</span><br><span class="line">    map.<span class="title function_">addSource</span>(<span class="string">&#x27;taiwan&#x27;</span>, &#123;</span><br><span class="line">      <span class="attr">type</span>: <span class="string">&#x27;geojson&#x27;</span>,</span><br><span class="line">      <span class="attr">data</span>: data</span><br><span class="line">    &#125;);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 套用台灣特色的視覺樣式</span></span><br><span class="line">    map.<span class="title function_">addLayer</span>(&#123;</span><br><span class="line">      <span class="attr">id</span>: <span class="string">&#x27;taiwan-regions&#x27;</span>,</span><br><span class="line">      <span class="attr">type</span>: <span class="string">&#x27;fill&#x27;</span>,</span><br><span class="line">      <span class="attr">source</span>: <span class="string">&#x27;taiwan&#x27;</span>,</span><br><span class="line">      <span class="attr">paint</span>: &#123;</span><br><span class="line">        <span class="string">&#x27;fill-color&#x27;</span>: <span class="string">&#x27;#ff6b6b&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;fill-opacity&#x27;</span>: <span class="number">0.3</span>,</span><br><span class="line">        <span class="string">&#x27;fill-outline-color&#x27;</span>: <span class="string">&#x27;#ee5a52&#x27;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="時間軸動畫"><a href="#時間軸動畫" class="headerlink" title="時間軸動畫"></a>時間軸動畫</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 添加時間維度的資料視覺化</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">animateData</span>(<span class="params">timeRange</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> filteredData = originalData.<span class="property">features</span>.<span class="title function_">filter</span>(<span class="function"><span class="params">feature</span> =&gt;</span> </span><br><span class="line">    feature.<span class="property">properties</span>.<span class="property">timestamp</span> &gt;= timeRange.<span class="property">start</span> &amp;&amp;</span><br><span class="line">    feature.<span class="property">properties</span>.<span class="property">timestamp</span> &lt;= timeRange.<span class="property">end</span></span><br><span class="line">  );</span><br><span class="line">  </span><br><span class="line">  map.<span class="title function_">getSource</span>(<span class="string">&#x27;earthquakes&#x27;</span>).<span class="title function_">setData</span>(&#123;</span><br><span class="line">    <span class="attr">type</span>: <span class="string">&#x27;FeatureCollection&#x27;</span>,</span><br><span class="line">    <span class="attr">features</span>: filteredData</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="💡-技術延伸應用"><a href="#💡-技術延伸應用" class="headerlink" title="💡 技術延伸應用"></a>💡 技術延伸應用</h2><p>這些技術可以應用到：</p>
+<ul>
+<li><strong>商業智能</strong>：銷售數據的地理分佈分析</li>
+<li><strong>物聯網</strong>：感測器資料的即時地圖展示</li>
+<li><strong>社會媒體</strong>：用戶簽到數據的視覺化</li>
+<li><strong>災害管理</strong>：緊急事件的地理資訊系統</li>
+</ul>
+<h2 id="🎓-學習建議"><a href="#🎓-學習建議" class="headerlink" title="🎓 學習建議"></a>🎓 學習建議</h2><ol>
+<li><strong>深入研究 Mapbox GL JS 官方文件</strong></li>
+<li><strong>實驗不同的資料來源和格式</strong></li>
+<li><strong>嘗試整合其他 Web API</strong></li>
+<li><strong>優化效能和使用者體驗</strong></li>
+</ol>
+<h2 id="📄-完整-HTML-範例"><a href="#📄-完整-HTML-範例" class="headerlink" title="📄 完整 HTML 範例"></a>📄 完整 HTML 範例</h2><p>以下是可以直接執行的完整 HTML 檔案：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;utf-8&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Create and style clusters<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;initial-scale=1,maximum-scale=1,user-scalable=no&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">link</span> <span class="attr">href</span>=<span class="string">&quot;https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.css&quot;</span> <span class="attr">rel</span>=<span class="string">&quot;stylesheet&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://api.mapbox.com/mapbox-gl-js/v3.12.0/mapbox-gl.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css">    <span class="selector-tag">body</span> &#123; <span class="attribute">margin</span>: <span class="number">0</span>; <span class="attribute">padding</span>: <span class="number">0</span>; &#125;</span></span><br><span class="line"><span class="language-css">    <span class="selector-id">#map</span> &#123; <span class="attribute">position</span>: absolute; <span class="attribute">top</span>: <span class="number">0</span>; <span class="attribute">bottom</span>: <span class="number">0</span>; <span class="attribute">width</span>: <span class="number">100%</span>; &#125;</span></span><br><span class="line"><span class="language-css">  </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">&quot;map&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  </span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    <span class="comment">// TO MAKE THE MAP APPEAR YOU MUST</span></span></span><br><span class="line"><span class="language-javascript">    <span class="comment">// ADD YOUR ACCESS TOKEN FROM</span></span></span><br><span class="line"><span class="language-javascript">    <span class="comment">// https://account.mapbox.com</span></span></span><br><span class="line"><span class="language-javascript">    mapboxgl.<span class="property">accessToken</span> = <span class="string">&#x27;YOUR_MAPBOX_ACCESS_TOKEN&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript">    </span></span><br><span class="line"><span class="language-javascript">    <span class="keyword">const</span> map = <span class="keyword">new</span> mapboxgl.<span class="title class_">Map</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="attr">container</span>: <span class="string">&#x27;map&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">      <span class="comment">// Choose from Mapbox&#x27;s core styles, or make your own style with Mapbox Studio</span></span></span><br><span class="line"><span class="language-javascript">      <span class="attr">style</span>: <span class="string">&#x27;mapbox://styles/mapbox/standard&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">      <span class="attr">config</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">basemap</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">          <span class="attr">theme</span>: <span class="string">&#x27;monochrome&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">          <span class="attr">lightPreset</span>: <span class="string">&#x27;night&#x27;</span></span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">      &#125;,</span></span><br><span class="line"><span class="language-javascript">      <span class="attr">center</span>: [-<span class="number">103.5917</span>, <span class="number">40.6699</span>],</span></span><br><span class="line"><span class="language-javascript">      <span class="attr">zoom</span>: <span class="number">3</span></span></span><br><span class="line"><span class="language-javascript">    &#125;);</span></span><br><span class="line"><span class="language-javascript">    </span></span><br><span class="line"><span class="language-javascript">    map.<span class="title function_">on</span>(<span class="string">&#x27;load&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="comment">// Add a new source from our GeoJSON data and</span></span></span><br><span class="line"><span class="language-javascript">      <span class="comment">// set the &#x27;cluster&#x27; option to true. GL-JS will</span></span></span><br><span class="line"><span class="language-javascript">      <span class="comment">// add the point_count property to your source data.</span></span></span><br><span class="line"><span class="language-javascript">      map.<span class="title function_">addSource</span>(<span class="string">&#x27;earthquakes&#x27;</span>, &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">type</span>: <span class="string">&#x27;geojson&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">        <span class="comment">// Point to GeoJSON data. This example visualizes all M1.0+ earthquakes</span></span></span><br><span class="line"><span class="language-javascript">        <span class="comment">// from 12/22/15 to 1/21/16 as logged by USGS&#x27; Earthquake hazards program.</span></span></span><br><span class="line"><span class="language-javascript">        <span class="attr">data</span>: <span class="string">&#x27;https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">cluster</span>: <span class="literal">true</span>,</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">clusterMaxZoom</span>: <span class="number">14</span>, <span class="comment">// Max zoom to cluster points on</span></span></span><br><span class="line"><span class="language-javascript">        <span class="attr">clusterRadius</span>: <span class="number">50</span> <span class="comment">// Radius of each cluster when clustering points (defaults to 50)</span></span></span><br><span class="line"><span class="language-javascript">      &#125;);</span></span><br><span class="line"><span class="language-javascript">      </span></span><br><span class="line"><span class="language-javascript">      map.<span class="title function_">addLayer</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">id</span>: <span class="string">&#x27;clusters&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">type</span>: <span class="string">&#x27;circle&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">source</span>: <span class="string">&#x27;earthquakes&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">filter</span>: [<span class="string">&#x27;has&#x27;</span>, <span class="string">&#x27;point_count&#x27;</span>],</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">paint</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">          <span class="comment">// Use step expressions (https://docs.mapbox.com/style-spec/reference/expressions/#step)</span></span></span><br><span class="line"><span class="language-javascript">          <span class="comment">// with three steps to implement three types of circles:</span></span></span><br><span class="line"><span class="language-javascript">          <span class="comment">//   * Blue, 20px circles when point count is less than 100</span></span></span><br><span class="line"><span class="language-javascript">          <span class="comment">//   * Yellow, 30px circles when point count is between 100 and 750</span></span></span><br><span class="line"><span class="language-javascript">          <span class="comment">//   * Pink, 40px circles when point count is greater than or equal to 750</span></span></span><br><span class="line"><span class="language-javascript">          <span class="string">&#x27;circle-color&#x27;</span>: [</span></span><br><span class="line"><span class="language-javascript">            <span class="string">&#x27;step&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">            [<span class="string">&#x27;get&#x27;</span>, <span class="string">&#x27;point_count&#x27;</span>],</span></span><br><span class="line"><span class="language-javascript">            <span class="string">&#x27;#51bbd6&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">            <span class="number">100</span>,</span></span><br><span class="line"><span class="language-javascript">            <span class="string">&#x27;#f1f075&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">            <span class="number">750</span>,</span></span><br><span class="line"><span class="language-javascript">            <span class="string">&#x27;#f28cb1&#x27;</span></span></span><br><span class="line"><span class="language-javascript">          ],</span></span><br><span class="line"><span class="language-javascript">          <span class="string">&#x27;circle-radius&#x27;</span>: [</span></span><br><span class="line"><span class="language-javascript">            <span class="string">&#x27;step&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">            [<span class="string">&#x27;get&#x27;</span>, <span class="string">&#x27;point_count&#x27;</span>],</span></span><br><span class="line"><span class="language-javascript">            <span class="number">20</span>,</span></span><br><span class="line"><span class="language-javascript">            <span class="number">100</span>,</span></span><br><span class="line"><span class="language-javascript">            <span class="number">30</span>,</span></span><br><span class="line"><span class="language-javascript">            <span class="number">750</span>,</span></span><br><span class="line"><span class="language-javascript">            <span class="number">40</span></span></span><br><span class="line"><span class="language-javascript">          ],</span></span><br><span class="line"><span class="language-javascript">          <span class="string">&#x27;circle-emissive-strength&#x27;</span>: <span class="number">1</span></span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">      &#125;);</span></span><br><span class="line"><span class="language-javascript">      </span></span><br><span class="line"><span class="language-javascript">      map.<span class="title function_">addLayer</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">id</span>: <span class="string">&#x27;cluster-count&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">type</span>: <span class="string">&#x27;symbol&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">source</span>: <span class="string">&#x27;earthquakes&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">filter</span>: [<span class="string">&#x27;has&#x27;</span>, <span class="string">&#x27;point_count&#x27;</span>],</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">layout</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">          <span class="string">&#x27;text-field&#x27;</span>: [<span class="string">&#x27;get&#x27;</span>, <span class="string">&#x27;point_count_abbreviated&#x27;</span>],</span></span><br><span class="line"><span class="language-javascript">          <span class="string">&#x27;text-font&#x27;</span>: [<span class="string">&#x27;DIN Offc Pro Medium&#x27;</span>, <span class="string">&#x27;Arial Unicode MS Bold&#x27;</span>],</span></span><br><span class="line"><span class="language-javascript">          <span class="string">&#x27;text-size&#x27;</span>: <span class="number">12</span></span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">      &#125;);</span></span><br><span class="line"><span class="language-javascript">      </span></span><br><span class="line"><span class="language-javascript">      map.<span class="title function_">addLayer</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">id</span>: <span class="string">&#x27;unclustered-point&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">type</span>: <span class="string">&#x27;circle&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">source</span>: <span class="string">&#x27;earthquakes&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">filter</span>: [<span class="string">&#x27;!&#x27;</span>, [<span class="string">&#x27;has&#x27;</span>, <span class="string">&#x27;point_count&#x27;</span>]],</span></span><br><span class="line"><span class="language-javascript">        <span class="attr">paint</span>: &#123;</span></span><br><span class="line"><span class="language-javascript">          <span class="string">&#x27;circle-color&#x27;</span>: <span class="string">&#x27;#11b4da&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">          <span class="string">&#x27;circle-radius&#x27;</span>: <span class="number">4</span>,</span></span><br><span class="line"><span class="language-javascript">          <span class="string">&#x27;circle-stroke-width&#x27;</span>: <span class="number">1</span>,</span></span><br><span class="line"><span class="language-javascript">          <span class="string">&#x27;circle-stroke-color&#x27;</span>: <span class="string">&#x27;#fff&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">          <span class="string">&#x27;circle-emissive-strength&#x27;</span>: <span class="number">1</span></span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">      &#125;);</span></span><br><span class="line"><span class="language-javascript">      </span></span><br><span class="line"><span class="language-javascript">      <span class="comment">// inspect a cluster on click</span></span></span><br><span class="line"><span class="language-javascript">      map.<span class="title function_">on</span>(<span class="string">&#x27;click&#x27;</span>, <span class="string">&#x27;clusters&#x27;</span>, <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">const</span> features = map.<span class="title function_">queryRenderedFeatures</span>(e.<span class="property">point</span>, &#123;</span></span><br><span class="line"><span class="language-javascript">          <span class="attr">layers</span>: [<span class="string">&#x27;clusters&#x27;</span>]</span></span><br><span class="line"><span class="language-javascript">        &#125;);</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">const</span> clusterId = features[<span class="number">0</span>].<span class="property">properties</span>.<span class="property">cluster_id</span>;</span></span><br><span class="line"><span class="language-javascript">        map.<span class="title function_">getSource</span>(<span class="string">&#x27;earthquakes&#x27;</span>).<span class="title function_">getClusterExpansionZoom</span>(</span></span><br><span class="line"><span class="language-javascript">          clusterId,</span></span><br><span class="line"><span class="language-javascript">          <span class="function">(<span class="params">err, zoom</span>) =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">            <span class="keyword">if</span> (err) <span class="keyword">return</span>;</span></span><br><span class="line"><span class="language-javascript">            </span></span><br><span class="line"><span class="language-javascript">            map.<span class="title function_">easeTo</span>(&#123;</span></span><br><span class="line"><span class="language-javascript">              <span class="attr">center</span>: features[<span class="number">0</span>].<span class="property">geometry</span>.<span class="property">coordinates</span>,</span></span><br><span class="line"><span class="language-javascript">              <span class="attr">zoom</span>: zoom</span></span><br><span class="line"><span class="language-javascript">            &#125;);</span></span><br><span class="line"><span class="language-javascript">          &#125;</span></span><br><span class="line"><span class="language-javascript">        );</span></span><br><span class="line"><span class="language-javascript">      &#125;);</span></span><br><span class="line"><span class="language-javascript">      </span></span><br><span class="line"><span class="language-javascript">      <span class="comment">// When a click event occurs on a feature in</span></span></span><br><span class="line"><span class="language-javascript">      <span class="comment">// the unclustered-point layer, open a popup at</span></span></span><br><span class="line"><span class="language-javascript">      <span class="comment">// the location of the feature, with</span></span></span><br><span class="line"><span class="language-javascript">      <span class="comment">// description HTML from its properties.</span></span></span><br><span class="line"><span class="language-javascript">      map.<span class="title function_">on</span>(<span class="string">&#x27;click&#x27;</span>, <span class="string">&#x27;unclustered-point&#x27;</span>, <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">const</span> coordinates = e.<span class="property">features</span>[<span class="number">0</span>].<span class="property">geometry</span>.<span class="property">coordinates</span>.<span class="title function_">slice</span>();</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">const</span> mag = e.<span class="property">features</span>[<span class="number">0</span>].<span class="property">properties</span>.<span class="property">mag</span>;</span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">const</span> tsunami = e.<span class="property">features</span>[<span class="number">0</span>].<span class="property">properties</span>.<span class="property">tsunami</span> === <span class="number">1</span> ? <span class="string">&#x27;yes&#x27;</span> : <span class="string">&#x27;no&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript">        </span></span><br><span class="line"><span class="language-javascript">        <span class="comment">// Ensure that if the map is zoomed out such that</span></span></span><br><span class="line"><span class="language-javascript">        <span class="comment">// multiple copies of the feature are visible, the</span></span></span><br><span class="line"><span class="language-javascript">        <span class="comment">// popup appears over the copy being pointed to.</span></span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">if</span> ([<span class="string">&#x27;mercator&#x27;</span>, <span class="string">&#x27;equirectangular&#x27;</span>].<span class="title function_">includes</span>(map.<span class="title function_">getProjection</span>().<span class="property">name</span>)) &#123;</span></span><br><span class="line"><span class="language-javascript">          <span class="keyword">while</span> (<span class="title class_">Math</span>.<span class="title function_">abs</span>(e.<span class="property">lngLat</span>.<span class="property">lng</span> - coordinates[<span class="number">0</span>]) &gt; <span class="number">180</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">            coordinates[<span class="number">0</span>] += e.<span class="property">lngLat</span>.<span class="property">lng</span> &gt; coordinates[<span class="number">0</span>] ? <span class="number">360</span> : -<span class="number">360</span>;</span></span><br><span class="line"><span class="language-javascript">          &#125;</span></span><br><span class="line"><span class="language-javascript">        &#125;</span></span><br><span class="line"><span class="language-javascript">        </span></span><br><span class="line"><span class="language-javascript">        <span class="keyword">new</span> mapboxgl.<span class="title class_">Popup</span>()</span></span><br><span class="line"><span class="language-javascript">          .<span class="title function_">setLngLat</span>(coordinates)</span></span><br><span class="line"><span class="language-javascript">          .<span class="title function_">setHTML</span>(</span></span><br><span class="line"><span class="language-javascript">            <span class="string">`magnitude: <span class="subst">$&#123;mag&#125;</span>&lt;br&gt;Was there a tsunami?: <span class="subst">$&#123;tsunami&#125;</span>`</span></span></span><br><span class="line"><span class="language-javascript">          )</span></span><br><span class="line"><span class="language-javascript">          .<span class="title function_">addTo</span>(map);</span></span><br><span class="line"><span class="language-javascript">      &#125;);</span></span><br><span class="line"><span class="language-javascript">      </span></span><br><span class="line"><span class="language-javascript">      map.<span class="title function_">on</span>(<span class="string">&#x27;mouseenter&#x27;</span>, <span class="string">&#x27;clusters&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">        map.<span class="title function_">getCanvas</span>().<span class="property">style</span>.<span class="property">cursor</span> = <span class="string">&#x27;pointer&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript">      &#125;);</span></span><br><span class="line"><span class="language-javascript">      map.<span class="title function_">on</span>(<span class="string">&#x27;mouseleave&#x27;</span>, <span class="string">&#x27;clusters&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">        map.<span class="title function_">getCanvas</span>().<span class="property">style</span>.<span class="property">cursor</span> = <span class="string">&#x27;&#x27;</span>;</span></span><br><span class="line"><span class="language-javascript">      &#125;);</span></span><br><span class="line"><span class="language-javascript">    &#125;);</span></span><br><span class="line"><span class="language-javascript">  </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  </span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="🚀-快速開始步驟"><a href="#🚀-快速開始步驟" class="headerlink" title="🚀 快速開始步驟"></a>🚀 快速開始步驟</h3><ol>
+<li><p><strong>取得 Access Token</strong>：</p>
+<ul>
+<li>前往 <a target="_blank" rel="noopener" href="https://account.mapbox.com/">Mapbox Account</a></li>
+<li>複製您的 access token</li>
+<li>替換程式碼中的 <code>YOUR_MAPBOX_ACCESS_TOKEN</code></li>
+</ul>
+</li>
+<li><p><strong>本地測試</strong>：</p>
+<ul>
+<li>儲存為 <code>.html</code> 檔案</li>
+<li>在瀏覽器中開啟</li>
+<li>享受互動式叢集地圖！</li>
+</ul>
+</li>
+<li><p><strong>客製化調整</strong>：</p>
+<ul>
+<li>修改 <code>clusterRadius</code> 調整叢集半徑</li>
+<li>更換 <code>data</code> URL 使用自己的 GeoJSON 資料</li>
+<li>調整顏色和大小的 step 表達式</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="📞-技術支援與參考資源"><a href="#📞-技術支援與參考資源" class="headerlink" title="📞 技術支援與參考資源"></a>📞 技術支援與參考資源</h2><h3 id="官方文件"><a href="#官方文件" class="headerlink" title="官方文件"></a>官方文件</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://docs.mapbox.com/mapbox-gl-js/">Mapbox GL JS 官方文件</a></li>
+<li><a target="_blank" rel="noopener" href="https://geojson.org/">GeoJSON 規格說明</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.mapbox.com/mapbox-gl-js/example/cluster/">Mapbox 叢集範例</a></li>
+</ul>
+<h3 id="資料來源"><a href="#資料來源" class="headerlink" title="資料來源"></a>資料來源</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson">USGS 地震資料</a></li>
+<li><a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson">世界陸地邊界 GeoJSON</a></li>
+</ul>
+<h3 id="相關專案"><a href="#相關專案" class="headerlink" title="相關專案"></a>相關專案</h3><ul>
+<li>本文技術範例基於 Mapbox 官方叢集教學</li>
+</ul>
+<blockquote>
+<p><strong>作者</strong>：技術團隊<br><strong>更新日期</strong>：2025年6月29日<br><strong>版本</strong>：v1.1<br><strong>程式碼來源</strong>：<a target="_blank" rel="noopener" href="https://docs.mapbox.com/mapbox-gl-js/example/cluster/">Mapbox Create and Style Clusters</a></p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://cookieseventeen.github.io/2025/06/29/mapbox-data-visualization-guide/" data-id="cmcxje0xz002fxf8o1i8d7rrm" data-title="Mapbox 地圖資料視覺化技術分析與應用指南" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Canvas/" rel="tag">Canvas</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Clustering/" rel="tag">Clustering</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Data-Visualization/" rel="tag">Data Visualization</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GeoJSON/" rel="tag">GeoJSON</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Interactive-Maps/" rel="tag">Interactive Maps</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mapbox/" rel="tag">Mapbox</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Mapbox-GL-JS/" rel="tag">Mapbox GL JS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/USGS-Data/" rel="tag">USGS Data</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Web-Mapping/" rel="tag">Web Mapping</a></li></ul>
 
     </footer>
   </div>
@@ -2895,7 +2599,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">標籤雲</h3>
     <div class="widget tagcloud">
-      <a href="/tags/AI-Assistant/" style="font-size: 10px;">AI Assistant</a> <a href="/tags/AI-Collaboration/" style="font-size: 10px;">AI Collaboration</a> <a href="/tags/ARM/" style="font-size: 10px;">ARM</a> <a href="/tags/Angular/" style="font-size: 10px;">Angular</a> <a href="/tags/Angular-15/" style="font-size: 10px;">Angular 15+</a> <a href="/tags/Angular-19/" style="font-size: 20px;">Angular 19</a> <a href="/tags/Angular-19/" style="font-size: 10px;">Angular 19+</a> <a href="/tags/Angular-Configuration/" style="font-size: 10px;">Angular Configuration</a> <a href="/tags/Angular-SSR/" style="font-size: 10px;">Angular SSR</a> <a href="/tags/Angular-Universal/" style="font-size: 20px;">Angular Universal</a> <a href="/tags/Best-Practices/" style="font-size: 10px;">Best Practices</a> <a href="/tags/Buildx/" style="font-size: 10px;">Buildx</a> <a href="/tags/Business-Context/" style="font-size: 10px;">Business Context</a> <a href="/tags/Business-Strategy/" style="font-size: 10px;">Business Strategy</a> <a href="/tags/CI-CD/" style="font-size: 10px;">CI/CD</a> <a href="/tags/Canvas/" style="font-size: 10px;">Canvas</a> <a href="/tags/Clean-Architecture/" style="font-size: 13.33px;">Clean Architecture</a> <a href="/tags/Clustering/" style="font-size: 10px;">Clustering</a> <a href="/tags/Code-Quality/" style="font-size: 10px;">Code Quality</a> <a href="/tags/Composables/" style="font-size: 10px;">Composables</a> <a href="/tags/Composition-API/" style="font-size: 10px;">Composition API</a> <a href="/tags/Critical-Functions/" style="font-size: 10px;">Critical Functions</a> <a href="/tags/Data-Visualization/" style="font-size: 10px;">Data Visualization</a> <a href="/tags/Debugging/" style="font-size: 10px;">Debugging</a> <a href="/tags/Dependency-Injection/" style="font-size: 10px;">Dependency Injection</a> <a href="/tags/Design-Patterns/" style="font-size: 10px;">Design Patterns</a> <a href="/tags/Developer-Experience/" style="font-size: 10px;">Developer Experience</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Domain-Knowledge/" style="font-size: 10px;">Domain Knowledge</a> <a href="/tags/ESLint-9-x/" style="font-size: 10px;">ESLint 9.x</a> <a href="/tags/Enterprise-Architecture/" style="font-size: 13.33px;">Enterprise Architecture</a> <a href="/tags/Error-Handling/" style="font-size: 10px;">Error Handling</a> <a href="/tags/Feature-Modules/" style="font-size: 13.33px;">Feature Modules</a> <a href="/tags/Flat-Config/" style="font-size: 10px;">Flat Config</a> <a href="/tags/Frontend-Architecture/" style="font-size: 10px;">Frontend Architecture</a> <a href="/tags/Frontend-Initialization/" style="font-size: 10px;">Frontend Initialization</a> <a href="/tags/Frontend-Tooling/" style="font-size: 10px;">Frontend Tooling</a> <a href="/tags/GeoJSON/" style="font-size: 10px;">GeoJSON</a> <a href="/tags/Global-Properties/" style="font-size: 10px;">Global Properties</a> <a href="/tags/HTTP-Interceptors/" style="font-size: 10px;">HTTP Interceptors</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/Hydration/" style="font-size: 13.33px;">Hydration</a> <a href="/tags/Interactive-Maps/" style="font-size: 10px;">Interactive Maps</a> <a href="/tags/Internationalization/" style="font-size: 10px;">Internationalization</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Knowledge-Management/" style="font-size: 10px;">Knowledge Management</a> <a href="/tags/Linting-Rules/" style="font-size: 10px;">Linting Rules</a> <a href="/tags/Mapbox/" style="font-size: 10px;">Mapbox</a> <a href="/tags/Mapbox-GL-JS/" style="font-size: 10px;">Mapbox GL JS</a> <a href="/tags/Migration-Guide/" style="font-size: 10px;">Migration Guide</a> <a href="/tags/Multi-language/" style="font-size: 10px;">Multi-language</a> <a href="/tags/Multi-platform/" style="font-size: 10px;">Multi-platform</a> <a href="/tags/Naming-Convention/" style="font-size: 10px;">Naming Convention</a> <a href="/tags/NullInjectorError/" style="font-size: 10px;">NullInjectorError</a> <a href="/tags/Offline-Deployment/" style="font-size: 10px;">Offline Deployment</a> <a href="/tags/Performance-Optimization/" style="font-size: 13.33px;">Performance Optimization</a> <a href="/tags/Pinia/" style="font-size: 10px;">Pinia</a> <a href="/tags/Prerender/" style="font-size: 13.33px;">Prerender</a> <a href="/tags/PrimeNG/" style="font-size: 13.33px;">PrimeNG</a> <a href="/tags/Production-Deployment/" style="font-size: 10px;">Production Deployment</a> <a href="/tags/Production-Issues/" style="font-size: 10px;">Production Issues</a> <a href="/tags/Project-Architecture/" style="font-size: 13.33px;">Project Architecture</a> <a href="/tags/Project-Setup/" style="font-size: 10px;">Project Setup</a> <a href="/tags/Prompt-Engineering/" style="font-size: 10px;">Prompt Engineering</a> <a href="/tags/RenderMode/" style="font-size: 13.33px;">RenderMode</a> <a href="/tags/Route-Guards/" style="font-size: 13.33px;">Route Guards</a> <a href="/tags/SEO/" style="font-size: 13.33px;">SEO</a> <a href="/tags/SSR/" style="font-size: 20px;">SSR</a> <a href="/tags/SSR-Configuration/" style="font-size: 13.33px;">SSR Configuration</a> <a href="/tags/Server-Side-Rendering/" style="font-size: 16.67px;">Server-Side Rendering</a> <a href="/tags/Service-Pattern/" style="font-size: 10px;">Service Pattern</a> <a href="/tags/Signals/" style="font-size: 13.33px;">Signals</a> <a href="/tags/Standalone-Components/" style="font-size: 16.67px;">Standalone Components</a> <a href="/tags/State-Management/" style="font-size: 10px;">State Management</a> <a href="/tags/Tailwind-CSS/" style="font-size: 13.33px;">Tailwind CSS</a> <a href="/tags/Team-Productivity/" style="font-size: 10px;">Team Productivity</a> <a href="/tags/Technical-Decision-Making/" style="font-size: 10px;">Technical Decision Making</a> <a href="/tags/Transloco/" style="font-size: 16.67px;">Transloco</a> <a href="/tags/Troubleshooting/" style="font-size: 10px;">Troubleshooting</a> <a href="/tags/TypeScript/" style="font-size: 10px;">TypeScript</a> <a href="/tags/USGS-Data/" style="font-size: 10px;">USGS Data</a> <a href="/tags/Vue-js/" style="font-size: 10px;">Vue.js</a> <a href="/tags/Web-Mapping/" style="font-size: 10px;">Web Mapping</a> <a href="/tags/i18n/" style="font-size: 10px;">i18n</a> <a href="/tags/i18n-Debug/" style="font-size: 10px;">i18n Debug</a> <a href="/tags/jsverse-transloco/" style="font-size: 10px;">jsverse/transloco</a> <a href="/tags/provideHttpClient/" style="font-size: 10px;">provideHttpClient</a> <a href="/tags/withInterceptorsFromDI/" style="font-size: 10px;">withInterceptorsFromDI</a>
+      <a href="/tags/AI-Assistant/" style="font-size: 10px;">AI Assistant</a> <a href="/tags/AI-Collaboration/" style="font-size: 10px;">AI Collaboration</a> <a href="/tags/ARM/" style="font-size: 10px;">ARM</a> <a href="/tags/Angular/" style="font-size: 10px;">Angular</a> <a href="/tags/Angular-15/" style="font-size: 10px;">Angular 15+</a> <a href="/tags/Angular-19/" style="font-size: 16.67px;">Angular 19</a> <a href="/tags/Angular-19/" style="font-size: 10px;">Angular 19+</a> <a href="/tags/Angular-Configuration/" style="font-size: 10px;">Angular Configuration</a> <a href="/tags/Angular-SSR/" style="font-size: 10px;">Angular SSR</a> <a href="/tags/Angular-Universal/" style="font-size: 20px;">Angular Universal</a> <a href="/tags/Best-Practices/" style="font-size: 10px;">Best Practices</a> <a href="/tags/Buildx/" style="font-size: 10px;">Buildx</a> <a href="/tags/Business-Context/" style="font-size: 10px;">Business Context</a> <a href="/tags/Business-Strategy/" style="font-size: 10px;">Business Strategy</a> <a href="/tags/CI-CD/" style="font-size: 10px;">CI/CD</a> <a href="/tags/Canvas/" style="font-size: 10px;">Canvas</a> <a href="/tags/Clean-Architecture/" style="font-size: 10px;">Clean Architecture</a> <a href="/tags/Clustering/" style="font-size: 10px;">Clustering</a> <a href="/tags/Code-Quality/" style="font-size: 10px;">Code Quality</a> <a href="/tags/Composables/" style="font-size: 10px;">Composables</a> <a href="/tags/Composition-API/" style="font-size: 10px;">Composition API</a> <a href="/tags/Critical-Functions/" style="font-size: 10px;">Critical Functions</a> <a href="/tags/Data-Visualization/" style="font-size: 10px;">Data Visualization</a> <a href="/tags/Debugging/" style="font-size: 10px;">Debugging</a> <a href="/tags/Dependency-Injection/" style="font-size: 10px;">Dependency Injection</a> <a href="/tags/Design-Patterns/" style="font-size: 10px;">Design Patterns</a> <a href="/tags/Developer-Experience/" style="font-size: 10px;">Developer Experience</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Domain-Knowledge/" style="font-size: 10px;">Domain Knowledge</a> <a href="/tags/ESLint-9-x/" style="font-size: 10px;">ESLint 9.x</a> <a href="/tags/Enterprise-Architecture/" style="font-size: 10px;">Enterprise Architecture</a> <a href="/tags/Error-Handling/" style="font-size: 10px;">Error Handling</a> <a href="/tags/Feature-Modules/" style="font-size: 10px;">Feature Modules</a> <a href="/tags/Flat-Config/" style="font-size: 10px;">Flat Config</a> <a href="/tags/Frontend-Architecture/" style="font-size: 10px;">Frontend Architecture</a> <a href="/tags/Frontend-Initialization/" style="font-size: 10px;">Frontend Initialization</a> <a href="/tags/Frontend-Tooling/" style="font-size: 10px;">Frontend Tooling</a> <a href="/tags/GeoJSON/" style="font-size: 10px;">GeoJSON</a> <a href="/tags/Global-Properties/" style="font-size: 10px;">Global Properties</a> <a href="/tags/HTTP-Interceptors/" style="font-size: 10px;">HTTP Interceptors</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/Hydration/" style="font-size: 13.33px;">Hydration</a> <a href="/tags/Interactive-Maps/" style="font-size: 10px;">Interactive Maps</a> <a href="/tags/Internationalization/" style="font-size: 10px;">Internationalization</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Knowledge-Management/" style="font-size: 10px;">Knowledge Management</a> <a href="/tags/Linting-Rules/" style="font-size: 10px;">Linting Rules</a> <a href="/tags/Mapbox/" style="font-size: 10px;">Mapbox</a> <a href="/tags/Mapbox-GL-JS/" style="font-size: 10px;">Mapbox GL JS</a> <a href="/tags/Migration-Guide/" style="font-size: 10px;">Migration Guide</a> <a href="/tags/Multi-language/" style="font-size: 10px;">Multi-language</a> <a href="/tags/Multi-platform/" style="font-size: 10px;">Multi-platform</a> <a href="/tags/Naming-Convention/" style="font-size: 10px;">Naming Convention</a> <a href="/tags/NullInjectorError/" style="font-size: 10px;">NullInjectorError</a> <a href="/tags/Offline-Deployment/" style="font-size: 10px;">Offline Deployment</a> <a href="/tags/Performance-Optimization/" style="font-size: 13.33px;">Performance Optimization</a> <a href="/tags/Pinia/" style="font-size: 10px;">Pinia</a> <a href="/tags/Prerender/" style="font-size: 13.33px;">Prerender</a> <a href="/tags/PrimeNG/" style="font-size: 10px;">PrimeNG</a> <a href="/tags/Production-Deployment/" style="font-size: 10px;">Production Deployment</a> <a href="/tags/Production-Issues/" style="font-size: 10px;">Production Issues</a> <a href="/tags/Project-Architecture/" style="font-size: 10px;">Project Architecture</a> <a href="/tags/Project-Setup/" style="font-size: 10px;">Project Setup</a> <a href="/tags/Prompt-Engineering/" style="font-size: 10px;">Prompt Engineering</a> <a href="/tags/RenderMode/" style="font-size: 13.33px;">RenderMode</a> <a href="/tags/Route-Guards/" style="font-size: 13.33px;">Route Guards</a> <a href="/tags/SEO/" style="font-size: 13.33px;">SEO</a> <a href="/tags/SSR/" style="font-size: 16.67px;">SSR</a> <a href="/tags/SSR-Configuration/" style="font-size: 13.33px;">SSR Configuration</a> <a href="/tags/Server-Side-Rendering/" style="font-size: 16.67px;">Server-Side Rendering</a> <a href="/tags/Service-Pattern/" style="font-size: 10px;">Service Pattern</a> <a href="/tags/Signals/" style="font-size: 10px;">Signals</a> <a href="/tags/Standalone-Components/" style="font-size: 13.33px;">Standalone Components</a> <a href="/tags/State-Management/" style="font-size: 10px;">State Management</a> <a href="/tags/Tailwind-CSS/" style="font-size: 10px;">Tailwind CSS</a> <a href="/tags/Team-Productivity/" style="font-size: 10px;">Team Productivity</a> <a href="/tags/Technical-Decision-Making/" style="font-size: 10px;">Technical Decision Making</a> <a href="/tags/Transloco/" style="font-size: 16.67px;">Transloco</a> <a href="/tags/Troubleshooting/" style="font-size: 10px;">Troubleshooting</a> <a href="/tags/TypeScript/" style="font-size: 10px;">TypeScript</a> <a href="/tags/USGS-Data/" style="font-size: 10px;">USGS Data</a> <a href="/tags/Vue-js/" style="font-size: 10px;">Vue.js</a> <a href="/tags/Web-Mapping/" style="font-size: 10px;">Web Mapping</a> <a href="/tags/i18n/" style="font-size: 10px;">i18n</a> <a href="/tags/i18n-Debug/" style="font-size: 10px;">i18n Debug</a> <a href="/tags/jsverse-transloco/" style="font-size: 10px;">jsverse/transloco</a> <a href="/tags/provideHttpClient/" style="font-size: 10px;">provideHttpClient</a> <a href="/tags/withInterceptorsFromDI/" style="font-size: 10px;">withInterceptorsFromDI</a>
     </div>
   </div>
 
@@ -2917,10 +2621,6 @@
       <ul>
         
           <li>
-            <a href="/2025/06/29/angular-enterprise-project-architecture-guide/">Angular 19 能源管理系統前端專案架構設計指南</a>
-          </li>
-        
-          <li>
             <a href="/2025/06/29/angular-enterprise-project-initialization-guide/">Angular 19 企業級前端專案初始化完整指南</a>
           </li>
         
@@ -2934,6 +2634,10 @@
         
           <li>
             <a href="/2025/06/29/angular-httpclient-modern-configuration-guide/">Angular HttpClient 現代化配置與 withInterceptorsFromDI 實戰指南</a>
+          </li>
+        
+          <li>
+            <a href="/2025/06/29/eslint-configuration-best-practices-guide/">ESLint 9.x 革命性配置與前端開發最佳化實戰指南</a>
           </li>
         
       </ul>
