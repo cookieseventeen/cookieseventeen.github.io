@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>Angular 19 企業級前端專案初始化完整指南 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="基於 Angular 19 的企業級前端專案完整初始化指南，採用 Standalone Components、Signals、功能模組化架構，整合 PrimeNG 和 Tailwind CSS 的最佳實踐方案，從零開始建立可擴展的現代化前端專案。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Angular 19 企業級前端專案初始化完整指南">
+<meta property="og:url" content="https://cookieseventeen.github.io/2025/06/29/angular-enterprise-project-initialization-guide/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="基於 Angular 19 的企業級前端專案完整初始化指南，採用 Standalone Components、Signals、功能模組化架構，整合 PrimeNG 和 Tailwind CSS 的最佳實踐方案，從零開始建立可擴展的現代化前端專案。">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-06-29T10:00:00.000Z">
+<meta property="article:modified_time" content="2025-07-10T15:13:32.674Z">
+<meta property="article:author" content="Ben Hsieh">
+<meta property="article:tag" content="Angular 19">
+<meta property="article:tag" content="Project Architecture">
+<meta property="article:tag" content="Standalone Components">
+<meta property="article:tag" content="Clean Architecture">
+<meta property="article:tag" content="Signals">
+<meta property="article:tag" content="PrimeNG">
+<meta property="article:tag" content="Tailwind CSS">
+<meta property="article:tag" content="Feature Modules">
+<meta property="article:tag" content="SSR">
+<meta property="article:tag" content="Enterprise Architecture">
+<meta property="article:tag" content="Frontend Initialization">
+<meta property="article:tag" content="Project Setup">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.2.0/css/fork-awesome.min.css">
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">任何一件事做到極致都值得敬佩</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="搜尋"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜尋"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://cookieseventeen.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-angular-enterprise-project-initialization-guide" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2025/06/29/angular-enterprise-project-initialization-guide/" class="article-date">
+  <time class="dt-published" datetime="2025-06-29T10:00:00.000Z" itemprop="datePublished">2025-06-29</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Tech-Daily/">Tech Daily</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      Angular 19 企業級前端專案初始化完整指南
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="Angular-19-企業級前端專案初始化完整指南"><a href="#Angular-19-企業級前端專案初始化完整指南" class="headerlink" title="Angular 19 企業級前端專案初始化完整指南"></a>Angular 19 企業級前端專案初始化完整指南</h1><h2 id="📋-核心懶人包"><a href="#📋-核心懶人包" class="headerlink" title="📋 核心懶人包"></a>📋 核心懶人包</h2><p>⭐ <strong>5 個關鍵價值點</strong>：</p>
+<ol>
+<li><strong>🏗️ 現代化架構設計</strong>：採用 Angular 19 最新的 Standalone Components 和 Signals 技術</li>
+<li><strong>🎯 模組化開發策略</strong>：功能模組化架構支援大型團隊協作和快速擴展</li>
+<li><strong>⚡ 效能優化配置</strong>：延遲載入、OnPush 變更檢測和 SSR 預渲染優化</li>
+<li><strong>🎨 完整 UI 解決方案</strong>：PrimeNG + Tailwind CSS 打造現代化使用者介面</li>
+<li><strong>🔧 開發工具整合</strong>：ESLint、Prettier、TypeScript 嚴格模式的完整工具鏈</li>
+</ol>
+<h2 id="🏗️-專案概述"><a href="#🏗️-專案概述" class="headerlink" title="🏗️ 專案概述"></a>🏗️ 專案概述</h2><p>本指南提供一套完整的 Angular 19 企業級前端專案初始化方案，專為大型企業應用設計。透過現代化的技術棧和成熟的架構模式，幫助開發團隊快速建立高品質、可維護、可擴展的前端專案基礎。</p>
+<h3 id="💼-適用場景"><a href="#💼-適用場景" class="headerlink" title="💼 適用場景"></a>💼 適用場景</h3><ul>
+<li><strong>企業級管理系統</strong>：CRM、ERP、人事管理等業務系統</li>
+<li><strong>數據驾驶艙應用</strong>：監控面板、分析報表、實時數據展示</li>
+<li><strong>多功能整合平台</strong>：整合多個業務模組的統一入口</li>
+<li><strong>B2B 商務應用</strong>：供應商管理、客戶服務、內部作業平台</li>
+</ul>
+<h3 id="🎯-核心技術特色"><a href="#🎯-核心技術特色" class="headerlink" title="🎯 核心技術特色"></a>🎯 核心技術特色</h3><ul>
+<li>✅ <strong>Angular 19 最新特性</strong>：Standalone Components、Signals、新版 Control Flow</li>
+<li>✅ <strong>企業級架構模式</strong>：Clean Architecture + Feature Module 分層設計</li>
+<li>✅ <strong>現代化 UI 技術棧</strong>：PrimeNG 19 + Tailwind CSS + 暗色模式</li>
+<li>✅ <strong>完整開發工具鏈</strong>：ESLint 9、Prettier、TypeScript 5.6+</li>
+<li>✅ <strong>效能優化配置</strong>：SSR、延遲載入、變更檢測優化</li>
+</ul>
+<h2 id="🏗️-技術架構圖"><a href="#🏗️-技術架構圖" class="headerlink" title="🏗️ 技術架構圖"></a>🏗️ 技術架構圖</h2><h3 id="整體架構設計"><a href="#整體架構設計" class="headerlink" title="整體架構設計"></a>整體架構設計</h3><p>本專案採用 <strong>功能模組化架構</strong> (Feature-Module Architecture)，結合 <strong>清潔架構</strong> (Clean Architecture) 原則，構建可擴展的企業級前端應用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">graph TB</span><br><span class="line">    subgraph &quot;企業級前端專案架構&quot;</span><br><span class="line">        subgraph &quot;技術棧層級&quot;</span><br><span class="line">            A1[&quot;Angular 19.2+&lt;br/&gt;Standalone Components&quot;]</span><br><span class="line">            A2[&quot;TypeScript 5.6+&lt;br/&gt;嚴格模式&quot;]</span><br><span class="line">            A3[&quot;PrimeNG 19&lt;br/&gt;UI 元件庫&quot;]</span><br><span class="line">            A4[&quot;Tailwind CSS&lt;br/&gt;樣式框架&quot;]</span><br><span class="line">        end</span><br><span class="line">        </span><br><span class="line">        subgraph &quot;架構分層&quot;</span><br><span class="line">            B1[&quot;Core Layer&lt;br/&gt;核心服務層&quot;]</span><br><span class="line">            B2[&quot;Shared Layer&lt;br/&gt;共享元件層&quot;]</span><br><span class="line">            B3[&quot;Feature Layer&lt;br/&gt;功能模組層&quot;]</span><br><span class="line">            B4[&quot;Pages Layer&lt;br/&gt;頁面整合層&quot;]</span><br><span class="line">        end</span><br><span class="line">        </span><br><span class="line">        subgraph &quot;開發工具&quot;</span><br><span class="line">            C1[&quot;ESLint 9&lt;br/&gt;程式碼檢查&quot;]</span><br><span class="line">            C2[&quot;Prettier&lt;br/&gt;格式化工具&quot;]</span><br><span class="line">            C3[&quot;Angular CLI&lt;br/&gt;構建工具&quot;]</span><br><span class="line">            C4[&quot;SSR Support&lt;br/&gt;伺服器端渲染&quot;]</span><br><span class="line">        end</span><br><span class="line">    end</span><br><span class="line">    </span><br><span class="line">    A1 --&gt; B1</span><br><span class="line">    A2 --&gt; B1</span><br><span class="line">    B1 --&gt; B2</span><br><span class="line">    B2 --&gt; B3</span><br><span class="line">    B3 --&gt; B4</span><br><span class="line">    </span><br><span class="line">    C1 --&gt; A2</span><br><span class="line">    C2 --&gt; A2</span><br><span class="line">    C3 --&gt; A1</span><br><span class="line">    C4 --&gt; A1</span><br></pre></td></tr></table></figure>
+
+<h3 id="分層責任與設計原則"><a href="#分層責任與設計原則" class="headerlink" title="分層責任與設計原則"></a>分層責任與設計原則</h3><table>
+<thead>
+<tr>
+<th>層級</th>
+<th>責任範圍</th>
+<th>設計原則</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Core Layer</strong></td>
+<td>核心業務邏輯、服務、攔截器</td>
+<td>提供基礎設施，保持單例模式</td>
+</tr>
+<tr>
+<td><strong>Shared Layer</strong></td>
+<td>可重用元件、管道、指令</td>
+<td>跨模組共享，無業務邏輯依賴</td>
+</tr>
+<tr>
+<td><strong>Feature Layer</strong></td>
+<td>功能模組、業務邏輯</td>
+<td>自包含，延遲載入，依賴隔離</td>
+</tr>
+<tr>
+<td><strong>Page Layer</strong></td>
+<td>頁面級元件</td>
+<td>整合功能模組，處理全域邏輯</td>
+</tr>
+</tbody></table>
+<h2 id="🚀-專案初始化步驟"><a href="#🚀-專案初始化步驟" class="headerlink" title="🚀 專案初始化步驟"></a>🚀 專案初始化步驟</h2><h3 id="1-環境準備"><a href="#1-環境準備" class="headerlink" title="1. 環境準備"></a>1. 環境準備</h3><p><strong>系統需求</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Node.js &gt;= 18.19.0</span><br><span class="line">npm &gt;= 10.2.0</span><br><span class="line">Angular CLI &gt;= 19.0.0</span><br></pre></td></tr></table></figure>
+
+<p><strong>安裝 Angular CLI</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g @angular/cli@latest</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-建立新專案"><a href="#2-建立新專案" class="headerlink" title="2. 建立新專案"></a>2. 建立新專案</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 建立專案（使用 Standalone Components 和 SSR）</span></span><br><span class="line">ng new your-project-name --routing --style=scss --ssr --package-manager=npm --standalone</span><br><span class="line"></span><br><span class="line"><span class="comment"># 進入專案目錄</span></span><br><span class="line"><span class="built_in">cd</span> your-project-name</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-安裝核心依賴"><a href="#3-安裝核心依賴" class="headerlink" title="3. 安裝核心依賴"></a>3. 安裝核心依賴</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安裝 UI 框架</span></span><br><span class="line">npm install primeng@19 primeicons primeflex</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安裝 Tailwind CSS</span></span><br><span class="line">npm install -D tailwindcss postcss autoprefixer</span><br><span class="line">npx tailwindcss init -p</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安裝開發工具</span></span><br><span class="line">npm install -D eslint @angular-eslint/eslint-plugin @angular-eslint/template-parser</span><br><span class="line">npm install -D prettier eslint-config-prettier eslint-plugin-prettier</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-建立專案目錄結構"><a href="#4-建立專案目錄結構" class="headerlink" title="4. 建立專案目錄結構"></a>4. 建立專案目錄結構</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 建立核心目錄結構</span></span><br><span class="line"><span class="built_in">mkdir</span> -p src/app/&#123;core,shared,features,pages&#125;</span><br><span class="line"><span class="built_in">mkdir</span> -p src/app/core/&#123;services,models,guards,interceptors,enums&#125;</span><br><span class="line"><span class="built_in">mkdir</span> -p src/app/shared/&#123;components,layouts,directives,pipes,utils&#125;</span><br><span class="line"><span class="built_in">mkdir</span> -p src/app/features/&#123;demo,user,system&#125;</span><br><span class="line"><span class="built_in">mkdir</span> -p src/app/pages/&#123;dashboard,not-found&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 建立版面配置</span></span><br><span class="line"><span class="built_in">mkdir</span> -p src/app/shared/layouts/&#123;empty-layout,sidebar-layout&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 建立文件目錄</span></span><br><span class="line"><span class="built_in">mkdir</span> docs</span><br></pre></td></tr></table></figure>
+
+<h2 id="📂-完整目錄結構"><a href="#📂-完整目錄結構" class="headerlink" title="📂 完整目錄結構"></a>📂 完整目錄結構</h2><h3 id="推薦的專案結構"><a href="#推薦的專案結構" class="headerlink" title="推薦的專案結構"></a>推薦的專案結構</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">your-project/</span><br><span class="line">├── 📁 docs/                                    # 專案文件目錄</span><br><span class="line">│   ├── 📄 project-architecture.md              # 專案架構文件</span><br><span class="line">│   ├── 📄 coding-standards.md                  # 程式碼規範文件</span><br><span class="line">│   └── 📄 deployment-guide.md                  # 部署指南文件</span><br><span class="line">│</span><br><span class="line">├── 📁 public/                                  # 靜態資源目錄</span><br><span class="line">│   └── 📄 favicon.ico                          # 網站圖示檔案</span><br><span class="line">│</span><br><span class="line">├── 📁 src/                                     # 原始程式碼根目錄</span><br><span class="line">│   ├── 📄 index.html                           # 應用程式 HTML 進入點</span><br><span class="line">│   ├── 📄 main.ts                              # 客戶端應用啟動檔案</span><br><span class="line">│   ├── 📄 main.server.ts                       # 伺服器端應用啟動檔案</span><br><span class="line">│   ├── 📄 styles.scss                          # 全域樣式檔案</span><br><span class="line">│   ├── 📄 tailwind.css                         # Tailwind CSS 進入點</span><br><span class="line">│   │</span><br><span class="line">│   ├── 📁 environments/                        # 環境配置目錄</span><br><span class="line">│   │   ├── 📄 environment.ts                   # 開發環境配置</span><br><span class="line">│   │   └── 📄 environment.prod.ts              # 生產環境配置</span><br><span class="line">│   │</span><br><span class="line">│   └── 📁 app/                                 # Angular 應用程式核心目錄</span><br><span class="line">│       ├── 📄 app.component.html               # 根元件 HTML 模板</span><br><span class="line">│       ├── 📄 app.component.scss               # 根元件樣式檔案</span><br><span class="line">│       ├── 📄 app.component.ts                 # 根元件 TypeScript 邏輯</span><br><span class="line">│       ├── 📄 app.config.ts                    # 應用程式核心配置</span><br><span class="line">│       ├── 📄 app.routes.ts                    # 根路由配置檔案</span><br><span class="line">│       │</span><br><span class="line">│       ├── 📁 core/                            # 核心層 - 應用程式基礎設施</span><br><span class="line">│       │   ├── 📁 enums/                       # 列舉定義目錄</span><br><span class="line">│       │   ├── 📁 guards/                      # 路由守衛目錄</span><br><span class="line">│       │   ├── 📁 interceptors/                # HTTP 攔截器目錄</span><br><span class="line">│       │   ├── 📁 models/                      # 資料模型與介面目錄</span><br><span class="line">│       │   └── 📁 services/                    # 核心服務目錄</span><br><span class="line">│       │</span><br><span class="line">│       ├── 📁 shared/                          # 共享層 - 可重用元件與工具</span><br><span class="line">│       │   ├── 📁 components/                  # 跨模組共享元件目錄</span><br><span class="line">│       │   ├── 📁 directives/                  # 自訂指令目錄</span><br><span class="line">│       │   ├── 📁 layouts/                     # 版面配置元件目錄</span><br><span class="line">│       │   │   ├── 📁 empty-layout/            # 空白版面配置元件</span><br><span class="line">│       │   │   └── 📁 sidebar-layout/          # 側邊欄版面配置元件</span><br><span class="line">│       │   ├── 📁 pipes/                       # 自訂管道目錄</span><br><span class="line">│       │   └── 📁 utils/                       # 工具函式目錄</span><br><span class="line">│       │</span><br><span class="line">│       ├── 📁 features/                        # 功能層 - 業務功能模組</span><br><span class="line">│       │   ├── 📁 demo/                        # 展示功能模組</span><br><span class="line">│       │   ├── 📁 user/                        # 使用者管理功能模組</span><br><span class="line">│       │   └── 📁 system/                      # 系統管理功能模組</span><br><span class="line">│       │</span><br><span class="line">│       └── 📁 pages/                           # 頁面層 - 頂層頁面元件</span><br><span class="line">│           ├── 📁 dashboard/                   # 儀表板頁面</span><br><span class="line">│           └── 📁 not-found/                   # 404 錯誤頁面</span><br><span class="line">│</span><br><span class="line">├── 📄 angular.json                             # Angular CLI 專案配置檔案</span><br><span class="line">├── 📄 eslint.config.js                         # ESLint 程式碼檢查配置</span><br><span class="line">├── 📄 package.json                             # NPM 套件管理與腳本配置</span><br><span class="line">├── 📄 tailwind.config.ts                       # Tailwind CSS 客製化配置</span><br><span class="line">├── 📄 tsconfig.app.json                        # 應用程式 TypeScript 配置</span><br><span class="line">├── 📄 tsconfig.json                            # 根層級 TypeScript 配置</span><br><span class="line">└── 📄 README.md                                # 專案說明文件</span><br></pre></td></tr></table></figure>
+
+<h2 id="⚙️-核心配置文件設置"><a href="#⚙️-核心配置文件設置" class="headerlink" title="⚙️ 核心配置文件設置"></a>⚙️ 核心配置文件設置</h2><h3 id="1-Tailwind-CSS-配置"><a href="#1-Tailwind-CSS-配置" class="headerlink" title="1. Tailwind CSS 配置"></a>1. Tailwind CSS 配置</h3><p><strong>tailwind.config.ts</strong>：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="keyword">type</span> &#123; <span class="title class_">Config</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;tailwindcss&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="attr">content</span>: [</span><br><span class="line">    <span class="string">&quot;./src/**/*.&#123;html,ts&#125;&quot;</span>,</span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">darkMode</span>: <span class="string">&#x27;class&#x27;</span>,</span><br><span class="line">  <span class="attr">theme</span>: &#123;</span><br><span class="line">    <span class="attr">extend</span>: &#123;</span><br><span class="line">      <span class="attr">colors</span>: &#123;</span><br><span class="line">        <span class="string">&#x27;primary&#x27;</span>: <span class="string">&#x27;var(--p-primary-color)&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;primary-contrast&#x27;</span>: <span class="string">&#x27;var(--p-primary-contrast-color)&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;surface&#x27;</span>: <span class="string">&#x27;var(--p-surface-ground)&#x27;</span>,</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">plugins</span>: [],</span><br><span class="line">&#125; <span class="keyword">satisfies</span> <span class="title class_">Config</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>src&#x2F;tailwind.css</strong>：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@tailwind</span> base;</span><br><span class="line"><span class="keyword">@tailwind</span> components;</span><br><span class="line"><span class="keyword">@tailwind</span> utilities;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* PrimeNG 與 Tailwind 整合 */</span></span><br><span class="line"><span class="keyword">@layer</span> base &#123;</span><br><span class="line">  <span class="selector-pseudo">:root</span> &#123;</span><br><span class="line">    <span class="attr">--p-primary-color</span>: <span class="number">#3b82f6</span>;</span><br><span class="line">    <span class="attr">--p-primary-contrast-color</span>: <span class="number">#ffffff</span>;</span><br><span class="line">    <span class="attr">--p-surface-ground</span>: <span class="number">#ffffff</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="selector-class">.dark</span> &#123;</span><br><span class="line">    <span class="attr">--p-surface-ground</span>: <span class="number">#0f1419</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-ESLint-配置"><a href="#2-ESLint-配置" class="headerlink" title="2. ESLint 配置"></a>2. ESLint 配置</h3><p><strong>eslint.config.js</strong>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tseslint <span class="keyword">from</span> <span class="string">&#x27;@typescript-eslint/eslint-plugin&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> angular <span class="keyword">from</span> <span class="string">&#x27;@angular-eslint/eslint-plugin&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> [</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">files</span>: [<span class="string">&#x27;**/*.ts&#x27;</span>],</span><br><span class="line">    <span class="attr">languageOptions</span>: &#123;</span><br><span class="line">      <span class="attr">parser</span>: <span class="string">&#x27;@typescript-eslint/parser&#x27;</span>,</span><br><span class="line">      <span class="attr">parserOptions</span>: &#123;</span><br><span class="line">        <span class="attr">project</span>: <span class="string">&#x27;./tsconfig.json&#x27;</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">plugins</span>: &#123;</span><br><span class="line">      <span class="string">&#x27;@typescript-eslint&#x27;</span>: tseslint,</span><br><span class="line">      <span class="string">&#x27;@angular-eslint&#x27;</span>: angular,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">rules</span>: &#123;</span><br><span class="line">      <span class="string">&#x27;@angular-eslint/component-class-suffix&#x27;</span>: <span class="string">&#x27;error&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;@angular-eslint/directive-class-suffix&#x27;</span>: <span class="string">&#x27;error&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;@typescript-eslint/no-explicit-any&#x27;</span>: <span class="string">&#x27;warn&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;@typescript-eslint/no-unused-vars&#x27;</span>: <span class="string">&#x27;error&#x27;</span>,</span><br><span class="line">      <span class="string">&#x27;prefer-const&#x27;</span>: <span class="string">&#x27;error&#x27;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-Angular-應用配置"><a href="#3-Angular-應用配置" class="headerlink" title="3. Angular 應用配置"></a>3. Angular 應用配置</h3><p><strong>src&#x2F;app&#x2F;app.config.ts</strong>：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">ApplicationConfig</span>, importProvidersFrom &#125; <span class="keyword">from</span> <span class="string">&#x27;@angular/core&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; provideRouter, withInMemoryScrolling &#125; <span class="keyword">from</span> <span class="string">&#x27;@angular/router&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; provideClientHydration &#125; <span class="keyword">from</span> <span class="string">&#x27;@angular/platform-browser&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; provideAnimationsAsync &#125; <span class="keyword">from</span> <span class="string">&#x27;@angular/platform-browser/animations/async&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; provideHttpClient, withFetch &#125; <span class="keyword">from</span> <span class="string">&#x27;@angular/common/http&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">PrimeNGConfig</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;primeng/api&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123; routes &#125; <span class="keyword">from</span> <span class="string">&#x27;./app.routes&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="attr">appConfig</span>: <span class="title class_">ApplicationConfig</span> = &#123;</span><br><span class="line">  <span class="attr">providers</span>: [</span><br><span class="line">    <span class="title function_">provideRouter</span>(routes, <span class="title function_">withInMemoryScrolling</span>(&#123;</span><br><span class="line">      <span class="attr">scrollPositionRestoration</span>: <span class="string">&#x27;top&#x27;</span></span><br><span class="line">    &#125;)),</span><br><span class="line">    <span class="title function_">provideClientHydration</span>(),</span><br><span class="line">    <span class="title function_">provideAnimationsAsync</span>(),</span><br><span class="line">    <span class="title function_">provideHttpClient</span>(<span class="title function_">withFetch</span>()),</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">provide</span>: <span class="title class_">PrimeNGConfig</span>,</span><br><span class="line">      <span class="attr">useFactory</span>: <span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">const</span> config = <span class="keyword">new</span> <span class="title class_">PrimeNGConfig</span>();</span><br><span class="line">        config.<span class="property">theme</span>.<span class="title function_">set</span>(&#123; <span class="attr">preset</span>: <span class="string">&#x27;Aura&#x27;</span> &#125;);</span><br><span class="line">        <span class="keyword">return</span> config;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-路由配置"><a href="#4-路由配置" class="headerlink" title="4. 路由配置"></a>4. 路由配置</h3><p><strong>src&#x2F;app&#x2F;app.routes.ts</strong>：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; <span class="title class_">Routes</span> &#125; <span class="keyword">from</span> <span class="string">&#x27;@angular/router&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="attr">routes</span>: <span class="title class_">Routes</span> = [</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">path</span>: <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">    <span class="attr">redirectTo</span>: <span class="string">&#x27;/dashboard&#x27;</span>,</span><br><span class="line">    <span class="attr">pathMatch</span>: <span class="string">&#x27;full&#x27;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">path</span>: <span class="string">&#x27;dashboard&#x27;</span>,</span><br><span class="line">    <span class="attr">loadComponent</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="string">&#x27;./pages/dashboard/dashboard.component&#x27;</span>)</span><br><span class="line">      .<span class="title function_">then</span>(<span class="function"><span class="params">m</span> =&gt;</span> m.<span class="property">DashboardComponent</span>),</span><br><span class="line">    <span class="attr">title</span>: <span class="string">&#x27;儀表板&#x27;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">path</span>: <span class="string">&#x27;demo&#x27;</span>,</span><br><span class="line">    <span class="attr">loadChildren</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="string">&#x27;./features/demo/routes&#x27;</span>)</span><br><span class="line">      .<span class="title function_">then</span>(<span class="function"><span class="params">m</span> =&gt;</span> m.<span class="property">demoRoutes</span>),</span><br><span class="line">    <span class="attr">title</span>: <span class="string">&#x27;Demo 展示中心&#x27;</span></span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">path</span>: <span class="string">&#x27;**&#x27;</span>,</span><br><span class="line">    <span class="attr">loadComponent</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="string">&#x27;./pages/not-found/not-found.component&#x27;</span>)</span><br><span class="line">      .<span class="title function_">then</span>(<span class="function"><span class="params">m</span> =&gt;</span> m.<span class="property">NotFoundComponent</span>),</span><br><span class="line">    <span class="attr">title</span>: <span class="string">&#x27;頁面未找到&#x27;</span></span><br><span class="line">  &#125;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<h2 id="💡-決策流程圖"><a href="#💡-決策流程圖" class="headerlink" title="💡 決策流程圖"></a>💡 決策流程圖</h2><h3 id="專案初始化決策指南"><a href="#專案初始化決策指南" class="headerlink" title="專案初始化決策指南"></a>專案初始化決策指南</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">    A[&quot;開始新專案&quot;] --&gt; B&#123;&quot;專案類型選擇&quot;&#125;</span><br><span class="line">    </span><br><span class="line">    B --&gt;|企業級大型應用| C[&quot;選擇 Angular 19&lt;br/&gt;Standalone Components&quot;]</span><br><span class="line">    B --&gt;|中小型專案| D[&quot;考慮其他輕量框架&quot;]</span><br><span class="line">    </span><br><span class="line">    C --&gt; E&#123;&quot;UI 設計需求&quot;&#125;</span><br><span class="line">    E --&gt;|豐富的企業級 UI| F[&quot;採用 PrimeNG + Tailwind&quot;]</span><br><span class="line">    E --&gt;|客製化設計| G[&quot;僅使用 Tailwind CSS&quot;]</span><br><span class="line">    </span><br><span class="line">    F --&gt; H[&quot;建立功能模組架構&quot;]</span><br><span class="line">    G --&gt; H</span><br><span class="line">    </span><br><span class="line">    H --&gt; I&#123;&quot;團隊規模&quot;&#125;</span><br><span class="line">    I --&gt;|大型團隊| J[&quot;嚴格分層架構&lt;br/&gt;Core/Shared/Feature/Pages&quot;]</span><br><span class="line">    I --&gt;|小型團隊| K[&quot;簡化版分層架構&quot;]</span><br><span class="line">    </span><br><span class="line">    J --&gt; L[&quot;配置開發工具鏈&quot;]</span><br><span class="line">    K --&gt; L</span><br><span class="line">    </span><br><span class="line">    L --&gt; M[&quot;ESLint + Prettier + TypeScript&quot;]</span><br><span class="line">    M --&gt; N&#123;&quot;性能需求&quot;&#125;</span><br><span class="line">    </span><br><span class="line">    N --&gt;|需要 SEO| O[&quot;啟用 SSR 配置&quot;]</span><br><span class="line">    N --&gt;|SPA 即可| P[&quot;客戶端渲染&quot;]</span><br><span class="line">    </span><br><span class="line">    O --&gt; Q[&quot;專案初始化完成&quot;]</span><br><span class="line">    P --&gt; Q</span><br><span class="line">    </span><br><span class="line">    Q --&gt; R[&quot;開始功能開發&quot;]</span><br></pre></td></tr></table></figure>
+
+<h3 id="技術選型決策要點"><a href="#技術選型決策要點" class="headerlink" title="技術選型決策要點"></a>技術選型決策要點</h3><table>
+<thead>
+<tr>
+<th>決策點</th>
+<th>選擇標準</th>
+<th>推薦方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>前端框架</strong></td>
+<td>企業級、大型專案、長期維護</td>
+<td>Angular 19 + Standalone Components</td>
+</tr>
+<tr>
+<td><strong>UI 框架</strong></td>
+<td>豐富元件、一致性設計、快速開發</td>
+<td>PrimeNG + Tailwind CSS</td>
+</tr>
+<tr>
+<td><strong>狀態管理</strong></td>
+<td>中小型專案、簡單狀態</td>
+<td>Angular Signals</td>
+</tr>
+<tr>
+<td><strong>狀態管理</strong></td>
+<td>複雜狀態、大型應用</td>
+<td>NgRx Store</td>
+</tr>
+<tr>
+<td><strong>樣式策略</strong></td>
+<td>快速開發、響應式設計</td>
+<td>Tailwind CSS + SCSS</td>
+</tr>
+<tr>
+<td><strong>代碼品質</strong></td>
+<td>團隊協作、一致性</td>
+<td>ESLint + Prettier + TypeScript</td>
+</tr>
+</tbody></table>
+<h2 id="🎯-核心洞察總結"><a href="#🎯-核心洞察總結" class="headerlink" title="🎯 核心洞察總結"></a>🎯 核心洞察總結</h2><h3 id="🏗️-架構設計洞察"><a href="#🏗️-架構設計洞察" class="headerlink" title="🏗️ 架構設計洞察"></a>🏗️ 架構設計洞察</h3><ol>
+<li><p><strong>分層架構的價值</strong></p>
+<ul>
+<li><strong>職責清晰</strong>：每層都有明確的責任範圍，避免代碼混亂</li>
+<li><strong>依賴隔離</strong>：功能模組間相互獨立，便於並行開發</li>
+<li><strong>易於測試</strong>：清晰的分層便於單元測試和整合測試</li>
+</ul>
+</li>
+<li><p><strong>Standalone Components 優勢</strong></p>
+<ul>
+<li><strong>減少複雜度</strong>：無需管理 NgModule 的繁瑣依賴關係</li>
+<li><strong>Tree-shaking 友好</strong>：更好的打包優化，減少最終包大小</li>
+<li><strong>組件自包含</strong>：每個組件明確聲明自己的依賴</li>
+</ul>
+</li>
+<li><p><strong>功能模組化策略</strong></p>
+<ul>
+<li><strong>延遲載入</strong>：首屏載入速度提升 40-60%</li>
+<li><strong>開發效率</strong>：不同功能模組可並行開發，提升團隊協作效率</li>
+<li><strong>維護性</strong>：功能邊界清晰，bug 定位和修復更容易</li>
+</ul>
+</li>
+</ol>
+<h3 id="⚡-效能優化策略"><a href="#⚡-效能優化策略" class="headerlink" title="⚡ 效能優化策略"></a>⚡ 效能優化策略</h3><ol>
+<li><p><strong>載入性能優化</strong></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 延遲載入實現</span></span><br><span class="line"><span class="keyword">const</span> <span class="attr">routes</span>: <span class="title class_">Routes</span> = [</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">path</span>: <span class="string">&#x27;feature&#x27;</span>,</span><br><span class="line">    <span class="attr">loadComponent</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="string">&#x27;./feature.component&#x27;</span>),</span><br><span class="line">    <span class="attr">loadChildren</span>: <span class="function">() =&gt;</span> <span class="keyword">import</span>(<span class="string">&#x27;./feature/routes&#x27;</span>)</span><br><span class="line">  &#125;</span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>變更檢測優化</strong></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span>(&#123;</span><br><span class="line">  <span class="attr">changeDetection</span>: <span class="title class_">ChangeDetectionStrategy</span>.<span class="property">OnPush</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">OptimizedComponent</span> &#123;</span><br><span class="line">  <span class="comment">// 使用 Signals 優化響應式更新</span></span><br><span class="line">  data = signal&lt;<span class="title class_">DataType</span>[]&gt;([]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>Signals 狀態管理</strong></p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 取代傳統的 Subject + Observable 模式</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">DataService</span> &#123;</span><br><span class="line">  <span class="keyword">private</span> _data = signal&lt;<span class="title class_">Data</span>[]&gt;([]);</span><br><span class="line">  data = <span class="variable language_">this</span>.<span class="property">_data</span>.<span class="title function_">asReadonly</span>();</span><br><span class="line">  </span><br><span class="line">  <span class="title function_">updateData</span>(<span class="params"><span class="attr">newData</span>: <span class="title class_">Data</span>[]</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">_data</span>.<span class="title function_">set</span>(newData);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="🔧-開發體驗優化"><a href="#🔧-開發體驗優化" class="headerlink" title="🔧 開發體驗優化"></a>🔧 開發體驗優化</h3><ol>
+<li><p><strong>類型安全保證</strong></p>
+<ul>
+<li>TypeScript 嚴格模式確保編譯時錯誤檢查</li>
+<li>介面定義明確的 API 契約</li>
+<li>泛型使用提升代碼復用性</li>
+</ul>
+</li>
+<li><p><strong>代碼品質控制</strong></p>
+<ul>
+<li>ESLint 自動檢查代碼規範問題</li>
+<li>Prettier 統一代碼格式</li>
+<li>Git hooks 確保提交品質</li>
+</ul>
+</li>
+</ol>
+<h2 id="🚀-進階應用策略"><a href="#🚀-進階應用策略" class="headerlink" title="🚀 進階應用策略"></a>🚀 進階應用策略</h2><h3 id="1-微前端架構擴展"><a href="#1-微前端架構擴展" class="headerlink" title="1. 微前端架構擴展"></a>1. 微前端架構擴展</h3><p>當專案需要擴展為微前端架構時，本初始化方案提供良好的基礎：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Module Federation 配置範例</span></span><br><span class="line"><span class="keyword">const</span> <span class="title class_">ModuleFederationPlugin</span> = <span class="built_in">require</span>(<span class="string">&#x27;@module-federation/webpack&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">  <span class="attr">plugins</span>: [</span><br><span class="line">    <span class="keyword">new</span> <span class="title class_">ModuleFederationPlugin</span>(&#123;</span><br><span class="line">      <span class="attr">name</span>: <span class="string">&#x27;shell&#x27;</span>,</span><br><span class="line">      <span class="attr">remotes</span>: &#123;</span><br><span class="line">        <span class="attr">userModule</span>: <span class="string">&#x27;userModule@http://localhost:4201/remoteEntry.js&#x27;</span>,</span><br><span class="line">        <span class="attr">systemModule</span>: <span class="string">&#x27;systemModule@http://localhost:4202/remoteEntry.js&#x27;</span>,</span><br><span class="line">      &#125;,</span><br><span class="line">    &#125;),</span><br><span class="line">  ],</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-國際化支援策略"><a href="#2-國際化支援策略" class="headerlink" title="2. 國際化支援策略"></a>2. 國際化支援策略</h3><p><strong>安裝 Angular i18n</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ng add @angular/localize</span><br></pre></td></tr></table></figure>
+
+<p><strong>多語言配置</strong>：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在 app.config.ts 中配置</span></span><br><span class="line"><span class="keyword">import</span> &#123; provideAnimationsAsync &#125; <span class="keyword">from</span> <span class="string">&#x27;@angular/platform-browser/animations/async&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; registerLocaleData &#125; <span class="keyword">from</span> <span class="string">&#x27;@angular/common&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> localeZhTw <span class="keyword">from</span> <span class="string">&#x27;@angular/common/locales/zh-Hant-TW&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="title function_">registerLocaleData</span>(localeZhTw);</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="attr">appConfig</span>: <span class="title class_">ApplicationConfig</span> = &#123;</span><br><span class="line">  <span class="attr">providers</span>: [</span><br><span class="line">    &#123; <span class="attr">provide</span>: <span class="variable constant_">LOCALE_ID</span>, <span class="attr">useValue</span>: <span class="string">&#x27;zh-TW&#x27;</span> &#125;,</span><br><span class="line">    <span class="comment">// 其他配置...</span></span><br><span class="line">  ]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-PWA-功能集成"><a href="#3-PWA-功能集成" class="headerlink" title="3. PWA 功能集成"></a>3. PWA 功能集成</h3><p><strong>安裝 PWA 支援</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ng add @angular/pwa</span><br></pre></td></tr></table></figure>
+
+<p><strong>Service Worker 自訂</strong>：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在 app.config.ts 中</span></span><br><span class="line"><span class="keyword">import</span> &#123; isDevMode &#125; <span class="keyword">from</span> <span class="string">&#x27;@angular/core&#x27;</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; provideServiceWorker &#125; <span class="keyword">from</span> <span class="string">&#x27;@angular/service-worker&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> <span class="attr">appConfig</span>: <span class="title class_">ApplicationConfig</span> = &#123;</span><br><span class="line">  <span class="attr">providers</span>: [</span><br><span class="line">    <span class="title function_">provideServiceWorker</span>(<span class="string">&#x27;ngsw-worker.js&#x27;</span>, &#123;</span><br><span class="line">      <span class="attr">enabled</span>: !<span class="title function_">isDevMode</span>(),</span><br><span class="line">      <span class="attr">registrationStrategy</span>: <span class="string">&#x27;registerWhenStable:30000&#x27;</span></span><br><span class="line">    &#125;)</span><br><span class="line">  ]</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-測試策略完善"><a href="#4-測試策略完善" class="headerlink" title="4. 測試策略完善"></a>4. 測試策略完善</h3><p><strong>單元測試配置</strong>：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 功能模組測試範例</span></span><br><span class="line"><span class="title function_">describe</span>(<span class="string">&#x27;FeatureComponent&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> <span class="attr">component</span>: <span class="title class_">FeatureComponent</span>;</span><br><span class="line">  <span class="keyword">let</span> <span class="attr">fixture</span>: <span class="title class_">ComponentFixture</span>&lt;<span class="title class_">FeatureComponent</span>&gt;;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">beforeEach</span>(<span class="title function_">async</span> () =&gt; &#123;</span><br><span class="line">    <span class="keyword">await</span> <span class="title class_">TestBed</span>.<span class="title function_">configureTestingModule</span>(&#123;</span><br><span class="line">      <span class="attr">imports</span>: [<span class="title class_">FeatureComponent</span>], <span class="comment">// Standalone Component 測試</span></span><br><span class="line">    &#125;).<span class="title function_">compileComponents</span>();</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="title function_">it</span>(<span class="string">&#x27;should create&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">expect</span>(component).<span class="title function_">toBeTruthy</span>();</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><strong>E2E 測試整合</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安裝 Cypress 進行 E2E 測試</span></span><br><span class="line">npm install --save-dev cypress @cypress/schematic</span><br><span class="line">ng add @cypress/schematic</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-CI-CD-管道設置"><a href="#5-CI-CD-管道設置" class="headerlink" title="5. CI&#x2F;CD 管道設置"></a>5. CI&#x2F;CD 管道設置</h3><p><strong>GitHub Actions 範例</strong>：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">CI/CD</span> <span class="string">Pipeline</span></span><br><span class="line"></span><br><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">push:</span></span><br><span class="line">    <span class="attr">branches:</span> [ <span class="string">main</span>, <span class="string">develop</span> ]</span><br><span class="line">  <span class="attr">pull_request:</span></span><br><span class="line">    <span class="attr">branches:</span> [ <span class="string">main</span> ]</span><br><span class="line"></span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">test:</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/checkout@v4</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/setup-node@v4</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">node-version:</span> <span class="string">&#x27;18&#x27;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span> <span class="string">npm</span> <span class="string">ci</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span> <span class="string">npm</span> <span class="string">run</span> <span class="string">lint</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span> <span class="string">npm</span> <span class="string">run</span> <span class="string">test:ci</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">run:</span> <span class="string">npm</span> <span class="string">run</span> <span class="string">build</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="📞-技術支援與參考資源"><a href="#📞-技術支援與參考資源" class="headerlink" title="📞 技術支援與參考資源"></a>📞 技術支援與參考資源</h2><h3 id="🛠️-實用工具推薦"><a href="#🛠️-實用工具推薦" class="headerlink" title="🛠️ 實用工具推薦"></a>🛠️ 實用工具推薦</h3><table>
+<thead>
+<tr>
+<th>工具分類</th>
+<th>推薦工具</th>
+<th>用途說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>開發工具</strong></td>
+<td>Visual Studio Code + Angular Language Service</td>
+<td>最佳的 Angular 開發體驗</td>
+</tr>
+<tr>
+<td><strong>調試工具</strong></td>
+<td>Angular DevTools</td>
+<td>組件檢查、效能分析</td>
+</tr>
+<tr>
+<td><strong>API 開發</strong></td>
+<td>JSON Server, MockAPI</td>
+<td>快速建立模擬 API</td>
+</tr>
+<tr>
+<td><strong>圖示資源</strong></td>
+<td>PrimeIcons, Heroicons</td>
+<td>豐富的圖示庫</td>
+</tr>
+<tr>
+<td><strong>狀態管理</strong></td>
+<td>NgRx DevTools</td>
+<td>複雜狀態調試</td>
+</tr>
+</tbody></table>
+<h3 id="📚-官方文件資源"><a href="#📚-官方文件資源" class="headerlink" title="📚 官方文件資源"></a>📚 官方文件資源</h3><ul>
+<li><strong>Angular 官方文件</strong>：<a target="_blank" rel="noopener" href="https://angular.io/docs">https://angular.io/docs</a></li>
+<li><strong>PrimeNG 元件庫</strong>：<a target="_blank" rel="noopener" href="https://primeng.org/">https://primeng.org/</a></li>
+<li><strong>Tailwind CSS 文件</strong>：<a target="_blank" rel="noopener" href="https://tailwindcss.com/docs">https://tailwindcss.com/docs</a></li>
+<li><strong>TypeScript 手冊</strong>：<a target="_blank" rel="noopener" href="https://www.typescriptlang.org/docs/">https://www.typescriptlang.org/docs/</a></li>
+</ul>
+<h3 id="🌐-社群資源"><a href="#🌐-社群資源" class="headerlink" title="🌐 社群資源"></a>🌐 社群資源</h3><ul>
+<li><strong>Angular 台灣社群</strong>：<a target="_blank" rel="noopener" href="https://www.facebook.com/groups/angular.tw">https://www.facebook.com/groups/angular.tw</a></li>
+<li><strong>Angular Blog</strong>：<a target="_blank" rel="noopener" href="https://blog.angular.io/">https://blog.angular.io/</a></li>
+<li><strong>NgConf 影片資源</strong>：<a target="_blank" rel="noopener" href="https://www.youtube.com/c/ngconf">https://www.youtube.com/c/ngconf</a></li>
+</ul>
+<h3 id="📖-延伸閱讀建議"><a href="#📖-延伸閱讀建議" class="headerlink" title="📖 延伸閱讀建議"></a>📖 延伸閱讀建議</h3><ol>
+<li><strong>《Angular 企業級應用開發》</strong> - 深入學習企業級開發模式</li>
+<li><strong>《Clean Architecture》</strong> - Robert C. Martin 的架構設計思想</li>
+<li><strong>《Refactoring》</strong> - Martin Fowler 的重構技巧</li>
+<li><strong>《You Don’t Know JS》</strong> - 深入理解 JavaScript 核心概念</li>
+</ol>
+<h3 id="🔧-問題排除指南"><a href="#🔧-問題排除指南" class="headerlink" title="🔧 問題排除指南"></a>🔧 問題排除指南</h3><p><strong>常見初始化問題</strong>：</p>
+<ol>
+<li><p><strong>Node.js 版本不相容</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用 nvm 管理 Node.js 版本</span></span><br><span class="line">nvm install 18.19.0</span><br><span class="line">nvm use 18.19.0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>套件安裝失敗</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 清除 npm 快取</span></span><br><span class="line">npm cache clean --force</span><br><span class="line"><span class="built_in">rm</span> -rf node_modules package-lock.json</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>ESLint 配置衝突</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 重新安裝 ESLint 相關套件</span></span><br><span class="line">npm uninstall eslint @angular-eslint/*</span><br><span class="line">npm install -D eslint@latest @angular-eslint/eslint-plugin@latest</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="🔗-相關文章連結"><a href="#🔗-相關文章連結" class="headerlink" title="🔗 相關文章連結"></a>🔗 相關文章連結</h2><p>由於這是專案初始化指南，建議後續閱讀以下主題的深入文章：</p>
+<h3 id="📚-系列文章建議"><a href="#📚-系列文章建議" class="headerlink" title="📚 系列文章建議"></a>📚 系列文章建議</h3><ul>
+<li><strong>後續文章</strong>：Angular 19 功能模組開發實戰指南 - 基於本架構的功能開發實作</li>
+<li><strong>後續文章</strong>：PrimeNG + Tailwind CSS 設計系統建立指南 - UI 設計系統的完整實作</li>
+</ul>
+<h3 id="🎯-相關主題"><a href="#🎯-相關主題" class="headerlink" title="🎯 相關主題"></a>🎯 相關主題</h3><ul>
+<li><strong>並行文章</strong>：Vue 3 企業級專案架構指南 - 不同框架的架構對比</li>
+<li><strong>對比文章</strong>：React 18 現代化開發架構 - 主流前端框架比較分析</li>
+</ul>
+<h3 id="📋-延伸閱讀"><a href="#📋-延伸閱讀" class="headerlink" title="📋 延伸閱讀"></a>📋 延伸閱讀</h3><ul>
+<li><strong>深入研究</strong>：Angular 效能優化進階技巧 - 更深入的效能調優策略</li>
+<li><strong>實踐案例</strong>：企業級前端專案 CI&#x2F;CD 實戰 - 完整的部署管道建立</li>
+</ul>
+<hr>
+<p><strong>作者資訊</strong>：<br><em>本文由前端架構專家撰寫，基於多年企業級 Angular 專案開發經驗整理而成。</em></p>
+<p><strong>版本資訊</strong>：<br><em>版本 v1.0 | 發布日期：2025年6月29日 | 基於 Angular 19.2.2</em> </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://cookieseventeen.github.io/2025/06/29/angular-enterprise-project-initialization-guide/" data-id="cmcxj4kd90000v68oe60can5m" data-title="Angular 19 企業級前端專案初始化完整指南" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Angular-19/" rel="tag">Angular 19</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Clean-Architecture/" rel="tag">Clean Architecture</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Enterprise-Architecture/" rel="tag">Enterprise Architecture</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Feature-Modules/" rel="tag">Feature Modules</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Frontend-Initialization/" rel="tag">Frontend Initialization</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PrimeNG/" rel="tag">PrimeNG</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Project-Architecture/" rel="tag">Project Architecture</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Project-Setup/" rel="tag">Project Setup</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SSR/" rel="tag">SSR</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Signals/" rel="tag">Signals</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Standalone-Components/" rel="tag">Standalone Components</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tailwind-CSS/" rel="tag">Tailwind CSS</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2025/06/29/angular-enterprise-project-architecture-guide/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Angular 19 能源管理系統前端專案架構設計指南</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分類</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Tech-Daily/">Tech Daily</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI-Assistant/" rel="tag">AI Assistant</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AI-Collaboration/" rel="tag">AI Collaboration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ARM/" rel="tag">ARM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular/" rel="tag">Angular</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular-15/" rel="tag">Angular 15+</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular-19/" rel="tag">Angular 19</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular-Configuration/" rel="tag">Angular Configuration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular-SSR/" rel="tag">Angular SSR</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Angular-Universal/" rel="tag">Angular Universal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Best-Practices/" rel="tag">Best Practices</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Buildx/" rel="tag">Buildx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Business-Context/" rel="tag">Business Context</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Business-Strategy/" rel="tag">Business Strategy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CI-CD/" rel="tag">CI&#x2F;CD</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Canvas/" rel="tag">Canvas</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Clean-Architecture/" rel="tag">Clean Architecture</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Clustering/" rel="tag">Clustering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Code-Quality/" rel="tag">Code Quality</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Composables/" rel="tag">Composables</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Composition-API/" rel="tag">Composition API</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Critical-Functions/" rel="tag">Critical Functions</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Data-Visualization/" rel="tag">Data Visualization</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Debugging/" rel="tag">Debugging</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Dependency-Injection/" rel="tag">Dependency Injection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Design-Patterns/" rel="tag">Design Patterns</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Developer-Experience/" rel="tag">Developer Experience</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Domain-Knowledge/" rel="tag">Domain Knowledge</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ESLint-9-x/" rel="tag">ESLint 9.x</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Enterprise-Architecture/" rel="tag">Enterprise Architecture</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Error-Handling/" rel="tag">Error Handling</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Feature-Modules/" rel="tag">Feature Modules</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Flat-Config/" rel="tag">Flat Config</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Frontend-Architecture/" rel="tag">Frontend Architecture</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Frontend-Initialization/" rel="tag">Frontend Initialization</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Frontend-Tooling/" rel="tag">Frontend Tooling</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GeoJSON/" rel="tag">GeoJSON</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Global-Properties/" rel="tag">Global Properties</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTTP-Interceptors/" rel="tag">HTTP Interceptors</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HttpClient/" rel="tag">HttpClient</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hydration/" rel="tag">Hydration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Interactive-Maps/" rel="tag">Interactive Maps</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/" rel="tag">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Knowledge-Management/" rel="tag">Knowledge Management</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linting-Rules/" rel="tag">Linting Rules</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mapbox/" rel="tag">Mapbox</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mapbox-GL-JS/" rel="tag">Mapbox GL JS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Migration-Guide/" rel="tag">Migration Guide</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Multi-platform/" rel="tag">Multi-platform</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Naming-Convention/" rel="tag">Naming Convention</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NullInjectorError/" rel="tag">NullInjectorError</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Offline-Deployment/" rel="tag">Offline Deployment</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Performance-Optimization/" rel="tag">Performance Optimization</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pinia/" rel="tag">Pinia</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Prerender/" rel="tag">Prerender</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PrimeNG/" rel="tag">PrimeNG</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Production-Issues/" rel="tag">Production Issues</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Project-Architecture/" rel="tag">Project Architecture</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Project-Setup/" rel="tag">Project Setup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Prompt-Engineering/" rel="tag">Prompt Engineering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RenderMode/" rel="tag">RenderMode</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Route-Guards/" rel="tag">Route Guards</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SEO/" rel="tag">SEO</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSR/" rel="tag">SSR</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SSR-Configuration/" rel="tag">SSR Configuration</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Server-Side-Rendering/" rel="tag">Server-Side Rendering</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Service-Pattern/" rel="tag">Service Pattern</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Signals/" rel="tag">Signals</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Standalone-Components/" rel="tag">Standalone Components</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/State-Management/" rel="tag">State Management</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tailwind-CSS/" rel="tag">Tailwind CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Team-Productivity/" rel="tag">Team Productivity</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Technical-Decision-Making/" rel="tag">Technical Decision Making</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Transloco/" rel="tag">Transloco</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Troubleshooting/" rel="tag">Troubleshooting</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TypeScript/" rel="tag">TypeScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/USGS-Data/" rel="tag">USGS Data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue-js/" rel="tag">Vue.js</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web-Mapping/" rel="tag">Web Mapping</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/i18n-Debug/" rel="tag">i18n Debug</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/provideHttpClient/" rel="tag">provideHttpClient</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/withInterceptorsFromDI/" rel="tag">withInterceptorsFromDI</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">標籤雲</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/AI-Assistant/" style="font-size: 10px;">AI Assistant</a> <a href="/tags/AI-Collaboration/" style="font-size: 10px;">AI Collaboration</a> <a href="/tags/ARM/" style="font-size: 10px;">ARM</a> <a href="/tags/Angular/" style="font-size: 10px;">Angular</a> <a href="/tags/Angular-15/" style="font-size: 10px;">Angular 15+</a> <a href="/tags/Angular-19/" style="font-size: 20px;">Angular 19</a> <a href="/tags/Angular-Configuration/" style="font-size: 10px;">Angular Configuration</a> <a href="/tags/Angular-SSR/" style="font-size: 10px;">Angular SSR</a> <a href="/tags/Angular-Universal/" style="font-size: 16.67px;">Angular Universal</a> <a href="/tags/Best-Practices/" style="font-size: 10px;">Best Practices</a> <a href="/tags/Buildx/" style="font-size: 10px;">Buildx</a> <a href="/tags/Business-Context/" style="font-size: 10px;">Business Context</a> <a href="/tags/Business-Strategy/" style="font-size: 10px;">Business Strategy</a> <a href="/tags/CI-CD/" style="font-size: 10px;">CI/CD</a> <a href="/tags/Canvas/" style="font-size: 10px;">Canvas</a> <a href="/tags/Clean-Architecture/" style="font-size: 13.33px;">Clean Architecture</a> <a href="/tags/Clustering/" style="font-size: 10px;">Clustering</a> <a href="/tags/Code-Quality/" style="font-size: 10px;">Code Quality</a> <a href="/tags/Composables/" style="font-size: 10px;">Composables</a> <a href="/tags/Composition-API/" style="font-size: 10px;">Composition API</a> <a href="/tags/Critical-Functions/" style="font-size: 10px;">Critical Functions</a> <a href="/tags/Data-Visualization/" style="font-size: 10px;">Data Visualization</a> <a href="/tags/Debugging/" style="font-size: 10px;">Debugging</a> <a href="/tags/Dependency-Injection/" style="font-size: 10px;">Dependency Injection</a> <a href="/tags/Design-Patterns/" style="font-size: 10px;">Design Patterns</a> <a href="/tags/Developer-Experience/" style="font-size: 10px;">Developer Experience</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/Domain-Knowledge/" style="font-size: 10px;">Domain Knowledge</a> <a href="/tags/ESLint-9-x/" style="font-size: 10px;">ESLint 9.x</a> <a href="/tags/Enterprise-Architecture/" style="font-size: 13.33px;">Enterprise Architecture</a> <a href="/tags/Error-Handling/" style="font-size: 10px;">Error Handling</a> <a href="/tags/Feature-Modules/" style="font-size: 13.33px;">Feature Modules</a> <a href="/tags/Flat-Config/" style="font-size: 10px;">Flat Config</a> <a href="/tags/Frontend-Architecture/" style="font-size: 10px;">Frontend Architecture</a> <a href="/tags/Frontend-Initialization/" style="font-size: 10px;">Frontend Initialization</a> <a href="/tags/Frontend-Tooling/" style="font-size: 10px;">Frontend Tooling</a> <a href="/tags/GeoJSON/" style="font-size: 10px;">GeoJSON</a> <a href="/tags/Global-Properties/" style="font-size: 10px;">Global Properties</a> <a href="/tags/HTTP-Interceptors/" style="font-size: 10px;">HTTP Interceptors</a> <a href="/tags/HttpClient/" style="font-size: 10px;">HttpClient</a> <a href="/tags/Hydration/" style="font-size: 13.33px;">Hydration</a> <a href="/tags/Interactive-Maps/" style="font-size: 10px;">Interactive Maps</a> <a href="/tags/JavaScript/" style="font-size: 10px;">JavaScript</a> <a href="/tags/Knowledge-Management/" style="font-size: 10px;">Knowledge Management</a> <a href="/tags/Linting-Rules/" style="font-size: 10px;">Linting Rules</a> <a href="/tags/Mapbox/" style="font-size: 10px;">Mapbox</a> <a href="/tags/Mapbox-GL-JS/" style="font-size: 10px;">Mapbox GL JS</a> <a href="/tags/Migration-Guide/" style="font-size: 10px;">Migration Guide</a> <a href="/tags/Multi-platform/" style="font-size: 10px;">Multi-platform</a> <a href="/tags/Naming-Convention/" style="font-size: 10px;">Naming Convention</a> <a href="/tags/NullInjectorError/" style="font-size: 10px;">NullInjectorError</a> <a href="/tags/Offline-Deployment/" style="font-size: 10px;">Offline Deployment</a> <a href="/tags/Performance-Optimization/" style="font-size: 13.33px;">Performance Optimization</a> <a href="/tags/Pinia/" style="font-size: 10px;">Pinia</a> <a href="/tags/Prerender/" style="font-size: 13.33px;">Prerender</a> <a href="/tags/PrimeNG/" style="font-size: 13.33px;">PrimeNG</a> <a href="/tags/Production-Issues/" style="font-size: 10px;">Production Issues</a> <a href="/tags/Project-Architecture/" style="font-size: 13.33px;">Project Architecture</a> <a href="/tags/Project-Setup/" style="font-size: 10px;">Project Setup</a> <a href="/tags/Prompt-Engineering/" style="font-size: 10px;">Prompt Engineering</a> <a href="/tags/RenderMode/" style="font-size: 13.33px;">RenderMode</a> <a href="/tags/Route-Guards/" style="font-size: 13.33px;">Route Guards</a> <a href="/tags/SEO/" style="font-size: 13.33px;">SEO</a> <a href="/tags/SSR/" style="font-size: 20px;">SSR</a> <a href="/tags/SSR-Configuration/" style="font-size: 10px;">SSR Configuration</a> <a href="/tags/Server-Side-Rendering/" style="font-size: 13.33px;">Server-Side Rendering</a> <a href="/tags/Service-Pattern/" style="font-size: 10px;">Service Pattern</a> <a href="/tags/Signals/" style="font-size: 13.33px;">Signals</a> <a href="/tags/Standalone-Components/" style="font-size: 16.67px;">Standalone Components</a> <a href="/tags/State-Management/" style="font-size: 10px;">State Management</a> <a href="/tags/Tailwind-CSS/" style="font-size: 13.33px;">Tailwind CSS</a> <a href="/tags/Team-Productivity/" style="font-size: 10px;">Team Productivity</a> <a href="/tags/Technical-Decision-Making/" style="font-size: 10px;">Technical Decision Making</a> <a href="/tags/Transloco/" style="font-size: 13.33px;">Transloco</a> <a href="/tags/Troubleshooting/" style="font-size: 10px;">Troubleshooting</a> <a href="/tags/TypeScript/" style="font-size: 10px;">TypeScript</a> <a href="/tags/USGS-Data/" style="font-size: 10px;">USGS Data</a> <a href="/tags/Vue-js/" style="font-size: 10px;">Vue.js</a> <a href="/tags/Web-Mapping/" style="font-size: 10px;">Web Mapping</a> <a href="/tags/i18n-Debug/" style="font-size: 10px;">i18n Debug</a> <a href="/tags/provideHttpClient/" style="font-size: 10px;">provideHttpClient</a> <a href="/tags/withInterceptorsFromDI/" style="font-size: 10px;">withInterceptorsFromDI</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">彙整</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/06/">六月 2025</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/06/29/angular-enterprise-project-initialization-guide/">Angular 19 企業級前端專案初始化完整指南</a>
+          </li>
+        
+          <li>
+            <a href="/2025/06/29/angular-enterprise-project-architecture-guide/">Angular 19 能源管理系統前端專案架構設計指南</a>
+          </li>
+        
+          <li>
+            <a href="/2025/06/29/angular-ssr-transloco-troubleshooting-guide/">Angular SSR + Transloco 故障排除與除錯完整指南</a>
+          </li>
+        
+          <li>
+            <a href="/2025/06/29/angular-httpclient-modern-configuration-guide/">Angular HttpClient 現代化配置與 withInterceptorsFromDI 實戰指南</a>
+          </li>
+        
+          <li>
+            <a href="/2025/06/29/eslint-configuration-best-practices-guide/">ESLint 9.x 革命性配置與前端開發最佳化實戰指南</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2025 Ben Hsieh<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
