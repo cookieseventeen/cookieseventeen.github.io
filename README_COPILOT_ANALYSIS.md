@@ -61,6 +61,7 @@ All technical skills demonstrated in this project are highly compatible with Git
 
 - 📖 [完整中文分析 / Full Chinese Analysis](./COPILOT_COMPATIBILITY_ANALYSIS.md)
 - 📖 [完整英文分析 / Full English Analysis](./COPILOT_COMPATIBILITY_ANALYSIS_EN.md)
+- 🚀 [快速參考指南 / Quick Reference Guide](./COPILOT_QUICK_REFERENCE.md)
 - 🌐 [GitHub Copilot 官方文件 / Official Docs](https://docs.github.com/copilot)
 - 💡 [Copilot 最佳實踐 / Best Practices](https://github.blog/2023-06-20-how-to-write-better-prompts-for-github-copilot/)
 

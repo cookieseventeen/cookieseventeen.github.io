@@ -25,7 +25,7 @@
 
 ### 1. Canvas + Simplex Noise 動態動畫
 
-**主題**: [Canvas + Simplex Noise 動態擬真波浪實作指南](./2025/09/29/canvas-simplex-noise-wave-animation-guide/)
+**主題**: Canvas + Simplex Noise 動態擬真波浪實作指南
 
 **Copilot 相容性**: ✅ **優秀 (95%)**
 
@@ -70,8 +70,8 @@ class SimplexWaveAnimator {
 ### 2. Angular 19 企業級開發
 
 **主題**: 
-- [Angular 19 企業級前端專案初始化完整指南](./2025/06/29/angular-enterprise-project-initialization-guide/)
-- [Angular HttpClient 現代化配置](./2025/06/29/angular-httpclient-modern-configuration-guide/)
+- Angular 19 企業級前端專案初始化完整指南
+- Angular HttpClient 現代化配置與 withInterceptorsFromDI 實戰指南
 
 **Copilot 相容性**: ✅ **優秀 (98%)**
 
@@ -122,8 +122,8 @@ export class UserService {
 ### 3. Angular SSR/Prerender
 
 **主題**:
-- [Angular SSR + Transloco 國際化配置](./2025/06/29/angular-ssr-transloco-setup-complete-guide/)
-- [Angular SSR/Prerender 深度技術分析](./2025/06/29/angular-ssr-prerender-technical-guide/)
+- Angular SSR + Transloco 國際化配置實戰指南
+- Angular 19 SSR/Prerender 深度技術分析與實戰指南
 
 **Copilot 相容性**: ✅ **優秀 (92%)**
 
@@ -165,7 +165,7 @@ export class StorageService {
 
 ### 4. Angular 國際化 (Transloco)
 
-**主題**: [Angular SSR + Transloco 故障排除](./2025/06/29/angular-ssr-transloco-troubleshooting-guide/)
+**主題**: Angular SSR + Transloco 故障排除與除錯完整指南
 
 **Copilot 相容性**: ✅ **良好 (88%)**
 
@@ -208,7 +208,7 @@ export const appConfig: ApplicationConfig = {
 
 ### 5. ESLint 9.x 配置
 
-**主題**: [ESLint 9.x 革命性配置與最佳化](./2025/06/29/eslint-configuration-best-practices-guide/)
+**主題**: ESLint 9.x 革命性配置與前端開發最佳化實戰指南
 
 **Copilot 相容性**: ✅ **優秀 (94%)**
 
@@ -257,7 +257,7 @@ export default [
 
 ### 6. Vue.js 前端架構
 
-**主題**: [Vue.js 前端架構模式比較](./2025/06/29/vue-frontend-architecture-patterns-guide/)
+**主題**: Vue.js 前端架構模式比較與選擇指南
 
 **Copilot 相容性**: ✅ **優秀 (96%)**
 
@@ -301,7 +301,7 @@ export function useAuth() {
 
 ### 7. Mapbox 地圖視覺化
 
-**主題**: [Mapbox 地圖資料視覺化技術分析](./2025/06/29/mapbox-data-visualization-guide/)
+**主題**: Mapbox 地圖資料視覺化技術分析與應用指南
 
 **Copilot 相容性**: ✅ **良好 (85%)**
 

@@ -506,8 +506,8 @@ Copilot is particularly good at:
 - **Codeium**: Free AI coding tool
 
 ### Learning Resources
-- [Angular with Copilot Tutorial](https://angular.io)
-- [Vue.js Copilot Guide](https://vuejs.org)
+- [Copilot in Angular Development - Best Practices](https://docs.github.com/copilot/getting-started-with-github-copilot)
+- [Copilot for Vue.js Projects](https://docs.github.com/copilot/using-github-copilot/getting-started-with-github-copilot)
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/)
 
 ---
